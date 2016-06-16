@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.base.orgDepartment.dao.DepartmentMapper">
+	<!--<sql id="addColumns">orgid,id,parentid,parentids,name,sort,phone,fax,email,bz,createTime,updateTime,createBy,updateBy,available,deleted</sql> -->
+	<!--<sql id="updateColumns">orgid,parentid,parentids,name,sort,phone,fax,email,bz,updateTime,createBy,updateBy,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">orgid,id,parentid,parentids,name,sort,phone,fax,email,bz,createTime,updateTime,createBy,updateBy,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="departmentResult" type="com.markbro.dzd.base.orgDepartment.bean.Department">
+		<result property="orgid" column="orgid" />
+		<result property="id" column="id" />
+		<result property="parentid" column="parentid" />
+		<result property="parentids" column="parentids" />
+		<result property="name" column="name" />
+		<result property="sort" column="sort" />
+		<result property="phone" column="phone" />
+		<result property="fax" column="fax" />
+		<result property="email" column="email" />
+		<result property="bz" column="bz" />
+		<result property="createTime" column="createTime" />
+		<result property="updateTime" column="updateTime" />
+		<result property="createBy" column="createBy" />
+		<result property="updateBy" column="updateBy" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="Department_Where_Clause">
+        <if test="orgid != null and orgid != ''">
+				AND orgid = #{orgid}
+		</if>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="parentid != null and parentid != ''">
+				AND parentid = #{parentid}
+		</if>
+			<if test="parentids != null and parentids != ''">
+				AND parentids = #{parentids}
+		</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+		</if>
+			<if test="sort != null and sort != ''">
+				AND sort = #{sort}
+		</if>
+			<if test="phone != null and phone != ''">
+				AND phone = #{phone}
+		</if>
+			<if test="fax != null and fax != ''">
+				AND fax = #{fax}
+		</if>
+			<if test="email != null and email != ''">
+				AND email = #{email}
+		</if>
+			<if test="bz != null and bz != ''">
+				AND bz = #{bz}
+		</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+		</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+		</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+		</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="departmentResult">
+        select <include refid="allColumns"/>
+        from org_department
+        where
+        id =#{id}
+    </select> 
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgDepartment.bean.Department" flushCache="true">
+    	insert into org_department(orgid,id,parentid,parentids,name,sort,phone,fax,email,bz,createTime,updateTime,createBy,updateBy,available,deleted)
+    	values (#{orgid},#{id},#{parentid},#{parentids},#{name},#{sort},#{phone},#{fax},#{email},#{bz},now(),now(),#{createBy},#{updateBy},1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into org_department (orgid,id,parentid,parentids,name,sort,phone,fax,email,bz,createTime,updateTime,createBy,updateBy,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(#{item.orgid},#{item.id},#{item.parentid},#{item.parentids},#{item.name},#{item.sort},#{item.phone},#{item.fax},#{item.email},#{item.bz},now(),now(),#{item.createBy},#{item.updateBy},1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.base.orgDepartment.bean.Department" flushCache="true">
+    	update org_department 
+    	<set>
+    		<if test="orgid != null">orgid=#{orgid},</if>
+			<if test="parentid != null">parentid=#{parentid},</if>
+			<if test="parentids != null">parentids=#{parentids},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="sort != null">sort=#{sort},</if>
+			<if test="phone != null">phone=#{phone},</if>
+			<if test="fax != null">fax=#{fax},</if>
+			<if test="email != null">email=#{email},</if>
+			<if test="bz != null">bz=#{bz},</if>
+			updateTime=now(),
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update org_department
+        <set>
+            <if test="orgid != null">orgid=#{orgid},</if>
+			<if test="parentid != null">parentid=#{parentid},</if>
+			<if test="parentids != null">parentids=#{parentids},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="sort != null">sort=#{sort},</if>
+			<if test="phone != null">phone=#{phone},</if>
+			<if test="fax != null">fax=#{fax},</if>
+			<if test="email != null">email=#{email},</if>
+			<if test="bz != null">bz=#{bz},</if>
+			updateTime=now(),
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update org_department
+         <set>
+         <if test="orgid != null">orgid=#{orgid},</if>
+			<if test="parentid != null">parentid=#{parentid},</if>
+			<if test="parentids != null">parentids=#{parentids},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="sort != null">sort=#{sort},</if>
+			<if test="phone != null">phone=#{phone},</if>
+			<if test="fax != null">fax=#{fax},</if>
+			<if test="email != null">email=#{email},</if>
+			<if test="bz != null">bz=#{bz},</if>
+			updateTime=now(),
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from org_department where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from org_department where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="departmentResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM org_department
+        <where>
+            and available=1
+            and deleted=0
+            <include refid="Department_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="departmentResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM org_department
+   		<where>
+   		    <if test="orgid != null and orgid != ''">
+				AND orgid = #{orgid}
+			</if>
+			<if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="parentid != null and parentid != ''">
+				AND parentid = #{parentid}
+			</if>
+			<if test="parentids != null and parentids != ''">
+				AND parentids = #{parentids}
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="sort != null and sort != ''">
+				AND sort = #{sort}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND phone = #{phone}
+			</if>
+			<if test="fax != null and fax != ''">
+				AND fax = #{fax}
+			</if>
+			<if test="email != null and email != ''">
+				AND email = #{email}
+			</if>
+			<if test="bz != null and bz != ''">
+				AND bz = #{bz}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+   	</select>
+
+	<select id="findByOrgid" resultType="com.markbro.dzd.base.orgDepartment.bean.Department">
+		select *
+			from org_department
+		<where>
+			orgid=#{orgid}
+			and deleted=0
+			and available=1
+		</where>
+	</select>
+</mapper>

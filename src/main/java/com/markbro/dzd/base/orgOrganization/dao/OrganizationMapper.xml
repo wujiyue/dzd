@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.base.orgOrganization.dao.OrganizationMapper">
+	<!--<sql id="addColumns">id,name,orgtypeid,orgtypename,phone,fax,description,createtype,createTime,updateTime,createBy,updateBy,available,deleted</sql> -->
+	<!--<sql id="updateColumns">name,orgtypeid,orgtypename,phone,fax,description,createtype,updateTime,createBy,updateBy,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,name,orgtypeid,orgtypename,phone,fax,description,createtype,createTime,updateTime,createBy,updateBy,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="organizationResult" type="com.markbro.dzd.base.orgOrganization.bean.Organization">
+		<result property="id" column="id" />
+		<result property="name" column="name" />
+		<result property="orgtypeid" column="orgtypeid" />
+		<result property="orgtypename" column="orgtypename" />
+		<result property="phone" column="phone" />
+		<result property="fax" column="fax" />
+		<result property="description" column="description" />
+		<result property="createtype" column="createtype" />
+		<result property="createTime" column="createTime" />
+		<result property="updateTime" column="updateTime" />
+		<result property="createBy" column="createBy" />
+		<result property="updateBy" column="updateBy" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="Organization_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+		</if>
+			<if test="orgtypeid != null and orgtypeid != ''">
+				AND orgtypeid = #{orgtypeid}
+		</if>
+			<if test="orgtypename != null and orgtypename != ''">
+				AND orgtypename = #{orgtypename}
+		</if>
+			<if test="phone != null and phone != ''">
+				AND phone = #{phone}
+		</if>
+			<if test="fax != null and fax != ''">
+				AND fax = #{fax}
+		</if>
+			<if test="description != null and description != ''">
+				AND description = #{description}
+		</if>
+			<if test="createtype != null and createtype != ''">
+				AND createtype = #{createtype}
+		</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+		</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+		</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+		</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="organizationResult">
+        select <include refid="allColumns"/>
+        from org_organization
+        where
+        id =#{id}
+    </select> 
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgOrganization.bean.Organization" flushCache="true">
+    	insert into org_organization(id,name,orgtypeid,orgtypename,phone,fax,description,createtype,createTime,updateTime,createBy,updateBy,available,deleted)
+    	values (#{id},#{name},#{orgtypeid},#{orgtypename},#{phone},#{fax},#{description},#{createtype},now(),now(),#{createBy},#{updateBy},1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into org_organization (id,name,orgtypeid,orgtypename,phone,fax,description,createtype,createTime,updateTime,createBy,updateBy,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(#{item.id},#{item.name},#{item.orgtypeid},#{item.orgtypename},#{item.phone},#{item.fax},#{item.description},#{item.createtype},now(),now(),#{item.createBy},#{item.updateBy},1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.base.orgOrganization.bean.Organization" flushCache="true">
+    	update org_organization 
+    	<set>
+    		<if test="name != null">name=#{name},</if>
+			<if test="orgtypeid != null">orgtypeid=#{orgtypeid},</if>
+			<if test="orgtypename != null">orgtypename=#{orgtypename},</if>
+			<if test="phone != null">phone=#{phone},</if>
+			<if test="fax != null">fax=#{fax},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="createtype != null">createtype=#{createtype},</if>
+			updateTime=now(),
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update org_organization
+        <set>
+            <if test="name != null">name=#{name},</if>
+			<if test="orgtypeid != null">orgtypeid=#{orgtypeid},</if>
+			<if test="orgtypename != null">orgtypename=#{orgtypename},</if>
+			<if test="phone != null">phone=#{phone},</if>
+			<if test="fax != null">fax=#{fax},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="createtype != null">createtype=#{createtype},</if>
+			updateTime=now(),
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update org_organization
+         <set>
+         <if test="name != null">name=#{name},</if>
+			<if test="orgtypeid != null">orgtypeid=#{orgtypeid},</if>
+			<if test="orgtypename != null">orgtypename=#{orgtypename},</if>
+			<if test="phone != null">phone=#{phone},</if>
+			<if test="fax != null">fax=#{fax},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="createtype != null">createtype=#{createtype},</if>
+			updateTime=now(),
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from org_organization where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from org_organization where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="organizationResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM org_organization
+        <where>
+            and available=1
+            and deleted=0
+            <include refid="Organization_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="organizationResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM org_organization
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="orgtypeid != null and orgtypeid != ''">
+				AND orgtypeid = #{orgtypeid}
+			</if>
+			<if test="orgtypename != null and orgtypename != ''">
+				AND orgtypename = #{orgtypename}
+			</if>
+			<if test="phone != null and phone != ''">
+				AND phone = #{phone}
+			</if>
+			<if test="fax != null and fax != ''">
+				AND fax = #{fax}
+			</if>
+			<if test="description != null and description != ''">
+				AND description = #{description}
+			</if>
+			<if test="createtype != null and createtype != ''">
+				AND createtype = #{createtype}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+   	</select>
+
+</mapper>

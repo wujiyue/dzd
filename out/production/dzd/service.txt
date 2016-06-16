@@ -1,0 +1,62 @@
+package [servicePackage];
+
+import [beanPackage].[modelClass][beanNameSuffix];
+import [repoPackage].[modelClass][daoNameSuffix];
+import org.springframework.stereotype.Service;
+import com.markbro.asoiaf.core.service.CrudService;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+/**
+ * [beanChineseName] Service
+ * Created by [author] on [date].
+ */
+@Service
+public class [modelClass][serviceNameSuffix]{
+
+    @Autowired
+    private [modelClass][daoNameSuffix] [lowerModelClass][daoNameSuffix];
+
+     /*基础公共方法*/
+    public [modelClass][beanNameSuffix] get([PK] id){
+        return [lowerModelClass][daoNameSuffix].get(id);
+    }
+
+    public List<[modelClass][beanNameSuffix]> find(PageBounds pageBounds,Map<String,Object> map){
+        return [lowerModelClass][daoNameSuffix].find(pageBounds,map);
+    }
+    public List<[modelClass][beanNameSuffix]> findByMap(PageBounds pageBounds,Map<String,Object> map){
+        return [lowerModelClass][daoNameSuffix].findByMap(pageBounds,map);
+    }
+
+    public void add([modelClass][beanNameSuffix] [lowerModelClass][beanNameSuffix]){
+        [lowerModelClass][daoNameSuffix].add([lowerModelClass][beanNameSuffix]);
+    }
+
+    public void addBatch(List<[modelClass][beanNameSuffix]> [lowerModelClass][beanNameSuffix]s){
+        [lowerModelClass][daoNameSuffix].addBatch([lowerModelClass][beanNameSuffix]s);
+    }
+
+    public void update([modelClass][beanNameSuffix] [lowerModelClass][beanNameSuffix]){
+        [lowerModelClass][daoNameSuffix].update([lowerModelClass][beanNameSuffix]);
+    }
+
+    public void updateByMap(Map<String,Object> map){
+        [lowerModelClass][daoNameSuffix].updateByMap(map);
+    }
+    public void updateByMapBatch(Map<String,Object> map){
+        [lowerModelClass][daoNameSuffix].updateByMapBatch(map);
+    }
+    public void delete([PK] id){
+        [lowerModelClass][daoNameSuffix].delete(id);
+    }
+
+    public void deleteBatch([PK][] ids){
+        [lowerModelClass][daoNameSuffix].deleteBatch(ids);
+    }
+     /*自定义方法*/
+[findByService]
+}

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="dbpool">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/webapp/WEB-INF/lib/dbpool.jar!/" />
+      <root url="jar://$PROJECT_DIR$/webapp/WEB-INF/lib/javapns-jdk16-163.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

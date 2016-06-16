@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.base.login.dao.LoginMapper">
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<!-- t_session -->
+	<select id="queryUserSession" parameterType="java.lang.String">
+		select yhid from t_session where token=#{token}
+	</select>
+
+	<update id="updateUserSessionATime" parameterType="java.lang.String">
+		update t_session set active_time=now() where token =#{token} and zt_dm=1
+	</update>
+
+
+	<select id="queryLoginToken" resultType="java.lang.String" parameterType="java.lang.String">
+		select token from t_session where yhid=#{yhid} and deleted=0 LIMIT 1
+	</select>
+	<update id="updateUserSession" parameterType="java.lang.String">
+		update t_session set deleted=1 where yhid=#{yhid}
+	</update>
+
+	<delete id="deleteUserSession" parameterType="java.lang.String">
+		delete from t_session where yhid=#{yhid} and deleted=1
+	</delete>
+	<delete id="deleteUserSessionToken" parameterType="java.lang.String">
+		delete from t_session where yhid=#{yhid} and token=#{token}
+	</delete>
+	<insert id="insertUserSession" parameterType="java.lang.String">
+		insert into t_session(yhid,ip,token,mei,login_time,active_time,deleted)
+		values(#{yhid},#{ip},#{token},#{mei},now(),now(),0)
+	</insert>
+
+
+	<select id="queryYhidByDlmc" resultType="java.util.Map" parameterType="java.lang.String" >
+		select id yhid,nickName xm,password dlmm from sys_user
+		where account = #{dlmc} limit 1
+	</select>
+	<!--查询登录用户的org-->
+	<select id="queryOrgMapByYhid" resultType="java.util.Map" parameterType="java.lang.String">
+		select * from org_organization org,sys_user yh where yh.id=#{yhid} and yh.orgid=org.id
+	</select>
+	<!--查询登录用户的角色列表，角色id和角色名称（dm,mc）-->
+	<select id="queryLoginJsList" resultType="java.util.Map" parameterType="java.lang.String">
+		select id dm,name mc from org_role where id in(select jsid from org_yh_js where orgid=#{zzid} and yhid=#{yhid})  and deleted=0
+	</select>
+	<!--查询登录用户的岗位列表，岗位id和岗位名称（dm,mc）-->
+	<select id="queryLoginGwList" resultType="java.util.Map" parameterType="java.lang.String">
+		select distinct lxid as dm,name as mc from org_tree a
+		where type='gw' and exists (select b.id from org_tree b where b.parentid=a.id and b.orgid=#{zzid} and b.lxid=#{yhid} and b.deleted=0) order by lxid
+	</select>
+	<!--查询登录用户的部门列表，部门id和部门名称（dm,mc）-->
+	<select id="queryLoginBmList" resultType="java.util.Map" parameterType="java.lang.String">
+		select distinct sjbmid as dm, b.name mc from org_tree a,org_department b
+		where a.sjbmid = b.id and a.type='ry' and a.orgid=#{zzid} and a.lxid=#{yhid} and a.deleted=0 order by sjbmid
+	</select>
+	<select id="queryLoginOrgInfo" resultType="java.util.Map"  parameterType="java.lang.String">
+		select b.name as bm_mc,c.name as gw_mc,b.lxid as bmid,c.lxid as gwid from org_tree a,org_tree b,org_tree c
+		where a.sjbmid=b.lxid and a.parentid=c.id and c.sjbmid=b.lxid
+		and a.lxid=#{yhid} and a.deleted=0 and b.deleted=0 and c.deleted=0
+	</select>
+</mapper>

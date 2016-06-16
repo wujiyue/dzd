@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.markbro.asoiaf</groupId>
+        <artifactId>asoiaf-starter-web</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <groupId>com.markbro</groupId>
+    <artifactId>dzd</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
+
+    <dependencies>
+
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.7</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20151123</version>
+        </dependency>
+        <dependency>
+            <groupId>net.sourceforge.pinyin4j</groupId>
+            <artifactId>pinyin4j</artifactId>
+            <version>2.5.0</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>com.markbro.bearinfested</groupId>
+            <artifactId>bearinfested-gen</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet.jsp</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>2.2</version>
+        </dependency>
+
+    </dependencies>
+
+    <!-- 开发者信息 -->
+    <developers>
+        <developer>
+            <id>Bro</id>
+            <name>WuJiYue</name>
+            <email>747506908@qq.com</email>
+            <roles><role>Project leader</role></roles>
+            <timezone>+8</timezone>
+        </developer>
+    </developers>
+    <build>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.apache.tomcat.maven</groupId>
+                <artifactId>tomcat7-maven-plugin</artifactId>
+                <version>2.2</version>
+                <configuration>
+                    <path>/</path>
+                </configuration>
+            </plugin>
+        </plugins>
+
+    </build>
+</project>

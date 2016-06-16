@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <link href="/resources/lib/Hui-iconfont/1.0.7/iconfont.css" rel="stylesheet" type="text/css" />
+
+   <!-- <link  href="/resources/css/H-ui.reset.css" rel="stylesheet" type="text/css"/>-->
+    <link  href="/resources/css/H-ui.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="/resources/lib/jquery/1.9.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/resources/lib/jquery.SuperSlide.2.1.1.js"></script>
+    <script type="text/javascript" src="/resources/js/H-ui.js"></script>
+    <style>
+        body{background-color: #f6f6f6}
+
+        .navbar-wrapper{ height: 45px;}
+        .navbar{ position:relative; z-index:1030}
+        .navbar-black{ background-color: #222}
+        .navbar-fixed-top{ position:fixed; top:0;left: 0; right: 0; z-index:1030}
+        /*logo*/
+        .logo{ display:inline-block; text-decoration:none; cursor:pointer;}
+        a.logo:hover{ text-decoration:none}
+        .navbar .logo{height: 44px;line-height: 44px;margin-right: 10px;float: left;}
+        .navbar-logo,.navbar-logo-m{font-size: 16px}
+        .navbar-slogan{ font-size:12px; cursor: default}
+        .navbar .container{ position:relative;}
+        .navbar-userbar{position:absolute;top:0px; right:15px}
+        .navbar .container .navbar-userbar{ right:0px}
+        /*导航*/
+        .nav{ z-index:1}
+        .nav > ul{ font-size:0; line-height:0}
+        .nav > ul > li{ position:relative}
+        .nav > ul > li,.nav > ul > li > a{ display:inline-block; height:44px; line-height:44px;text-align:center;font-size:14px}
+        .nav > ul > li > a{ padding:0 20px}
+        .nav > ul > li > a:hover,.nav > ul > li.current > a{background-color:rgba(255,255,255,0.2); text-decoration:none;
+            -webkit-transition: background-color 0.3s ease 0s;
+            -moz-transition: background-color 0.3s ease 0s;
+            -o-transition: background-color 0.3s ease 0s;
+            -ms-transition: background-color 0.3s ease 0s;
+            transition: background-color 0.3s ease 0s28.}
+        @media (max-width: 767px) {
+            .logo{ margin-right: 0}
+            .navbar-nav{display: none}
+            .navbar-nav > ul > li{ width: 100%; text-align: left;}
+            .navbar-nav > ul > li > a{display:block;padding:0 15px; text-align: left}
+            .nav-collapse ul,.nav-collapse li {width: 100%;display: block;}
+            .js .nav-collapse {position: absolute;display: block;float:none; clear:both;max-height: 0;clip: rect(0 0 0 0);margin-left: -15px; margin-right: -15px;overflow: hidden;zoom: 1;
+                -webkt-transition:max-height 284ms ease 0s;
+                -moz-transition:max-height 284ms ease 0s;
+                -o-transition:max-height 284ms ease 0s;
+                -ms-transition:max-height 284ms ease 0s;
+                transition:max-height 284ms ease 0s;
+            }
+            .js-nav-active .nav-collapse.closed {max-height: none}
+            .nav-collapse.opened {max-height: 9999px}
+        }
+            /*导航条风格-黑色*/
+        .navbar-black{background-color:#222;border-bottom:#080808 1px solid;-moz-box-shadow: 0 0 4px #333333;-webkit-box-shadow: 0 0 4px #333333;box-shadow: 0 0 4px #333333}
+        .navbar-black .logo{ color: #fff }
+        .navbar-black .navbar-logo-m{color: #eee}
+        .navbar-black .navbar-nav > ul > li,
+        .navbar-black .navbar-nav > ul > li > a{ color:#fff}
+        .navbar-black .navbar-nav > ul > li > a:hover,
+        .navbar-black .navbar-nav > ul > li.current > a{color:#fff;}
+        .navbar-black .navbar-userbar{ color: #fff}
+        @media (max-width: 767px) {
+            .navbar-black .navbar-nav > ul > li{border-bottom: solid 1px #222;}
+            .navbar-black .navbar-nav > ul > li > a:hover,
+            .navbar-black .navbar-nav > ul > li.current > a{ background: #777;}
+        }
+        /*面包导航*/
+        .nav-toggle,a.nav-toggle{position:absolute; top:0px; right:15px; font-size: 20px; color:#999; padding:6px 11px;background-color:rgba(0,0,0,0.5);color:#fff;-webkit-tap-highlight-color: rgba(0,0,0,0);
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            -o-user-select: none;
+            user-select: none;}
+        }
+
+        .nav-toggle:hover,a.nav-toggle:hover{ text-decoration: none; color:#fff}
+
+
+        /*图片轮播*/
+        .content_wrapper{width: 90%;margin:0 auto;}
+    .bannerAndLogin{height:250px;}
+    #banner{width: 69%;border: 1px solid red;height:250px;float:left;}
+        .login{float:left;width: 30%;border: 1px solid green;border-left: 0px solid green;height:250px;}
+
+        .slider{position:relative;text-align:center; margin:0 auto;z-index:1;}
+        .slider .bd,.slider .bd li,.slider .bd img{width:960px; height:272px}/*请给每个幻灯片套个div并设置id，通过id重置这个地方的宽度，达到自定义效果*/
+        .slider .bd{z-index:2;overflow:hidden}
+        .slider .bd li{float:left;width: 100%;overflow:hidden; background-position:center; background-repeat:no-repeat}
+        .slider .bd li a{ display:block; width: 100%; height: 100%}
+        .slider .bd li img{display:block}
+        .slider .hd{ position: absolute; z-index: 3; left: 0; right: 0; bottom:10px; padding: 0 10px; text-align: center}
+        .slider .hd li{display:inline-block;text-align:center;margin-right:10px;cursor:pointer;background-color:#C2C2C2}
+        .slider .hd li.active{background-color:#222}
+        /*圆点*/
+        .dots li{width:10px; height:10px;font-size:0px;line-height:0px;border-radius:50%}
+        /*数字*/
+        .numbox li{width:20px; height:20px; line-height:20px; font-size:13px;font-family:Arial;font-weight:bold; text-indent:inherit;}
+        .numbox li.active{color:#fff}
+        /*长方条*/
+        .rectangle li{width:40px; height:10px;font-size:0px;line-height:0px}
+    </style>
+    <script>
+        $(function(){
+            jQuery("#banner .slider").slide({mainCell:".bd ul",titCell:".hd li",trigger:"click",effect:"leftLoop",autoPlay:true,delayTime:700,interTime:7000,pnLoop:false,titOnClassName:"active"});
+        });
+
+    </script>
+</head>
+<body>
+
+<header class="navbar-wrapper">
+    <div class="navbar navbar-black">
+        <div class="container cl">
+            <a class="logo navbar-logo f-l mr-10 hidden-xs" href="/aboutHui.shtml">H-ui前端框架</a>
+            <a class="logo navbar-logo-m f-l mr-10 visible-xs" href="/aboutHui.shtml">H-ui</a>
+            <span class="logo navbar-slogan f-l mr-10 hidden-xs">简单 &middot; 免费 &middot; 适合中国网站</span>
+            <a aria-hidden="false" class="nav-toggle Hui-iconfont visible-xs" href="javascript:;">&#xe667;</a>
+            <nav class="nav navbar-nav nav-collapse" role="navigation" id="Hui-navbar">
+                <ul class="cl">
+                    <li class="current"><a href="/">首页</a></li>
+                    <li><a href="#">核心</a></li>
+                    <li><a href="#">扩展</a></li>
+                    <li class="dropDown dropDown_hover"><a href="#" class="dropDown_A">一级导航 <i class="Hui-iconfont">&#xe6d5;</i></a>
+                        <ul class="dropDown-menu menu radius box-shadow">
+                            <li><a href="#">二级导航</a></li>
+                            <li><a href="#">二级导航</a></li>
+                            <li class="disabled"><a href="javascript:;">二级菜单</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#">联系我们</a></li>
+                </ul>
+            </nav>
+            <nav class="navbar-userbar hidden-xs">
+            </nav>
+        </div>
+    </div>
+</header>
+
+    <div class="content_wrapper">
+        <!--图片轮播-->
+        <div class="bannerAndLogin">
+            <div id="banner">
+                <div class="slider">
+                    <div class="bd">
+                        <ul>
+                            <li><a href="#" target="_blank"><img src="images/banner-1.jpg" ></a></li>
+                            <li><a href="#" target="_blank"><img src="images/banner-1.jpg" ></a></li>
+                            <li><a href="#" target="_blank"><img src="images/banner-1.jpg" ></a></li>
+                            <li><a href="#" target="_blank"><img src="images/banner-1.jpg" ></a></li>
+                        </ul>
+                    </div>
+                    <ol class="hd cl numbox">
+                        <li>1</li>
+                        <li>2</li>
+                        <li>3</li>
+                        <li>4</li>
+                    </ol>
+
+            </div>
+            <div class="login">
+
+
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

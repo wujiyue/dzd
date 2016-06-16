@@ -1,0 +1,28 @@
+package [repoPackage];
+import org.springframework.stereotype.Repository;
+import com.markbro.asoiaf.core.repo.CrudRepo;
+import [beanPackage].[modelClass][beanNameSuffix];
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import java.util.List;
+import java.util.Map;
+/**
+ * [beanChineseName] dao
+ * Created by [author] on [date].
+ */
+@Repository
+public interface [modelClass][daoNameSuffix]{
+
+    public [modelClass][beanNameSuffix] get([PK] id);
+    public void add([modelClass][beanNameSuffix] [lowerModelClass][beanNameSuffix]);
+    public void addBatch(List<[modelClass][beanNameSuffix]> [lowerModelClass][beanNameSuffix]s);
+    public void update([modelClass][beanNameSuffix] [lowerModelClass][beanNameSuffix]);
+    public void updateByMap(Map<String,Object> map);
+    public void updateByMapBatch(Map<String,Object> map);
+    public void delete([PK] id);
+    public void deleteBatch([PK][] ids);
+    //find与findByMap的唯一的区别是在find方法在where条件中多了未删除、有效数据的条件（deleted=0,available=1）
+    public List<[modelClass][beanNameSuffix]> find(PageBounds pageBounds,Map<String,Object> map);
+    public List<[modelClass][beanNameSuffix]> findByMap(PageBounds pageBounds,Map<String,Object> map);
+
+[findByRepo]
+}

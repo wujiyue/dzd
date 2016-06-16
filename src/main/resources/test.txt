@@ -1,0 +1,63 @@
+package [testServicePackage];
+import java.util.Date;
+import java.util.List;
+import java.util.ArrayList;
+import static org.junit.Assert.*;
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import [beanPackage].[modelClass][beanNameSuffix];
+import [servicePackage].[modelClass]Service;
+import static org.junit.Assert.assertEquals;
+import org.junit.runner.RunWith;
+
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(value = {"classpath*:/applicationContext-core.xml","classpath*:/applicationContext-[projectName].xml"})
+//@Transactional
+public class [modelClass]ServiceTester{
+	@Autowired
+	[modelClass]Service testTarget;
+
+	@Test
+	public void testAdd() {
+		[modelClass] [lowerModelClass] = new [modelClass]();
+		testTarget.add([lowerModelClass]);
+		assertEquals([lowerModelClass].getId()>0,true);
+	}
+	@Test
+    	public void testAddBatch() {
+    		List<[modelClass]> [lowerModelClass]s=new ArrayList<[modelClass]>();
+    		[modelClass] [lowerModelClass] =null;
+    		for(int i=0;i<5;i++){
+    			[lowerModelClass] = new [modelClass]();
+    			[lowerModelClass]s.add([lowerModelClass]);
+    		}
+    		testTarget.addBatch([lowerModelClass]s);
+    	}
+	@Test
+	public void testGet() {
+		[modelClass] [lowerModelClass] = new [modelClass]();
+		testTarget.add([lowerModelClass]);
+		[modelClass] [lowerModelClass]2= testTarget.get([lowerModelClass].getId());
+		assertEquals([lowerModelClass].getId(), [lowerModelClass]2.getId());
+	}
+
+	@Test
+	public void testFind() {
+		List<[modelClass]> [lowerModelClass]s = testTarget.find(new PageBounds());
+		this.printList([lowerModelClass]s);
+		assertEquals([lowerModelClass]s.size()>0, true);
+	}
+
+	public void printList(List<[modelClass]> list){
+		if(list.size()<50){
+			for([modelClass] t:list){
+				System.out.println(t.toString());
+
+			}
+		}
+		System.out.println("====>总记录数："+list.size());
+	}
+}
