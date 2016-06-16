@@ -40,7 +40,7 @@ public class RequestFilter implements Filter {
 			String uri = request.getServletPath();
 
 		req.setCharacterEncoding("UTF-8");
-		if (this.baseUrl.indexOf(uri) >= 0 || uri.indexOf("/wap/")>=0|| uri.indexOf("/vendorgys/")>=0){
+		if (this.baseUrl.indexOf(uri) >= 0 || uri.indexOf("/wap/")>=0|| uri.indexOf("/vendorgys/")>=0||isStaticResources(uri)){
 			chain.doFilter(request, response);
 			return;
 		}
@@ -92,7 +92,7 @@ public class RequestFilter implements Filter {
 		}
 		String method = request.getParameter("method");
 		try {
-			if(!ConstantUtil.CON_ADMIN.equals(yhid)){
+			if(!ConstantUtil.CON_ADMIN.equals(yhid)&&!"1".equals(yhid)){
 				AclVerify.verify(yhid, uri);
 			}
 		} catch (ForbiddenException e) {
@@ -137,7 +137,13 @@ public class RequestFilter implements Filter {
 		this.baseUrl = config.getInitParameter("baseUrl");
 		servletContext = config.getServletContext();  
 	}
-
+	public boolean isStaticResources(String uri){
+		if(uri.endsWith(".js")||uri.endsWith(".css")||uri.endsWith(".jpg")||uri.endsWith(".png")||uri.endsWith(".bmp")||uri.endsWith(".gif")||uri.endsWith(".eot")||uri.endsWith(".svg")||uri.endsWith(".ttf")||uri.endsWith(".woff")){
+			return true;
+		}else{
+			return false;
+		}
+	}
 	public void destroy() {
 	}
 }

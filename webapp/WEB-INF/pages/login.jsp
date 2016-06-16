@@ -39,7 +39,7 @@
 <div class="header"></div>
 <div class="loginWraper">
   <div  class="loginBox">
-    <form id="loginForm" class="form form-horizontal" action="/denglu" method="post">
+    <form id="loginForm" class="form form-horizontal" action="/login" method="post">
       <div class="row cl">
         <div class="formControls col-10 col-offset-2">
         <bro:msg style="position:absolute;top:-35px;width:310px"></bro:msg>

@@ -38,7 +38,7 @@ public class LoginController extends BaseController {
      * @param model
      * @return
      */
-    @RequestMapping (value = "/denglu", method = RequestMethod.POST)
+    @RequestMapping (value = "/login", method = RequestMethod.POST)
     public String doLogin(HttpServletRequest request, Model model) {
         return loginService.validate(request, response);
     }
@@ -49,7 +49,7 @@ public class LoginController extends BaseController {
      * @param response
      * @return
      */
-    @RequestMapping(value = "/tuichu")
+    @RequestMapping(value = "/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
         return loginService.logout(request, response);
     }
