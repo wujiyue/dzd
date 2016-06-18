@@ -18,7 +18,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 /**
  * filter工具类修改
@@ -82,26 +81,28 @@ public class RequestFilter implements Filter {
 			}else {
 				tishi = "登录信息失效，请重新登录系统。";
 			}
-
+			throw new UnAuthorizedException(tishi);
 			//
-			PrintWriter writer = response.getWriter();
+		/*	PrintWriter writer = response.getWriter();
 			String msg = this.createResponseStr(tishi, request.getContextPath());
 			writer.write(msg);
 			writer.close();
-			return;
+			return;*/
 		}
 		String method = request.getParameter("method");
 		try {
-			if(!ConstantUtil.CON_ADMIN.equals(yhid)&&!"1".equals(yhid)){
+			if(!ConstantUtil.CON_ADMIN.equals(yhid)&&!"1".equals(yhid)&&!(uri.indexOf("/json/")>0)){//登录用户调用json数据接口不检测权限
 				AclVerify.verify(yhid, uri);
 			}
 		} catch (ForbiddenException e) {
 			log.warn(yhid + "没有权限访问服务：" + uri + " ");
-			response.setContentType("text/html;charset=UTF-8");
+			throw new ForbiddenException(yhid + "没有权限访问服务：" + uri + " ");
+
+ 			/*response.setContentType("text/html;charset=UTF-8");
 			response.getWriter().println("{alert:'您没有访问uri:" + uri + "的权限'}");
 			response.getWriter().flush();
-			response.getWriter().close();
-			return;
+			response.getWriter().close();*/
+			//return;
 		} catch (UnAuthorizedException e) {
 			log.warn(yhid + "没有权限访问服务的方法：" + uri + " " + " " + method);
 			response.setContentType("text/html;charset=UTF-8");
@@ -109,7 +110,7 @@ public class RequestFilter implements Filter {
 					"{alert:'您没有执行method:" + method + "的权限'}");
 			response.getWriter().flush();
 			response.getWriter().close();
-			return;
+			//return;
 		}
 		chain.doFilter(request, response);
 	}

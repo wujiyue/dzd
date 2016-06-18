@@ -5,9 +5,7 @@ import com.markbro.asoiaf.core.exception.UnAuthorizedException;
 import com.markbro.asoiaf.core.utils.EhCacheUtils;
 import com.markbro.dzd.common.util.ConstantUtil;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 路径检查
@@ -73,7 +71,7 @@ public class AclVerify {
 			}
 		}
 		if (!returnBool) {
-			List<Map> url_list = (List) EhCacheUtils.getSysInfo(ConstantUtil.CACHE_GLOBAL_URL);
+			/*List<Map> url_list = (List) EhCacheUtils.getSysInfo(ConstantUtil.CACHE_GLOBAL_URL);
 			Iterator localIterator2;
 			Map map;
 			for (localIterator2 = url_list.iterator(); localIterator2.hasNext();) {
@@ -83,7 +81,7 @@ public class AclVerify {
 					break;
 				}
 			}
-			if (returnBool)
+			if (returnBool)*/
 				throw new ForbiddenException();//当前用户没有访问页面的权限-403
 		}
 	}

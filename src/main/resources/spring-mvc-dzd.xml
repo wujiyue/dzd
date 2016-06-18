@@ -70,16 +70,22 @@
         <!-- 国际化操作拦截器 如果采用基于（请求/Session/Cookie）则必需配置 -->
         <!--<bean class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor"/>-->
        <!--性能检测-->
-       <!-- <bean class="com.markbro.broadminin.interceptor.MonitorInterceptor"></bean>-->
 
-       <!-- <mvc:interceptor>
-            <mvc:mapping path="/**"/>
-            <bean class="com.markbro.wechat.interceptor.ActionLogInterceptor"></bean>
-        </mvc:interceptor>-->
+        <mvc:interceptor>
+            <mvc:mapping path="/**"></mvc:mapping>
+            <mvc:exclude-mapping path="/resources/**"/>
 
+            <bean class="com.markbro.dzd.interceptor.MonitorInterceptor"></bean>
+        </mvc:interceptor>
+        <mvc:interceptor>
+            <mvc:mapping path="/**"></mvc:mapping>
+            <mvc:exclude-mapping path="/resources/**"/>
+
+            <bean class="com.markbro.dzd.interceptor.RequestFilterInterceptor"></bean>
+        </mvc:interceptor>
         <!-- 手机视图拦截器 -->
         <!--<mvc:interceptor>
-            <mvc:mapping path="/**" />
+        <mvc:mapping path="/**" />
             <bean class="com.markbro.broadminin.interceptor.MobileInterceptor" />
         </mvc:interceptor>-->
 
@@ -103,7 +109,7 @@
     </bean>-->
     <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
-        <property name="prefix" value="//WEB-INF/pages/"/>
+        <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>
     </bean>
     <bean name="tableView" class="org.springframework.web.servlet.view.JstlView">

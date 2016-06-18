@@ -1,2 +1,0 @@
-<script type="text/javascript" src="${ctx}/resources/lib/jquery/province/jquery.provincesCity.js"></script>
-<script type="text/javascript" src="${ctx}/resources/lib/jquery/province/provincesdata.js"></script>

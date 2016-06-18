@@ -39,7 +39,7 @@
 	</select>
 	<!--查询登录用户的org-->
 	<select id="queryOrgMapByYhid" resultType="java.util.Map" parameterType="java.lang.String">
-		select * from org_organization org,sys_user yh where yh.id=#{yhid} and yh.orgid=org.id
+		select org.* from org_organization org,sys_user yh where yh.id=#{yhid} and yh.orgid=org.id
 	</select>
 	<!--查询登录用户的角色列表，角色id和角色名称（dm,mc）-->
 	<select id="queryLoginJsList" resultType="java.util.Map" parameterType="java.lang.String">

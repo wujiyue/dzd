@@ -1,2 +1,0 @@
-<link href="${ctx}/resources/lib/zTree/v3/css/zTreeStyle/zTreeStyle.css" rel="stylesheet" type="text/css"/>
-<script src="${ctx}/resources/lib/zTree/v3/js/jquery.ztree.all-3.5.min.js" type="text/javascript"></script>

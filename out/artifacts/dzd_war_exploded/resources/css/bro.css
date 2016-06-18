@@ -1,8 +1,0 @@
-@charset "utf-8";
-/* 你自己的样式 */
-.main_content{padding:0px 5px;overflow-y: hidden;width:100%;border:1px solid red;float:left;}
-.bg-readonly{background-color: #DBDBDB;}
-/* 可以解决ie下树高度不能100% */
-html,body{  margin:0px;  height:100%;}
-
-.content-wrapper{margin:0 auto;width:90%;}

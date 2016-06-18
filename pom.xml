@@ -37,7 +37,6 @@
             <version>2.5.0</version>
         </dependency>
 
-
         <dependency>
             <groupId>com.markbro.bearinfested</groupId>
             <artifactId>bearinfested-gen</artifactId>

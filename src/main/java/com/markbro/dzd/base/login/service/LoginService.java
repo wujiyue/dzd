@@ -221,11 +221,11 @@ public class LoginService {
                            loginMapper.deleteUserSession(yhid);
                         }else{
                            // this.resetCacheYhid(arrayOfString[0]);
-                            EhCacheUtils.removeSysInfo(ConstantUtil.YHID_KEY+"_"+arrayOfString[0]);
-                            EhCacheUtils.removeSysInfo(ConstantUtil.CACHE_LOGIN_TIME+"_"+arrayOfString[0]);
-                            EhCacheUtils.removeSysInfo(ConstantUtil.CACHE_ACTIVE_TIME+"_"+arrayOfString[0]);
+                            EhCacheUtils.removeSysInfo(ConstantUtil.YHID_KEY,arrayOfString[0]);
+                            EhCacheUtils.removeSysInfo(ConstantUtil.CACHE_LOGIN_TIME,arrayOfString[0]);
+                            EhCacheUtils.removeSysInfo(ConstantUtil.CACHE_ACTIVE_TIME,arrayOfString[0]);
                             //Cache.removeInfo(ConstantUtil.ZTDM_KEY, arrayOfString[0]);
-                            EhCacheUtils.removeSysInfo(ConstantUtil.IP_KEY+"_"+arrayOfString[0]);
+                            EhCacheUtils.removeSysInfo(ConstantUtil.IP_KEY,arrayOfString[0]);
                         }
                     } else {
                         String str1 = "在" + arrayOfString[1] + "上登录的用户" + dlmc + "将自动退出";
@@ -309,10 +309,10 @@ public class LoginService {
     }
     private LoginBean getLoginBean(String yhid){
         LoginBean lBean = new LoginBean();
-        if (ConstantUtil.CON_ADMIN.equals(yhid)) {
+        if (ConstantUtil.CON_ADMIN.equals(yhid)||"1".equals(yhid)) {
             lBean.setBmid(ConstantUtil.NUM_ZERO);
             lBean.setGwid(ConstantUtil.NUM_ZERO);
-            lBean.setYhid(ConstantUtil.CON_ADMIN);
+            lBean.setYhid(yhid);
             lBean.setZzid(ConstantUtil.NUM_ZERO);
             lBean.setXm(ConstantUtil.CON_ADMIN_MC);
             lBean.setJsList(new ArrayList<Map<String, String>>());
@@ -388,6 +388,7 @@ public class LoginService {
      */
     private String getOrgInfo(String yhid) {
         StringBuffer sb = new StringBuffer();
+        //登录用户的部门岗位信息（bm_mc,gw_mc,bmid,gwid）
         List<Map<String, Object>> org = loginMapper.queryLoginOrgInfo(yhid);
         if(org.size() > 0){
             for(int i=0;i<org.size();i++){

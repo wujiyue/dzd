@@ -23,11 +23,8 @@ import java.util.Map;
 public class LoginController extends BaseController {
     @Autowired
     protected LoginService loginService;
-    @RequestMapping (value = "/", method = RequestMethod.GET)
-    public String toindex () {
-        return "/index";
-    }
-    @RequestMapping (value = "/login", method = RequestMethod.GET)
+
+    @RequestMapping (value = {"/login","/"}, method = RequestMethod.GET)
      public String toLogin () {
         return "/login";
     }
