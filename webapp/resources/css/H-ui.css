@@ -2700,9 +2700,15 @@ H-ui采用Font Awesome 3.2.1的整套图标，因为是图标字体，所以可�
     </div>	
 */
 .tabBar {border-bottom: 2px solid #222}
+.tabBar-green {border-bottom: 2px solid #5EB95E}
+.tabBar-blue {border-bottom: 2px solid #2D6DCC}
+.tabBar-red {border-bottom: 2px solid #C81623}
 .tabBar span {background-color: #e8e8e8;cursor: pointer;display: inline-block;float: left;
 font-weight: bold;height: 30px;line-height: 30px;padding: 0 15px}
 .tabBar span.current{background-color: #222;color: #fff}
+.tabBar-green span.current{background-color: #5EB95E;color: #fff}
+.tabBar-blue span.current{background-color: #2D6DCC;color: #fff}
+.tabBar-red span.current{background-color: #C81623;color: #fff}
 .tabCon {display: none}
 /*4.6 标签与标号
 	Name:			style_label

@@ -216,12 +216,23 @@
 
 
             if (opts.isPagination) {
-                document.getElementById(opts.pagination).innerHTML = "";
+               // document.getElementById(opts.pagination).innerHTML = "";
+                $("#"+opts.pagination).html("");
             }
            // if(opts.columns&&opts.columns.length>0){
                 var theadhtml=createThead();
+            var s = navigator.userAgent.toLowerCase();
+            var BrowserInfo = {
+                IsIE: /*@cc_on!@*/false,
+                IsIE9Under: /*@cc_on!@*/false && (parseInt(s.match(/msie (\d+)/)[1], 10) <= 9)
+            };
+            if( BrowserInfo.IsIE9Under  ){
+                document.getElementById(opts.table).appendChild = theadhtml+"<tbody id=\"tbody_"+opts.table+"\" class=\"text-c\"></tbody>";
+            }else{
                 document.getElementById(opts.table).innerHTML = theadhtml+"<tbody id=\"tbody_"+opts.table+"\" class=\"text-c\"></tbody>";
-            /*}else{
+
+            }
+                 /*}else{
              var theadhtml=  $("#"+opts.table).find("thead").html();
                 alert(theadhtml);
                 document.getElementById(opts.table).innerHTML = theadhtml+"<tbody id=\"tbody_"+opts.table+"\" class=\"text-c\"></tbody>";
@@ -229,14 +240,18 @@
 
             var loadingStr = "<tr><td colspan=" + cells + " style='text-align:center'>{0}</td></tr>";
 
-            document.getElementById("tbody_"+opts.table).innerHTML =loadingStr.replace("{0}", "<img src='/resources/images/loading.gif'/>数据正在加载中...");
+           // document.getElementById("tbody_"+opts.table).innerHTML =loadingStr.replace("{0}", "<img src='/resources/images/loading.gif'/>数据正在加载中...");
+           $("#tbody_"+opts.table).html(loadingStr.replace("{0}", "<img src='/resources/images/loading.gif'/>数据正在加载中..."));
+
             var url = opts.url + "?ts=" + Math.random();
             $.post(url, getParam(), function (json) {
                json=JSON.parse(json);
                // alert(JSON.stringify(json));
                 if (json.items.length == 0 || typeof (json.items.length) == "undefined") {
 
-                    document.getElementById("tbody_"+opts.table).innerHTML =trStr.replace("{0}", "<img width='18' src='/Scripts/datagrid/images/smiley_027.png'/>没有查询到您想要的数据");
+                   // document.getElementById("tbody_"+opts.table).innerHTML =loadingStr.replace("{0}", "<img width='18' src='/Scripts/datagrid/images/smiley_027.png'/>没有查询到您想要的数据");
+                   $("#tbody_"+opts.table).html(loadingStr.replace("{0}", "<img width='18' src='/Scripts/datagrid/images/smiley_027.png'/>没有查询到您想要的数据"));
+
 
                     return;
                 }
@@ -258,7 +273,9 @@
                     datahtml = render(data);
                // }
 
-                document.getElementById("tbody_"+opts.table).innerHTML =datahtml
+               // document.getElementById("tbody_"+opts.table).innerHTML =datahtml
+                $("#tbody_"+opts.table).html(datahtml);
+
 
 
                 if (json.totalCount > 0 && opts.isPagination) {

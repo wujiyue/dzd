@@ -24,7 +24,7 @@
 <div class="pd-20">
 	<form action="" method="post" class="form form-horizontal" id="form-article-add">
 		<div id="tab-system" class="HuiTab">
-			<div class="tabBar cl"><span>基本设置</span><span>安全设置</span><span>邮件设置</span><span>其他设置</span></div>
+			<div class="tabBar tabBar-blue cl"><span>基本设置</span><span>安全设置</span><span>邮件设置</span><span>其他设置</span></div>
 			<div class="tabCon">
 				<div class="row cl">
 					<label class="form-label col-2"><span class="c-red">*</span>网站名称：</label>

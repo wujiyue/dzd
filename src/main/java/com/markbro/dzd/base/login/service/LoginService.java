@@ -281,16 +281,18 @@ public class LoginService {
 
     public void cacheInfo(String yhid){
         LoginBean lbean = this.getLoginBean(yhid);
-        EhCacheUtils.putUserInfo("orgMap",yhid,  lbean.getOrgMap());
         EhCacheUtils.putUserInfo(ConstantUtil.ZZID_KEY,yhid,  lbean.getZzid());
         EhCacheUtils.putUserInfo(ConstantUtil.BMID_KEY,yhid,  lbean.getBmid());
         EhCacheUtils.putUserInfo(ConstantUtil.GWID_KEY,yhid,  lbean.getGwid());
         EhCacheUtils.putUserInfo(ConstantUtil.XM_KEY,yhid,  lbean.getXm());
         EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_USERBEAN,yhid,lbean);
         EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_JS,yhid,  lbean.getJsList());
-        EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_ORG,yhid,  this.getOrgInfo(yhid));
+        if(!"admin".equals(yhid)&&!"1".equals(yhid)){
+            EhCacheUtils.putUserInfo("orgMap",yhid,  lbean.getOrgMap());
+            EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_ORG,yhid,  this.getOrgInfo(yhid));
+            EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_URL,yhid,  this.getUrlByYhid(yhid));
+        }
         //EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_GW_SEL,yhid,  ydxsLoginMapper.queryYhGwId(yhid));
-       EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_URL,yhid,  this.getUrlByYhid(yhid));
         //EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_METHOD,yhid,  this.getMethodByYhid(yhid));
         //EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_ISMANAGER, yhid, this.isManagerYhid(yhid));
         //非admin账号时将用户的部门信息放到缓存中
@@ -309,12 +311,14 @@ public class LoginService {
     }
     private LoginBean getLoginBean(String yhid){
         LoginBean lBean = new LoginBean();
+        Map<String, Object> userMap = userMapper.queryUserMapByYhid(yhid);
+        lBean.setUserMap(userMap);
         if (ConstantUtil.CON_ADMIN.equals(yhid)||"1".equals(yhid)) {
             lBean.setBmid(ConstantUtil.NUM_ZERO);
             lBean.setGwid(ConstantUtil.NUM_ZERO);
             lBean.setYhid(yhid);
             lBean.setZzid(ConstantUtil.NUM_ZERO);
-            lBean.setXm(ConstantUtil.CON_ADMIN_MC);
+            lBean.setXm(String.valueOf(userMap.get("nickname")));
             lBean.setJsList(new ArrayList<Map<String, String>>());
             return lBean;
         }
@@ -327,11 +331,11 @@ public class LoginService {
             zzid = orgMap.get("id").toString();
 
         }
-        Map<String, Object> userMap = userMapper.queryUserMapByYhid(yhid);
+
         List<Map<String, String>> bmList = loginMapper.queryLoginBmList(zzid,yhid);
         List<Map<String, String>> gwList = loginMapper.queryLoginGwList(zzid,yhid);
         List<Map<String, String>> jsList = loginMapper.queryLoginJsList(zzid,yhid);
-        lBean.setUserMap(userMap);
+
         if(userMap!=null){
             String xm=String.valueOf(userMap.get("nickname"));
             lBean.setXm(xm);

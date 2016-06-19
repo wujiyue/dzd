@@ -227,7 +227,7 @@
 	<!--查询登录用户url权限-->
 	<select id="queryQxByYhid" resultType="java.util.Map"  parameterType="java.lang.String">
 		select * from sys_permission where id in
-		(select qxid from sys_permission_role where jsid in(select jsid from sys_user_role where yhid=1))
+		(select qxid from sys_permission_role where jsid in(select jsid from org_yh_js where yhid=1))
 		and deleted=0
 	</select>
 

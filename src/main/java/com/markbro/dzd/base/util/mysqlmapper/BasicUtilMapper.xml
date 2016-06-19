@@ -265,4 +265,9 @@
 	  ) and zt_dm=1
 	  limit 0,1
 	</select>
+
+	<insert id="addSmsHis" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+		insert into sys_smshis(phone,content,returncode,createTime)
+		values (#{phone},#{content},#{returncode},now())
+	</insert>
 </mapper>

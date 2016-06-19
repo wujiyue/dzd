@@ -1,7 +1,6 @@
 package com.markbro.dzd.interceptor;
 
 import com.markbro.asoiaf.core.exception.ForbiddenException;
-import com.markbro.asoiaf.core.exception.UnAuthorizedException;
 import com.markbro.asoiaf.core.utils.EhCacheUtils;
 import com.markbro.asoiaf.core.utils.SysPara;
 import com.markbro.dzd.base.filter.AclVerify;
@@ -24,7 +23,7 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
     private String baseUrl;
     private final String sysTokenKey = "sys_token";
     private final String sdtjqfIctTokenKey = "sdtjqf_ict_token";
-    Logger log= LoggerFactory.getLogger(MonitorInterceptor.class);
+    Logger log= LoggerFactory.getLogger(RequestFilterInterceptor.class);
     @Autowired
     LoginService loginService;
     public RequestFilterInterceptor(){
@@ -90,7 +89,7 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
 			writer.close();
 			return;*/
         }
-        String method = request.getParameter("method");
+        //String method = request.getParameter("method");
         try {
             if(!ConstantUtil.CON_ADMIN.equals(yhid)&&!"1".equals(yhid)&&!(uri.indexOf("/json/")>0)){//登录用户调用json数据接口不检测权限
                 AclVerify.verify(yhid, uri);
@@ -103,7 +102,8 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
 			response.getWriter().flush();
 			response.getWriter().close();*/
             //return;
-        } catch (UnAuthorizedException e) {
+        }
+       /* catch (UnAuthorizedException e) {
             log.warn(yhid + "没有权限访问服务的方法：" + uri + " " + " " + method);
             response.setContentType("text/html;charset=UTF-8");
             response.getWriter().println(
@@ -111,7 +111,7 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
             response.getWriter().flush();
             response.getWriter().close();
             //return;
-        }
+        }*/
         return true;
     }
 

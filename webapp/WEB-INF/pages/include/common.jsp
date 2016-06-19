@@ -34,7 +34,6 @@ user-scalable - 用户是否可以手动缩放
 
 <link  href="${ctx}/resources/css/H-ui.css" rel="stylesheet" type="text/css"/>
 <link  href="${ctx}/resources/css/bro.css" rel="stylesheet" type="text/css"/>
-<link href="${ctx}/resources/skin/default/skin.css" rel="stylesheet" type="text/css" id="skin" />
 <link href="${ctx}/resources/lib/Hui-iconfont/1.0.7/iconfont.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="${ctx}/resources/lib/laypage/1.2/laypage.js"></script>

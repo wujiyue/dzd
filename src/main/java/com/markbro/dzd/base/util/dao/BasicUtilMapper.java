@@ -79,4 +79,6 @@ public interface BasicUtilMapper extends SqlMapper {
 	public String getZzmc(@Param("zzid") String zzid);
 	public String getJtZzmc(@Param("zzid") String zzid);
 	public int updateForSql(Map<String, Object> map);
+	//插入短信历史表
+	public void addSmsHis(Map<String, Object> map);
 }

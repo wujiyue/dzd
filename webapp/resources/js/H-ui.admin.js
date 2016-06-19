@@ -234,7 +234,6 @@ $(function(){
 	/*换肤*/
 	$("#Hui-skin .dropDown-menu a").click(function(){
 		var v = $(this).attr("data-val");
-		alert(v);
 		setCookie("Huiskin", v);
 		var hrefStr=$("#skin").attr("href");
 		var hrefRes=hrefStr.substring(0,hrefStr.lastIndexOf('skin/'))+'skin/'+v+'/skin.css';
