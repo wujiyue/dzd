@@ -1,6 +1,7 @@
 package com.markbro.dzd.sys;
 
 import com.markbro.asoiaf.core.model.Msg;
+import com.markbro.dzd.base.tablekey.service.TableKeyService;
 import com.markbro.dzd.base.util.dao.BasicUtilMapper;
 import com.markbro.dzd.common.util.PatternUtil;
 import com.markbro.dzd.common.util.RequestUtil;
@@ -27,7 +28,17 @@ import java.util.Map;
 @Controller
 @RequestMapping("/sys")
 public class SysController extends com.markbro.asoiaf.core.web.BaseController{
-
+    @Autowired
+    TableKeyService bmKeyService;
+    @Autowired
+    TableKeyService gwKeyService;
+    @RequestMapping("/json/testTableKey")
+    @ResponseBody
+    public String testTableKey(){
+        String bm=   bmKeyService.getStringId()+"===="+bmKeyService.getIntegerId();
+        String gw=   gwKeyService.getStringId()+"===="+gwKeyService.getIntegerId();
+        return bm+"$$$"+gw;
+    }
     /**
      * 跳转到敏感词页面
      */

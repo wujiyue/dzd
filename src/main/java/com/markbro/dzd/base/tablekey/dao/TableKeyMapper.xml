@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.base.tablekey.dao.TableKeyMapper">
+
+    <select id="get"  resultType="java.util.Map">
+        select *
+        from sys_table_key
+        where
+        key_name =#{key_name}
+    </select> 
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.area.bean.Area" flushCache="true">
+    	insert into sys_table_key(key_name,cur_no,prefix,create_time)
+    	values (#{key_name},#{cur_no},#{prefix},now())
+    </insert>
+
+    <update id="update" parameterType="com.markbro.dzd.base.area.bean.Area" flushCache="true">
+    	update sys_table_key
+        <set>
+            <if test="cur_no != null and cur_no != ''">cur_no=#{cur_no},</if>
+            <if test="prefix != null and prefix != ''">prefix=#{prefix},</if>
+        </set>
+    	 where
+		key_name =#{key_name}
+    </update>
+
+
+</mapper>
