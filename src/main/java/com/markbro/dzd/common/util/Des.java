@@ -12,7 +12,9 @@ public class Des {
 	public Des() {
 		getKey("sdtjqf_ict");
 	}
-
+	public Des(String key) {
+		getKey(key);
+	}
 	public void getKey(String strKey) {
 		try {
 			KeyGenerator _generator = KeyGenerator.getInstance("DES");
