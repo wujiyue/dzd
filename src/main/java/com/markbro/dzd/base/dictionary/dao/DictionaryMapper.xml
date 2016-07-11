@@ -3,10 +3,10 @@
     "-//mybatis.org//DTD Mapper 3.0//EN"  
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.markbro.dzd.base.dictionary.dao.DictionaryMapper">
-	<!--<sql id="addColumns">id,type,value,label,description,parentId,createTime,updateTime,createBy,updateBy,sort,available,deleted</sql> -->
-	<!--<sql id="updateColumns">type,value,label,description,parentId,updateTime,createBy,updateBy,sort,available,deleted</sql> -->
+	<!--<sql id="addColumns">id,type,value,label,description,createTime,updateTime,createBy,updateBy,sort,available,deleted</sql> -->
+	<!--<sql id="updateColumns">type,value,label,description,updateTime,createBy,updateBy,sort,available,deleted</sql> -->
 	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
-	<sql id="allColumns">id,type,value,label,description,parentId,createTime,updateTime,createBy,updateBy,sort,available,deleted</sql>
+	<sql id="allColumns">id,type,value,label,description,createTime,updateTime,createBy,updateBy,sort,available,deleted</sql>
 	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
 	<resultMap id="dictionaryResult" type="com.markbro.dzd.base.dictionary.bean.Dictionary">
 		<result property="id" column="id" />
@@ -14,7 +14,6 @@
 		<result property="value" column="value" />
 		<result property="label" column="label" />
 		<result property="description" column="description" />
-		<result property="parentId" column="parentId" />
 		<result property="createTime" column="createTime" />
 		<result property="updateTime" column="updateTime" />
 		<result property="createBy" column="createBy" />
@@ -39,11 +38,11 @@
 			<if test="description != null and description != ''">
 				AND description = #{description}
 		</if>
-			<if test="parentId != null and parentId != ''">
-				AND parentId = #{parentId}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
 		</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 		</if>
 			<if test="updateTime != null and updateTime != ''">
 				AND updateTime = #{updateTime}
@@ -72,14 +71,14 @@
         id =#{id}
     </select> 
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.dictionary.bean.Dictionary" flushCache="true">
-    	insert into base_dictionary(id,type,value,label,description,parentId,createTime,updateTime,createBy,updateBy,sort,available,deleted)
-    	values (null,#{type},#{value},#{label},#{description},#{parentId},now(),now(),#{createBy},#{updateBy},#{sort},1,0)
+    	insert into base_dictionary(id,type,value,label,description,createTime,updateTime,createBy,updateBy,sort,available,deleted)
+    	values (null,#{type},#{value},#{label},#{description},now(),now(),#{createBy},#{updateBy},#{sort},1,0)
     </insert>
     <insert id="addBatch" flushCache="true">
-        insert into base_dictionary (id,type,value,label,description,parentId,createTime,updateTime,createBy,updateBy,sort,available,deleted)
+        insert into base_dictionary (id,type,value,label,description,createTime,updateTime,createBy,updateBy,sort,available,deleted)
         values
         <foreach collection="list" item="item" separator="," >
-        	(null,#{item.type},#{item.value},#{item.label},#{item.description},#{item.parentId},now(),now(),#{item.createBy},#{item.updateBy},#{item.sort},1,0)
+        	(null,#{item.type},#{item.value},#{item.label},#{item.description},now(),now(),#{item.createBy},#{item.updateBy},#{item.sort},1,0)
         </foreach>
     </insert>
     <update id="update" parameterType="com.markbro.dzd.base.dictionary.bean.Dictionary" flushCache="true">
@@ -89,7 +88,6 @@
 			<if test="value != null">value=#{value},</if>
 			<if test="label != null">label=#{label},</if>
 			<if test="description != null">description=#{description},</if>
-			<if test="parentId != null">parentId=#{parentId},</if>
 			updateTime=now(),
 			<if test="createBy != null">createBy=#{createBy},</if>
 			<if test="updateBy != null">updateBy=#{updateBy},</if>
@@ -108,7 +106,6 @@
 			<if test="value != null">value=#{value},</if>
 			<if test="label != null">label=#{label},</if>
 			<if test="description != null">description=#{description},</if>
-			<if test="parentId != null">parentId=#{parentId},</if>
 			updateTime=now(),
 			<if test="createBy != null">createBy=#{createBy},</if>
 			<if test="updateBy != null">updateBy=#{updateBy},</if>
@@ -127,7 +124,6 @@
 			<if test="value != null">value=#{value},</if>
 			<if test="label != null">label=#{label},</if>
 			<if test="description != null">description=#{description},</if>
-			<if test="parentId != null">parentId=#{parentId},</if>
 			updateTime=now(),
 			<if test="createBy != null">createBy=#{createBy},</if>
 			<if test="updateBy != null">updateBy=#{updateBy},</if>
@@ -177,11 +173,11 @@
 			<if test="description != null and description != ''">
 				AND description = #{description}
 			</if>
-			<if test="parentId != null and parentId != ''">
-				AND parentId = #{parentId}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
 			</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 			</if>
 			<if test="updateTime != null and updateTime != ''">
 				AND updateTime = #{updateTime}
@@ -205,13 +201,4 @@
    		</where>
    	</select>
 
-	<select id="findByType" resultType="com.markbro.dzd.base.dictionary.bean.Dictionary">
-		select *
-			from base_dictionary
-		<where>
-			type=#{type}
-			and deleted=0
-			and available=1
-		</where>
-	</select>
 </mapper>

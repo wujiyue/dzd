@@ -18,24 +18,25 @@ public class SerialGenerator {
     private  String cpdm;//产品代码
     private  String machinecode;//机器码
     private  String sqdm;//授权代码
+    private Boolean userMachinecode;//使用机器码
     //SerialGenerator
     public static void main(String args[]) {
+        System.out.println(getMachineCode());
       //Des des=new Des(_key);
        // System.out.println(des.getDesString(des.getDesString("57FAFB1BC1020AA7553916F20CC169302FDCEE9988777BB4614D941C9D92EEF2766345BE5581D13C")));
         SerialBean bean=new SerialBean();
         bean.setStarttime("2016-06-21");
         bean.setEndtime("2017-06-21");
+        bean.setUserMachinecode(false);
         bean.setMachinecode("BFEBFBFF000306A9#714920#D8-50-E6-21-B2-8D");
         bean.setCpdm("7000201");
         bean.setSqdm("001");
         bean.setUserid("wujiyue");
         SerialGenerator generator=new SerialGenerator(bean);
-       String code= generator.zhuce();
+        String code= generator.zhuce();
         System.out.println("注册码："+code);
         SerialBean newbean=generator.jiexi(code);
         System.out.println(newbean);
-
-
     }
     public SerialGenerator(SerialBean serialBean){
         this.starttime=serialBean.getStarttime();
@@ -44,10 +45,16 @@ public class SerialGenerator {
         this.cpdm=serialBean.getCpdm();
         this.machinecode=serialBean.getMachinecode();
         this.sqdm=serialBean.getSqdm();
+        this.userMachinecode=serialBean.getUserMachinecode();
     }
     //注册获得机器码
     public String zhuce(){
-        String str=this.starttime+"_"+this.endtime+"_"+this.userid+"_"+this.cpdm+"_"+this.machinecode+"_"+this.sqdm;
+        String str="";
+        if(this.userMachinecode){
+            str=this.starttime+"_"+this.endtime+"_"+this.userid+"_"+this.cpdm+"_"+this.machinecode+"_"+this.sqdm;
+        }else{
+            str=this.starttime+"_"+this.endtime+"_"+this.userid+"_"+this.cpdm+"_"+this.sqdm;
+        }
         return jiami(str);
     }
     //解析注册码
@@ -55,12 +62,22 @@ public class SerialGenerator {
         String str=jiemi(code);
         String[] arr=str.split("_");
         SerialBean bean=new SerialBean();
-        bean.setStarttime(arr[0]);
-        bean.setEndtime(arr[1]);
-        bean.setUserid(arr[2]);
-        bean.setCpdm(arr[3]);
-        bean.setMachinecode(arr[4]);
-        bean.setSqdm(arr[5]);
+        if(this.userMachinecode){
+            bean.setStarttime(arr[0]);
+            bean.setEndtime(arr[1]);
+            bean.setUserid(arr[2]);
+            bean.setCpdm(arr[3]);
+            bean.setMachinecode(arr[4]);
+            bean.setSqdm(arr[5]);
+        }else{
+            bean.setStarttime(arr[0]);
+            bean.setEndtime(arr[1]);
+            bean.setUserid(arr[2]);
+            bean.setCpdm(arr[3]);
+            bean.setSqdm(arr[4]);
+            bean.setUserMachinecode(false);
+        }
+
         return bean;
     }
     //加密序列号

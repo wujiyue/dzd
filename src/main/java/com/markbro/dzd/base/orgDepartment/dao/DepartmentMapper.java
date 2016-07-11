@@ -1,13 +1,14 @@
 package com.markbro.dzd.base.orgDepartment.dao;
-import org.springframework.stereotype.Repository;
-import com.markbro.asoiaf.core.repo.CrudRepo;
-import com.markbro.dzd.base.orgDepartment.bean.Department;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.markbro.dzd.base.orgDepartment.bean.Department;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Map;
 /**
- * Department dao
- * Created by wujiyue on 2016-06-12 22:39:32.
+ * 部门 dao
+ * Created by wujiyue on 2016-07-09 23:04:45.
  */
 @Repository
 public interface DepartmentMapper{
@@ -23,5 +24,18 @@ public interface DepartmentMapper{
     public List<Department> find(PageBounds pageBounds,Map<String,Object> map);
     public List<Department> findByMap(PageBounds pageBounds,Map<String,Object> map);
 
-	public List<Department> findByOrgid(PageBounds pageBounds,java.lang.String orgid);
+	public List<Department> findByParentid(PageBounds pageBounds,Map<String,Object> map);
+
+    public Integer findByParentidCount(@Param("parentid")String parentid,@Param("orgid")String orgid);
+
+    public Integer findByOrgidCount(String parentid);
+    //检测要删除的记录下是否有孩子
+    public Integer checkForDelete(@Param("ids")String ids);
+
+    public String getParentidsById(@Param("id")String id);
+
+    public int updateSort(@Param("id")String id, @Param("sort")String sort);
+
+    public Integer getMaxSortByParentid(@Param("parentid")String parentid);
+
 }

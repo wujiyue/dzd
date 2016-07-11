@@ -1,38 +1,34 @@
 package com.markbro.dzd.base.dictionary.web;
+
+import com.markbro.asoiaf.core.model.Msg;
+import com.markbro.asoiaf.core.model.PageParam;
 import com.markbro.dzd.base.dictionary.bean.Dictionary;
 import com.markbro.dzd.base.dictionary.service.DictionaryService;
+import com.markbro.dzd.interceptor.ActionLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.markbro.asoiaf.utils.string.StringUtil;
-import org.springframework.ui.Model;
-import com.markbro.asoiaf.core.model.Msg;
-import com.markbro.asoiaf.core.model.PageParam;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
- * Dictionary管理
- * Created by wujiyue on 2016-03-06 22:45:03.
+ * 数据字典管理
+ * Created by wujiyue on 2016-07-05 22:19:55.
  */
 @Controller
 @RequestMapping("/base/dictionary")
 public class DictionaryController extends com.markbro.asoiaf.core.web.BaseController{
     @Autowired
     protected DictionaryService dictionaryService;
-    @RequestMapping("/")
+    @RequestMapping(value={"","/"})
     public String index(){
-        return "redirect:/base/dictionary/list";
+        return "/base/dictionary/list";
     }
     /**
      * 跳转到新增页面
@@ -62,15 +58,10 @@ public class DictionaryController extends com.markbro.asoiaf.core.web.BaseContro
     /**
      * 跳转到列表页面
      */
-    @RequestMapping(value={"/list","/",""})
+    @RequestMapping(value={"/list"})
     public String list(PageParam pageParam,Model model){
         Object dictionarys=null;
-        if(pageParam!=null&& StringUtil.notEmpty(pageParam.getSearchWords())){
-              //todo 这里应该根据搜索关键词模糊查询
-              dictionarys=dictionaryService.find(getPageBounds(pageParam),getMap(request));
-        }else{
-              dictionarys=dictionaryService.find(getPageBounds(pageParam),getMap(request));
-        }
+        dictionarys=dictionaryService.find(getPageBounds(pageParam),getMap(request));
         model.addAttribute("dictionarys",dictionarys);
         model.addAttribute("pageParam",pageParam);
         return "/base/dictionary/list";
@@ -118,11 +109,6 @@ public class DictionaryController extends com.markbro.asoiaf.core.web.BaseContro
         }
     //-----------json数据接口--------------------
     
-	@ResponseBody
-	@RequestMapping("/json/findByType/{type}")
-	public Object findByType(@PathVariable java.lang.String type) {
-		return dictionaryService.findByType(getPageBounds(),type);
-	}
     /**
 	*找到已删除的数据（deleted=1）
 	*/
@@ -167,10 +153,12 @@ public class DictionaryController extends com.markbro.asoiaf.core.web.BaseContro
     @ResponseBody
     @RequestMapping("/json/find")
     public Object find() {
-        return dictionaryService.find(getPageBounds(),getMap(request));
+        resultMap=getPageMap(dictionaryService.find(getPageBounds(),getMap(request)));
+        return resultMap;
     }
     @ResponseBody
     @RequestMapping(value="/json/add",method = RequestMethod.POST)
+    @ActionLog(description="新增数据字典")
     public void add(Dictionary m) {
         
         dictionaryService.add(m);
@@ -182,13 +170,9 @@ public class DictionaryController extends com.markbro.asoiaf.core.web.BaseContro
     }
     @ResponseBody
     @RequestMapping(value="/json/save",method = RequestMethod.POST)
-    public void save(Dictionary m) {
-        if(m.getId()==null||"".equals(m.getId().toString())){
-            
-            dictionaryService.add(m);
-        }else{
-            dictionaryService.update(m);
-        }
+    @ActionLog(description="保存数据字典")
+    public Object save(Dictionary m) {
+        return  dictionaryService.save(m);
     }
     /**
 	* 逻辑删除的数据（deleted=1）
@@ -232,11 +216,13 @@ public class DictionaryController extends com.markbro.asoiaf.core.web.BaseContro
 	}
     @ResponseBody
     @RequestMapping(value = "/json/delete/{id}", method = RequestMethod.POST)
+    @ActionLog(description="物理删除数据字典")
     public void delete(@PathVariable java.lang.Integer id) {
         dictionaryService.delete(id);
     }
     @ResponseBody
     @RequestMapping(value = "/json/deletes/{ids}", method = RequestMethod.POST)
+    @ActionLog(description="批量物理删除数据字典")
     public void deletes(@PathVariable java.lang.Integer[] ids) {//前端传送一个用逗号隔开的id字符串，后端用数组接收，springMVC就可以完成自动转换成数组
          dictionaryService.deleteBatch(ids);
     }

@@ -1,21 +1,24 @@
 package com.markbro.dzd.base.dictionary.service;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.markbro.asoiaf.core.model.Msg;
 import com.markbro.dzd.base.dictionary.bean.Dictionary;
 import com.markbro.dzd.base.dictionary.dao.DictionaryMapper;
+import com.markbro.dzd.base.tablekey.service.TableKeyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.markbro.asoiaf.core.service.CrudService;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 /**
- * Dictionary Service
- * Created by wujiyue on 2016-03-06 22:45:03.
+ * 数据字典 Service
+ * Created by wujiyue on 2016-07-05 22:19:54.
  */
 @Service
 public class DictionaryService{
     @Autowired
     private DictionaryMapper dictionaryMapper;
+    @Autowired
+    private TableKeyService keyService;
      /*基础公共方法*/
     public Dictionary get(java.lang.Integer id){
         return dictionaryMapper.get(id);
@@ -28,6 +31,24 @@ public class DictionaryService{
     }
     public void add(Dictionary dictionary){
         dictionaryMapper.add(dictionary);
+    }
+    public Object save(Dictionary dictionary){
+          Msg msg=new Msg();
+                 try{
+                     if(dictionary.getId()==null||"".equals(dictionary.getId().toString())){
+                         java.lang.Integer id= keyService.getIntegerId();
+                         dictionary.setId(id);
+                         dictionaryMapper.add(dictionary);
+                     }else{
+                         dictionaryMapper.update(dictionary);
+                     }
+                     msg.setType(Msg.MsgType.success);
+                     msg.setContent("保存信息成功");
+                 }catch (Exception ex){
+                     msg.setType(Msg.MsgType.error);
+                     msg.setContent("保存信息失败");
+                 }
+                return msg;
     }
     public void addBatch(List<Dictionary> dictionarys){
         dictionaryMapper.addBatch(dictionarys);
@@ -49,7 +70,4 @@ public class DictionaryService{
     }
      /*自定义方法*/
 
-	 public List<Dictionary> findByType(PageBounds pageBounds,java.lang.String type){
-		return dictionaryMapper.findByType(pageBounds,type);
-	}
 }

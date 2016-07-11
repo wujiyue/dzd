@@ -18,7 +18,9 @@
 <![endif]-->
 	<%@include file="/WEB-INF/pages/include/common.jsp"%>
 
-
+	<%if(request.getAttribute("prompt")!=null){%>
+	alert('<%=request.getAttribute("prompt")%>');
+	<%}%>
 <link href="${ctx}/resources/css/H-ui.admin.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/resources/lib/Hui-iconfont/1.0.7/iconfont.css" rel="stylesheet" type="text/css" />
 <link href="${ctx}/resources/skin/default/skin.css" rel="stylesheet" type="text/css" id="skin" />
@@ -75,6 +77,17 @@
 <aside class="Hui-aside">
 	<input runat="server" id="divScrollValue" type="hidden" value="" />
 	<div class="menu_dropdown bk_2">
+		<dl id="menu-personal">
+			<dt><i class="Hui-iconfont">&#xe62d;</i> 个人中心<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dd>
+				<ul>
+					<li><a _href="article-list.html" data-title="个人信息" href="javascript:void(0)">个人信息</a></li>
+					<li><a _href="article-list.html" data-title="修改密码" href="javascript:void(0)">修改密码</a></li>
+
+
+				</ul>
+			</dd>
+		</dl>
 		<dl id="menu-article">
 			<dt><i class="Hui-iconfont">&#xe616;</i> 资讯管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
@@ -144,11 +157,13 @@
 			</dd>
 		</dl>
 		<dl id="menu-admin">
-			<dt><i class="Hui-iconfont">&#xe62d;</i> 管理员管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+			<dt><i class="Hui-iconfont">&#xe62d;</i> 权限管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
-					<li><a _href="/sys/role/" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
-					<li><a _href="admin-permission.html" data-title="权限管理" href="javascript:void(0)">权限管理</a></li>
+					<li><a _href="/sys/permission" data-title="菜单权限" href="javascript:void(0)">菜单权限</a></li>
+
+					<li><a _href="/org/role/" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
+
 					<li><a _href="/sys/user/" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
 				</ul>
 			</dd>
@@ -171,11 +186,21 @@
 			<dt><i class="Hui-iconfont">&#xe62e;</i> 系统管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
 			<dd>
 				<ul>
+					<li><a _href="/org/organization" data-title="组织机构" href="javascript:void(0)">组织机构</a></li>
+					<li><a _href="/org/department" data-title="部门管理" href="javascript:void(0)">部门管理</a></li>
+
+					<li><a _href="/org/position" data-title="岗位管理" href="javascript:void(0)">岗位管理</a></li>
+
+					<li><a _href="/org/manager" data-title="组织目录" href="javascript:void(0)">组织目录</a></li>
+
 					<li><a _href="/sys/settings" data-title="系统设置" href="javascript:void(0)">系统设置</a></li>
-					<li><a _href="system-category.html" data-title="栏目管理" href="javascript:void(0)">栏目管理</a></li>
-					<li><a _href="system-data.html" data-title="数据字典" href="javascript:void(0)">数据字典</a></li>
+					<li><a _href="/base/mkdm" data-title="模块管理" href="javascript:void(0)">模块管理</a></li>
+					<li><a _href="/base/para" data-title="系统参数管理" href="javascript:void(0)">系统参数管理</a></li>
+
+					<li><a _href="/sys/cache/" data-title="系统缓存" href="javascript:void(0)">系统缓存</a></li>
+					<li><a _href="/base/dictionary" data-title="数据字典" href="javascript:void(0)">数据字典</a></li>
 					<li><a _href="/sys/sensitivewords" data-title="屏蔽词" href="javascript:void(0)">屏蔽词</a></li>
-					<li><a _href="/sys/syslog" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>
+					<li><a _href="/base/actionlog" data-title="系统日志" href="javascript:void(0)">系统日志</a></li>
 					<li><i class="Hui-iconfont Hui-iconfont-middle"></i><a  _href="/druid/" data-title="连接池监控" href="javascript:void(0)">连接池监控</a></li>
 					<li><i class="Hui-iconfont Hui-iconfont-middle"></i><a _href="/sys/menu" data-title="菜单管理" href="javascript:void(0)">菜单管理</a></li>
 

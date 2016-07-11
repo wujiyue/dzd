@@ -25,6 +25,7 @@ public class LoginBean implements Serializable {
 	private String yhid;//用户id
 	private String zzid;//组织机构id
 	private String xm;//显示名
+	private String state;//用户状态
 	private boolean isAdmin;
 	private boolean mobileLogin; // 是否手机登录
 	//登录用户组织信息
@@ -40,6 +41,15 @@ public class LoginBean implements Serializable {
 		this.isAdmin =this.yhid.equals(ConstantUtil.CON_ADMIN);
 		return isAdmin;
 	}
+
+	public String getState() {
+		return state;
+	}
+
+	public void setState(String state) {
+		this.state = state;
+	}
+
 	public  Map<String, Object> getOrgMap() {
 		return orgMap;
 	}

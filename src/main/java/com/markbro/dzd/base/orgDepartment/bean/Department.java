@@ -3,8 +3,8 @@ import com.markbro.asoiaf.core.model.AliasModel;
 import com.markbro.asoiaf.core.utils.MyBatisRequestUtil;
 import java.util.Map;
 /**
- * Department bean
- * Created by wujiyue on 2016-06-12 22:39:30.
+ * 部门 bean
+ * Created by wujiyue on 2016-07-09 23:04:44.
  */
 public class Department  implements AliasModel {
 	private java.lang.String orgid;//机构、组织id

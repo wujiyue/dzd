@@ -5,6 +5,7 @@ import [servicePackage].[modelClass][serviceNameSuffix];
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.apache.ibatis.annotations.Param;
+import com.markbro.dzd.interceptor.ActionLog;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,12 +70,7 @@ public class [modelClass]Controller extends com.markbro.asoiaf.core.web.BaseCont
     @RequestMapping(value={"/list"})
     public String list(PageParam pageParam,Model model){
         Object [lowerModelClass]s=null;
-        if(pageParam!=null&& StringUtil.notEmpty(pageParam.getSearchWords())){
-              //todo 这里应该根据搜索关键词模糊查询
-              [lowerModelClass]s=[lowerModelClass][serviceNameSuffix].find(getPageBounds(pageParam),getMap(request));
-        }else{
-              [lowerModelClass]s=[lowerModelClass][serviceNameSuffix].find(getPageBounds(pageParam),getMap(request));
-        }
+        [lowerModelClass]s=[lowerModelClass][serviceNameSuffix].find(getPageBounds(pageParam),getMap(request));
         model.addAttribute("[lowerModelClass]s",[lowerModelClass]s);
         model.addAttribute("pageParam",pageParam);
         return "/[module]/[lowerModelClass]/list";
@@ -142,11 +138,13 @@ public class [modelClass]Controller extends com.markbro.asoiaf.core.web.BaseCont
     @ResponseBody
     @RequestMapping("/json/find")
     public Object find() {
-        return [lowerModelClass][serviceNameSuffix].find(getPageBounds(),getMap(request));
+        resultMap=getPageMap([lowerModelClass][serviceNameSuffix].find(getPageBounds(),getMap(request)));
+        return resultMap;
     }
 
     @ResponseBody
     @RequestMapping(value="/json/add",method = RequestMethod.POST)
+    @ActionLog(description="新增[beanChineseName]")
     public void add([modelClass][beanNameSuffix] m) {
         [IdGenerator]
         [lowerModelClass][serviceNameSuffix].add(m);
@@ -160,14 +158,9 @@ public class [modelClass]Controller extends com.markbro.asoiaf.core.web.BaseCont
 
     @ResponseBody
     @RequestMapping(value="/json/save",method = RequestMethod.POST)
-    public void save([modelClass][beanNameSuffix] m) {
-        if(m.get[PKName]()==null||"".equals(m.get[PKName]().toString())){
-            [IdGenerator]
-            [lowerModelClass][serviceNameSuffix].add(m);
-        }else{
-            [lowerModelClass][serviceNameSuffix].update(m);
-        }
-
+    @ActionLog(description="保存[beanChineseName]")
+    public Object save([modelClass][beanNameSuffix] m) {
+        return  [lowerModelClass][serviceNameSuffix].save(m);
     }
 
     [removeAction]
@@ -175,12 +168,14 @@ public class [modelClass]Controller extends com.markbro.asoiaf.core.web.BaseCont
 
     @ResponseBody
     @RequestMapping(value = "/json/delete/{id}", method = RequestMethod.POST)
+    @ActionLog(description="物理删除[beanChineseName]")
     public void delete(@PathVariable [PK] id) {
         [lowerModelClass][serviceNameSuffix].delete(id);
     }
 
     @ResponseBody
     @RequestMapping(value = "/json/deletes/{ids}", method = RequestMethod.POST)
+    @ActionLog(description="批量物理删除[beanChineseName]")
     public void deletes(@PathVariable [PK][] ids) {//前端传送一个用逗号隔开的id字符串，后端用数组接收，springMVC就可以完成自动转换成数组
          [lowerModelClass][serviceNameSuffix].deleteBatch(ids);
     }

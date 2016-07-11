@@ -1,7 +1,9 @@
 package com.markbro.dzd.sys.permission.web;
+
 import com.markbro.asoiaf.core.model.Msg;
 import com.markbro.asoiaf.core.model.PageParam;
 import com.markbro.asoiaf.utils.string.StringUtil;
+import com.markbro.dzd.interceptor.ActionLog;
 import com.markbro.dzd.sys.permission.bean.Permission;
 import com.markbro.dzd.sys.permission.service.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,9 +17,10 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
 import java.util.Map;
+
 /**
- * Permission管理
- * Created by wujiyue on 2016-06-13 21:13:46.
+ * 菜单权限管理
+ * Created by wujiyue on 2016-07-07 21:47:44.
  */
 @Controller
 @RequestMapping("/sys/permission")
@@ -26,7 +29,7 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
     protected PermissionService permissionService;
     @RequestMapping(value={"","/"})
     public String index(){
-        return "/sys/permission/list";
+        return "/sys/permission/manager";
     }
     /**
      * 跳转到新增页面
@@ -39,7 +42,7 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
      * 删除数据并重定向到列表页面
      */
      @RequestMapping ("/delete/{id}")
-     public String delete (@PathVariable java.lang.Integer id, RedirectAttributes redirectAttributes) {
+     public String delete (@PathVariable java.lang.String id, RedirectAttributes redirectAttributes) {
             if (false){//判断不能删除的条件
                 redirectAttributes.addFlashAttribute("msg", new Msg(Msg.MsgType.error, "不能删除当前数据!"));
             }else {
@@ -59,12 +62,7 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
     @RequestMapping(value={"/list"})
     public String list(PageParam pageParam,Model model){
         Object permissions=null;
-        if(pageParam!=null&& StringUtil.notEmpty(pageParam.getSearchWords())){
-              //todo 这里应该根据搜索关键词模糊查询
-              permissions=permissionService.find(getPageBounds(pageParam),getMap(request));
-        }else{
-              permissions=permissionService.find(getPageBounds(pageParam),getMap(request));
-        }
+        permissions=permissionService.find(getPageBounds(pageParam),getMap(request));
         model.addAttribute("permissions",permissions);
         model.addAttribute("pageParam",pageParam);
         return "/sys/permission/list";
@@ -73,11 +71,10 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
     * 跳转到编辑页面
     */
     @RequestMapping(value = "/edit")
-    public String toEdit(Permission permission,Model model){
-        if(permission!=null&&permission.getId()!=null){
-            permission=permissionService.get(permission.getId());
-        }
-         model.addAttribute("permission",permission);
+    public String toEdit(Model model){
+        Map map=getMap(request);
+        String id= (String) map.get("id");
+        model.addAttribute("permission",permissionService.get(id));
          return "/sys/permission/edit";
     }
    /**
@@ -111,10 +108,14 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
             return "redirect:/sys/permission/list";
         }
     //-----------json数据接口--------------------
-    
+    @ResponseBody
+    @RequestMapping("/json/saveSort")
+    public Object saveSort() {
+        return permissionService.saveSort(getMap(request));
+    }
 	@ResponseBody
 	@RequestMapping("/json/findByParentid/{parentid}")
-	public Object findByParentid(@PathVariable java.lang.Integer parentid) {
+	public Object findByParentid(@PathVariable java.lang.String parentid) {
 		return permissionService.findByParentid(getPageBounds(),parentid);
 	}
     /**
@@ -130,7 +131,7 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
     
 	@ResponseBody
 	@RequestMapping("/json/findBack/{ids}")
-	public void findBack(@PathVariable java.lang.Integer[] ids) {
+	public void findBack(@PathVariable java.lang.String[] ids) {
 		Map<String,Object> map=new HashMap<String,Object>();
 		map.put("deleted",0);
 		map.put("ids",ids);
@@ -152,7 +153,7 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
      */
     @ResponseBody
     @RequestMapping(value = "/json/get/{id}")
-    public Object get(@PathVariable java.lang.Integer id) {
+    public Object get(@PathVariable java.lang.String id) {
         return permissionService.get(id);
     }
     /**
@@ -161,11 +162,14 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
     @ResponseBody
     @RequestMapping("/json/find")
     public Object find() {
-        return permissionService.find(getPageBounds(),getMap(request));
+        resultMap=getPageMap(permissionService.find(getPageBounds(),getMap(request)));
+        return resultMap;
     }
     @ResponseBody
     @RequestMapping(value="/json/add",method = RequestMethod.POST)
+    @ActionLog(description="新增菜单权限")
     public void add(Permission m) {
+        
         permissionService.add(m);
     }
     @ResponseBody
@@ -175,27 +179,32 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
     }
     @ResponseBody
     @RequestMapping(value="/json/save",method = RequestMethod.POST)
-    public void save(Permission m) {
-        if(m.getId()==null||"".equals(m.getId().toString())){
-            permissionService.add(m);
-        }else{
-            permissionService.update(m);
-        }
+    @ActionLog(description="保存菜单权限")
+    public Object save(Permission m) {
+        return  permissionService.save(m);
     }
     /**
 	* 逻辑删除的数据（deleted=1）
 	*/
 	@ResponseBody
 	@RequestMapping("/json/remove/{id}")
-	public Object remove(@PathVariable java.lang.Integer id){
+	public Object remove(@PathVariable java.lang.String id){
 	Msg msg=new Msg();
 	try{
-		Map<String,Object> map=new HashMap<String,Object>();
-		map.put("deleted",1);
-		map.put("id",id);
-		permissionService.updateByMap(map);
-		msg.setType(Msg.MsgType.success);
-		msg.setContent("删除成功！");
+        int count=permissionService.checkForDelete(id);
+        if(count>0){
+            msg.setType(Msg.MsgType.error);
+            msg.setContent("删除的菜单下不能有子菜单！");
+            return msg;
+        }else{
+            Map<String,Object> map=new HashMap<String,Object>();
+            map.put("deleted",1);
+            map.put("id",id);
+            permissionService.updateByMap(map);
+            msg.setType(Msg.MsgType.success);
+            msg.setContent("删除成功！");
+        }
+
 	}catch (Exception e){
 		msg.setType(Msg.MsgType.error);
 		msg.setContent("删除失败！");
@@ -207,15 +216,25 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
 	*/
 	@ResponseBody
 	@RequestMapping("/json/removes/{ids}")
-	public Object removes(@PathVariable java.lang.Integer[] ids){
+	public Object removes(@PathVariable java.lang.String[] ids){
 	Msg msg=new Msg();
 	try{
-		Map<String,Object> map=new HashMap<String,Object>();
-		map.put("deleted",1);
-		map.put("ids",ids);
-		permissionService.updateByMapBatch(map);
-		msg.setType(Msg.MsgType.success);
-		msg.setContent("批量删除成功！");
+
+        String ids_str=StringUtil.arrToString(ids,",");
+        int count=permissionService.checkForDelete(ids_str);
+        if(count>0){
+            msg.setType(Msg.MsgType.error);
+            msg.setContent("删除的菜单下不能有子菜单！");
+            return msg;
+        }else{
+            Map<String,Object> map=new HashMap<String,Object>();
+            map.put("deleted",1);
+            map.put("ids",ids);
+            permissionService.updateByMapBatch(map);
+            msg.setType(Msg.MsgType.success);
+            msg.setContent("批量删除成功！");
+        }
+
 	}catch (Exception e){
 		msg.setType(Msg.MsgType.error);
 		msg.setContent("批量删除失败！");
@@ -224,12 +243,22 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
 	}
     @ResponseBody
     @RequestMapping(value = "/json/delete/{id}", method = RequestMethod.POST)
-    public void delete(@PathVariable java.lang.Integer id) {
+    @ActionLog(description="物理删除菜单权限")
+    public void delete(@PathVariable java.lang.String id) {
         permissionService.delete(id);
     }
     @ResponseBody
     @RequestMapping(value = "/json/deletes/{ids}", method = RequestMethod.POST)
-    public void deletes(@PathVariable java.lang.Integer[] ids) {//前端传送一个用逗号隔开的id字符串，后端用数组接收，springMVC就可以完成自动转换成数组
+    @ActionLog(description="批量物理删除菜单权限")
+    public void deletes(@PathVariable java.lang.String[] ids) {//前端传送一个用逗号隔开的id字符串，后端用数组接收，springMVC就可以完成自动转换成数组
          permissionService.deleteBatch(ids);
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/json/tree")
+    public Object tree() {
+        Map<String, Object> map = getMap(request);
+        return permissionService.tree(map);
     }
 }

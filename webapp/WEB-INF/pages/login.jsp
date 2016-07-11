@@ -49,7 +49,7 @@
       <div class="row cl">
         <label class="form-label col-2"><i class="iconfont">&#xf00ec;</i></label>
         <div class="formControls col-7">
-          <input id="account" value="${username}" name="account" type="text" placeholder="账户" datatype="*3-10" class="input-text radius size-L" nullmsg="请输入账户名！" />
+          <input id="account" value="${username}" name="account" autocomplete="false" type="text" placeholder="账户" datatype="*3-10" class="input-text  size-L" nullmsg="请输入账户名！" />
         </div>
         <div class="col-3">
           <div class="Validform_checktip"></div>
@@ -58,7 +58,7 @@
       <div class="row cl">
         <label class="form-label col-2"><i class="iconfont">&#xf00c9;</i></label>
         <div class="formControls col-7">
-          <input id="password" name="password" type="password" placeholder="密码" class="input-text radius size-L" datatype="*" nullmsg="请输入密码！" />
+          <input id="password" name="password" type="password" placeholder="密码"  autocomplete="false" class="input-text  size-L" datatype="*" nullmsg="请输入密码！" />
         </div>
         <div class="col-3">
           <div class="Validform_checktip"></div>
@@ -67,7 +67,7 @@
       <c:if test="${sys:getConfig('loginWithValidateCode')}">
       <div class="row cl">
         <div class="formControls col-7 col-offset-2">
-          <bro:validateCode name="verycode"   inputClass="input-text radius size-L" ></bro:validateCode>
+          <bro:validateCode name="verycode"   inputClass="input-text  size-L" ></bro:validateCode>
           </div>
         <div class="col-3">
           <div class="Validform_checktip"></div>
@@ -83,8 +83,8 @@
       </div>
       <div class="row">
         <div class="formControls col-8 col-offset-2">
-          <input name="" type="submit" class="btn btn-success radius size-L" style="font-weight: bold" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
-          <input name="" type="reset" class="btn btn-default radius size-L"  value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
+          <input name="" type="submit" class="btn btn-success  size-L" style="font-weight: bold" value="&nbsp;登&nbsp;&nbsp;&nbsp;&nbsp;录&nbsp;">
+          <input name="" type="reset" class="btn btn-default  size-L"  value="&nbsp;取&nbsp;&nbsp;&nbsp;&nbsp;消&nbsp;">
         </div>
       </div>
     </form>

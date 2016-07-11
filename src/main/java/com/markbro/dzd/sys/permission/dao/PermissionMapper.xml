@@ -3,15 +3,16 @@
     "-//mybatis.org//DTD Mapper 3.0//EN"  
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.markbro.dzd.sys.permission.dao.PermissionMapper">
-	<!--<sql id="addColumns">id,parentid,mc,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted</sql> -->
-	<!--<sql id="updateColumns">parentid,mc,code,url,icon,sort,description,createBy,updateBy,updateTime,available,deleted</sql> -->
+	<!--<sql id="addColumns">id,parentid,parentids,name,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted</sql> -->
+	<!--<sql id="updateColumns">parentid,parentids,name,code,url,icon,sort,description,createBy,updateBy,updateTime,available,deleted</sql> -->
 	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
-	<sql id="allColumns">id,parentid,mc,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted</sql>
+	<sql id="allColumns">id,parentid,parentids,name,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted</sql>
 	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
 	<resultMap id="permissionResult" type="com.markbro.dzd.sys.permission.bean.Permission">
 		<result property="id" column="id" />
 		<result property="parentid" column="parentid" />
-		<result property="mc" column="mc" />
+		<result property="parentids" column="parentids" />
+		<result property="name" column="name" />
 		<result property="code" column="code" />
 		<result property="url" column="url" />
 		<result property="icon" column="icon" />
@@ -31,8 +32,11 @@
 			<if test="parentid != null and parentid != ''">
 				AND parentid = #{parentid}
 		</if>
-			<if test="mc != null and mc != ''">
-				AND mc = #{mc}
+			<if test="parentids != null and parentids != ''">
+				AND parentids = #{parentids}
+		</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
 		</if>
 			<if test="code != null and code != ''">
 				AND code = #{code}
@@ -49,8 +53,11 @@
 			<if test="description != null and description != ''">
 				AND description = #{description}
 		</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+		</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 		</if>
 			<if test="createBy != null and createBy != ''">
 				AND createBy = #{createBy}
@@ -69,28 +76,30 @@
 		</if>
 			
     </sql>
-    <select id="get"  resultMap="permissionResult">
-        select <include refid="allColumns"/>
-        from sys_permission
+    <select id="get"  resultType="java.util.Map">
+        select a.*,b.name parentname
+        from sys_permission a left join sys_permission b
+		on a.parentid=b.id
         where
-        id =#{id}
+        a.id =#{id}
     </select> 
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.sys.permission.bean.Permission" flushCache="true">
-    	insert into sys_permission(id,parentid,mc,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted)
-    	values (null,#{parentid},#{mc},#{code},#{url},#{icon},#{sort},#{description},now(),#{createBy},#{updateBy},now(),1,0)
+    	insert into sys_permission(id,parentid,parentids,name,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted)
+    	values (#{id},#{parentid},#{parentids},#{name},#{code},#{url},#{icon},#{sort},#{description},now(),#{createBy},#{updateBy},now(),1,0)
     </insert>
     <insert id="addBatch" flushCache="true">
-        insert into sys_permission (id,parentid,mc,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted)
+        insert into sys_permission (id,parentid,parentids,name,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted)
         values
         <foreach collection="list" item="item" separator="," >
-        	(null,#{item.parentid},#{item.mc},#{item.code},#{item.url},#{item.icon},#{item.sort},#{item.description},now(),#{item.createBy},#{item.updateBy},now(),1,0)
+        	(#{item.id},#{item.parentid},#{item.parentids},#{item.name},#{item.code},#{item.url},#{item.icon},#{item.sort},#{item.description},now(),#{item.createBy},#{item.updateBy},now(),1,0)
         </foreach>
     </insert>
     <update id="update" parameterType="com.markbro.dzd.sys.permission.bean.Permission" flushCache="true">
     	update sys_permission 
     	<set>
     		<if test="parentid != null">parentid=#{parentid},</if>
-			<if test="mc != null">mc=#{mc},</if>
+			<if test="parentids != null">parentids=#{parentids},</if>
+			<if test="name != null">name=#{name},</if>
 			<if test="code != null">code=#{code},</if>
 			<if test="url != null">url=#{url},</if>
 			<if test="icon != null">icon=#{icon},</if>
@@ -110,7 +119,8 @@
         update sys_permission
         <set>
             <if test="parentid != null">parentid=#{parentid},</if>
-			<if test="mc != null">mc=#{mc},</if>
+			<if test="parentids != null">parentids=#{parentids},</if>
+			<if test="name != null">name=#{name},</if>
 			<if test="code != null">code=#{code},</if>
 			<if test="url != null">url=#{url},</if>
 			<if test="icon != null">icon=#{icon},</if>
@@ -130,7 +140,8 @@
          update sys_permission
          <set>
          <if test="parentid != null">parentid=#{parentid},</if>
-			<if test="mc != null">mc=#{mc},</if>
+			<if test="parentids != null">parentids=#{parentids},</if>
+			<if test="name != null">name=#{name},</if>
 			<if test="code != null">code=#{code},</if>
 			<if test="url != null">url=#{url},</if>
 			<if test="icon != null">icon=#{icon},</if>
@@ -165,6 +176,7 @@
             and deleted=0
             <include refid="Permission_Where_Clause"/>
         </where>
+		order by sort
     </select>
     <select id="findByMap" resultMap="permissionResult"  parameterType="map" >
    		SELECT <include refid="allColumns"/> FROM sys_permission
@@ -175,8 +187,11 @@
 			<if test="parentid != null and parentid != ''">
 				AND parentid = #{parentid}
 			</if>
-			<if test="mc != null and mc != ''">
-				AND mc = #{mc}
+			<if test="parentids != null and parentids != ''">
+				AND parentids = #{parentids}
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
 			</if>
 			<if test="code != null and code != ''">
 				AND code = #{code}
@@ -193,8 +208,11 @@
 			<if test="description != null and description != ''">
 				AND description = #{description}
 			</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+			</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 			</if>
 			<if test="createBy != null and createBy != ''">
 				AND createBy = #{createBy}
@@ -223,12 +241,28 @@
 			and deleted=0
 			and available=1
 		</where>
+		order by sort
 	</select>
+
 	<!--查询登录用户url权限-->
 	<select id="queryQxByYhid" resultType="java.util.Map"  parameterType="java.lang.String">
 		select * from sys_permission where id in
 		(select qxid from sys_permission_role where jsid in(select jsid from org_yh_js where yhid=1))
 		and deleted=0
 	</select>
+	<!--删除菜单时检测是否含有子菜单-->
+	<select id="checkForDelete" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(1) from sys_permission where deleted=0 and parentid in ('${ids}')
+	</select>
+	<select id="getParentidsById" resultType="java.lang.String" parameterType="java.lang.String">
+		select parentids from sys_permission where id=#{id}
+	</select>
 
+	<update id="updateMenuSort" parameterType="java.lang.String">
+		update sys_permission set sort=#{sort} where id=#{id}
+	</update>
+
+	<select id="getMaxSortByParentid" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select IFNULL(Max(sort),0) from sys_permission where deleted=0 and parentid=#{parentid}
+	</select>
 </mapper>

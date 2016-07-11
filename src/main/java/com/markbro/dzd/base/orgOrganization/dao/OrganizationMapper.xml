@@ -49,8 +49,11 @@
 			<if test="createtype != null and createtype != ''">
 				AND createtype = #{createtype}
 		</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+		</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 		</if>
 			<if test="updateTime != null and updateTime != ''">
 				AND updateTime = #{updateTime}
@@ -193,8 +196,11 @@
 			<if test="createtype != null and createtype != ''">
 				AND createtype = #{createtype}
 			</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+			</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 			</if>
 			<if test="updateTime != null and updateTime != ''">
 				AND updateTime = #{updateTime}

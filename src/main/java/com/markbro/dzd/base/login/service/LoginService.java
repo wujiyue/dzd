@@ -11,6 +11,7 @@ import com.markbro.asoiaf.utils.string.StringUtil;
 import com.markbro.dzd.base.filter.Token;
 import com.markbro.dzd.base.login.bean.LoginBean;
 import com.markbro.dzd.base.login.dao.LoginMapper;
+import com.markbro.dzd.base.orgOrganization.dao.OrganizationMapper;
 import com.markbro.dzd.common.util.ConstantUtil;
 import com.markbro.dzd.common.util.Des;
 import com.markbro.dzd.common.util.Guid;
@@ -40,6 +41,9 @@ public class LoginService {
     private LoginMapper loginMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private OrganizationMapper organizationMapper;
+
     @Autowired
     private PermissionMapper qxMapper;
     private final String pageInputDd = "account";//登录页面帐户名
@@ -235,7 +239,7 @@ public class LoginService {
                 }
                 EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_DLMC, yhid, dlmc);
                 this.cacheInfo(yhid);
-
+                request.getSession().setAttribute(TmConstant.KEY_LOGIN_USER,yhid);
                 Cookie localCookie = new Cookie(cookieTokenKey, gentoken);
                 localCookie.setPath("/");
                 localCookie.setMaxAge(31536000);
@@ -318,18 +322,19 @@ public class LoginService {
             lBean.setGwid(ConstantUtil.NUM_ZERO);
             lBean.setYhid(yhid);
             lBean.setZzid(ConstantUtil.NUM_ZERO);
+            lBean.setState("1");
             lBean.setXm(String.valueOf(userMap.get("nickname")));
             lBean.setJsList(new ArrayList<Map<String, String>>());
+            Map<String, Object> orgMap = loginMapper.queryOrgMapByYhid("1");;
+            lBean.setOrgMap(orgMap);
             return lBean;
         }
         String zzid = "";
-        String zzmc = "";
+        //String zzmc = "";
         //登录用户的组织信息
         Map<String, Object> orgMap = loginMapper.queryOrgMapByYhid(yhid);
         if(orgMap!=null){
-
             zzid = orgMap.get("id").toString();
-
         }
 
         List<Map<String, String>> bmList = loginMapper.queryLoginBmList(zzid,yhid);
@@ -339,6 +344,8 @@ public class LoginService {
         if(userMap!=null){
             String xm=String.valueOf(userMap.get("nickname"));
             lBean.setXm(xm);
+            String available=String.valueOf(userMap.get("available"));
+            lBean.setState(available);
         }
         lBean.setBmList(bmList);
         if (bmList.size() > 0){

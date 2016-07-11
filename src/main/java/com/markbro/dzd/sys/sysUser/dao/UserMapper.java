@@ -1,4 +1,5 @@
 package com.markbro.dzd.sys.sysUser.dao;
+
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.markbro.dzd.sys.sysUser.bean.User;
 import org.apache.ibatis.annotations.Param;
@@ -7,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 /**
- * User dao
- * Created by wujiyue on 2016-06-13 19:57:42.
+ * 系统用户 dao
+ * Created by wujiyue on 2016-07-05 22:52:54.
  */
 @Repository
 public interface UserMapper{

@@ -3,8 +3,8 @@ import com.markbro.asoiaf.core.model.AliasModel;
 import com.markbro.asoiaf.core.utils.MyBatisRequestUtil;
 import java.util.Map;
 /**
- * Organization bean
- * Created by wujiyue on 2016-06-12 22:38:52.
+ * 组织机构 bean
+ * Created by wujiyue on 2016-07-10 10:38:27.
  */
 public class Organization  implements AliasModel {
 	private java.lang.String id;//主键。机构、组织id

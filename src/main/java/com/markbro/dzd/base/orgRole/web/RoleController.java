@@ -1,32 +1,29 @@
 package com.markbro.dzd.base.orgRole.web;
+
+import com.markbro.asoiaf.core.model.Msg;
+import com.markbro.asoiaf.core.model.PageParam;
+import com.markbro.asoiaf.core.utils.IdGen;
 import com.markbro.dzd.base.orgRole.bean.Role;
 import com.markbro.dzd.base.orgRole.service.RoleService;
+import com.markbro.dzd.interceptor.ActionLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.markbro.asoiaf.utils.string.StringUtil;
-import org.springframework.ui.Model;
-import com.markbro.asoiaf.core.model.Msg;
-import com.markbro.asoiaf.core.model.PageParam;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import com.markbro.asoiaf.core.utils.IdGen;
 /**
  * Role管理
  * Created by wujiyue on 2016-06-12 22:35:18.
  */
 @Controller
-@RequestMapping("/base/role")
+@RequestMapping("/org/role")
+@ActionLog(description="角色管理")
 public class RoleController extends com.markbro.asoiaf.core.web.BaseController{
     @Autowired
     protected RoleService roleService;
@@ -65,12 +62,7 @@ public class RoleController extends com.markbro.asoiaf.core.web.BaseController{
     @RequestMapping(value={"/list"})
     public String list(PageParam pageParam,Model model){
         Object roles=null;
-        if(pageParam!=null&& StringUtil.notEmpty(pageParam.getSearchWords())){
-              //todo 这里应该根据搜索关键词模糊查询
-              roles=roleService.find(getPageBounds(pageParam),getMap(request));
-        }else{
-              roles=roleService.find(getPageBounds(pageParam),getMap(request));
-        }
+        roles=roleService.find(getPageBounds(pageParam),getMap(request));
         model.addAttribute("roles",roles);
         model.addAttribute("pageParam",pageParam);
         return "/base/role/list";
@@ -162,7 +154,12 @@ public class RoleController extends com.markbro.asoiaf.core.web.BaseController{
     @ResponseBody
     @RequestMapping("/json/find")
     public Object find() {
-        return roleService.find(getPageBounds(),getMap(request));
+      /*  PageList list= (PageList) roleService.find(getPageBounds(),getMap(request));
+        Paginator paginator= list.getPaginator();
+        resultMap.put("total",paginator.getTotalCount());
+        resultMap.put("rows",list);*/
+        resultMap=getPageMap(roleService.find(getPageBounds(),getMap(request)));
+        return resultMap;
     }
     @ResponseBody
     @RequestMapping(value="/json/add",method = RequestMethod.POST)
@@ -178,14 +175,8 @@ public class RoleController extends com.markbro.asoiaf.core.web.BaseController{
     }
     @ResponseBody
     @RequestMapping(value="/json/save",method = RequestMethod.POST)
-    public void save(Role m) {
-        if(m.getId()==null||"".equals(m.getId().toString())){
-            java.lang.String id=IdGen.getGuid();
-			m.setId(id);
-            roleService.add(m);
-        }else{
-            roleService.update(m);
-        }
+    public Object save(Role m) {
+       return roleService.save(m);
     }
     /**
 	* 逻辑删除的数据（deleted=1）
@@ -212,6 +203,7 @@ public class RoleController extends com.markbro.asoiaf.core.web.BaseController{
 	*/
 	@ResponseBody
 	@RequestMapping("/json/removes/{ids}")
+    @ActionLog(description="删除角色")
 	public Object removes(@PathVariable java.lang.String[] ids){
 	Msg msg=new Msg();
 	try{

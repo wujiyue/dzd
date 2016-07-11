@@ -15,9 +15,11 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 /**
- * 请求性能检测器
+ * 请求过滤拦截器
  */
 public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
     private String baseUrl;
@@ -79,7 +81,15 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
                 tishi = "登录信息失效，请重新登录系统。";
             }
             request.setAttribute(ConstantUtil.CODE_WARNING, tishi);
-            request.getRequestDispatcher("/login").forward(request, response);
+           // request.getRequestDispatcher("/login").forward(request, response);
+            String path=request.getContextPath();
+            StringBuffer sb = new StringBuffer();
+            sb.append("<script>");
+            sb.append("alert('" + tishi + "');");
+            sb.append("top.document.location.href='" + path + "/login'");
+            sb.append("</script>");
+            //request.setAttribute("warning",sb.toString());
+            responseString(response,sb.toString(),"text/html;charset=UTF-8");
             return false;
             //throw new UnAuthorizedException(tishi);
 
@@ -115,5 +125,23 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
         return true;
     }
 
-
+    /**
+     * 客户端返回字符串
+     * @param response
+     * @param string
+     * @return
+     */
+    protected String responseString(HttpServletResponse response, String string, String type) {
+        try {
+            response.reset();
+            response.setContentType(type);
+            //response.setCharacterEncoding("utf-8");
+            PrintWriter writer = response.getWriter();
+            writer.print(string);
+            writer.close();
+            return null;
+        } catch (IOException e) {
+            return null;
+        }
+    }
 }

@@ -6,8 +6,8 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import java.util.List;
 import java.util.Map;
 /**
- * Organization dao
- * Created by wujiyue on 2016-06-12 22:38:53.
+ * 组织机构 dao
+ * Created by wujiyue on 2016-07-10 10:38:28.
  */
 @Repository
 public interface OrganizationMapper{

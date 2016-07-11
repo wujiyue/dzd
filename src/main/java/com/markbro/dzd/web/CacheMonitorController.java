@@ -19,7 +19,7 @@ import java.util.Map;
 public class CacheMonitorController extends com.markbro.asoiaf.core.web.BaseController{
     @Autowired
     CacheMonitorService cacheMonitorService;
-    @RequestMapping("/")
+    @RequestMapping(value={"","/"})
     public String index(){
         return "/sys/cache/list";
     }
@@ -43,9 +43,9 @@ public class CacheMonitorController extends com.markbro.asoiaf.core.web.BaseCont
     }
 
     @ResponseBody
-    @RequestMapping("/json/getSysCacheInfo")
-    public Object getSysCacheInfo(HttpServletRequest req){
+    @RequestMapping("/json/getCacheInfo")
+    public Object getCacheInfo(HttpServletRequest req){
         Map map= ServletUtil.getMap(req);
-        return cacheMonitorService.getSysCacheInfo(map);
+        return cacheMonitorService.getCacheInfo(map);
     }
 }

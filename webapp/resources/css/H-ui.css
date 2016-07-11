@@ -1136,7 +1136,7 @@ table.dataTable thead .sorting_desc {background-image:url(../images/sort_desc.pn
 </div>
 	Explain: 
 */
-input[type="radio"],input[type="checkbox"] {line-height: normal; margin-top:-4px}
+input[type="radio"],input[type="checkbox"] {line-height: normal; margin-top:-1px}
 .check-box,.radio-box{ display:inline-block; box-sizing:border-box; cursor:pointer; position:relative; padding-left:30px; padding-right:20px}
 .icheckbox,
 .icheckbox-red,

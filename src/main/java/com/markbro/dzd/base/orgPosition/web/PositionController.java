@@ -1,32 +1,28 @@
 package com.markbro.dzd.base.orgPosition.web;
+
+import com.markbro.asoiaf.core.model.Msg;
+import com.markbro.asoiaf.core.model.PageParam;
 import com.markbro.dzd.base.orgPosition.bean.Position;
 import com.markbro.dzd.base.orgPosition.service.PositionService;
+import com.markbro.dzd.interceptor.ActionLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.markbro.asoiaf.utils.string.StringUtil;
-import org.springframework.ui.Model;
-import com.markbro.asoiaf.core.model.Msg;
-import com.markbro.asoiaf.core.model.PageParam;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import com.markbro.asoiaf.core.utils.IdGen;
+
 /**
- * Position管理
- * Created by wujiyue on 2016-06-12 22:37:39.
+ * 岗位管理
+ * Created by wujiyue on 2016-07-10 10:31:56.
  */
 @Controller
-@RequestMapping("/base/position")
+@RequestMapping("/org/position")
 public class PositionController extends com.markbro.asoiaf.core.web.BaseController{
     @Autowired
     protected PositionService positionService;
@@ -65,12 +61,7 @@ public class PositionController extends com.markbro.asoiaf.core.web.BaseControll
     @RequestMapping(value={"/list"})
     public String list(PageParam pageParam,Model model){
         Object positions=null;
-        if(pageParam!=null&& StringUtil.notEmpty(pageParam.getSearchWords())){
-              //todo 这里应该根据搜索关键词模糊查询
-              positions=positionService.find(getPageBounds(pageParam),getMap(request));
-        }else{
-              positions=positionService.find(getPageBounds(pageParam),getMap(request));
-        }
+        positions=positionService.find(getPageBounds(pageParam),getMap(request));
         model.addAttribute("positions",positions);
         model.addAttribute("pageParam",pageParam);
         return "/base/position/list";
@@ -119,9 +110,9 @@ public class PositionController extends com.markbro.asoiaf.core.web.BaseControll
     //-----------json数据接口--------------------
     
 	@ResponseBody
-	@RequestMapping("/json/findByOrgid/{orgid}")
-	public Object findByOrgid(@PathVariable java.lang.String orgid) {
-		return positionService.findByOrgid(getPageBounds(),orgid);
+	@RequestMapping("/json/findByParentid/{parentid}")
+	public Object findByParentid(@PathVariable java.lang.String parentid) {
+		return positionService.findByParentid(getPageBounds(),parentid);
 	}
     /**
 	*找到已删除的数据（deleted=1）
@@ -167,13 +158,14 @@ public class PositionController extends com.markbro.asoiaf.core.web.BaseControll
     @ResponseBody
     @RequestMapping("/json/find")
     public Object find() {
-        return positionService.find(getPageBounds(),getMap(request));
+        resultMap=getPageMap(positionService.find(getPageBounds(),getMap(request)));
+        return resultMap;
     }
     @ResponseBody
     @RequestMapping(value="/json/add",method = RequestMethod.POST)
+    @ActionLog(description="新增岗位")
     public void add(Position m) {
-        java.lang.String id=IdGen.getGuid();
-			m.setId(id);
+        
         positionService.add(m);
     }
     @ResponseBody
@@ -183,14 +175,9 @@ public class PositionController extends com.markbro.asoiaf.core.web.BaseControll
     }
     @ResponseBody
     @RequestMapping(value="/json/save",method = RequestMethod.POST)
-    public void save(Position m) {
-        if(m.getId()==null||"".equals(m.getId().toString())){
-            java.lang.String id=IdGen.getGuid();
-			m.setId(id);
-            positionService.add(m);
-        }else{
-            positionService.update(m);
-        }
+    @ActionLog(description="保存岗位")
+    public Object save(Position m) {
+        return  positionService.save(m);
     }
     /**
 	* 逻辑删除的数据（deleted=1）
@@ -234,11 +221,13 @@ public class PositionController extends com.markbro.asoiaf.core.web.BaseControll
 	}
     @ResponseBody
     @RequestMapping(value = "/json/delete/{id}", method = RequestMethod.POST)
+    @ActionLog(description="物理删除岗位")
     public void delete(@PathVariable java.lang.String id) {
         positionService.delete(id);
     }
     @ResponseBody
     @RequestMapping(value = "/json/deletes/{ids}", method = RequestMethod.POST)
+    @ActionLog(description="批量物理删除岗位")
     public void deletes(@PathVariable java.lang.String[] ids) {//前端传送一个用逗号隔开的id字符串，后端用数组接收，springMVC就可以完成自动转换成数组
          positionService.deleteBatch(ids);
     }

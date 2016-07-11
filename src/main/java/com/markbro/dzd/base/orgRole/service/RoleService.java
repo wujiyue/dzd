@@ -1,20 +1,23 @@
 package com.markbro.dzd.base.orgRole.service;
+
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.markbro.asoiaf.core.model.Msg;
 import com.markbro.dzd.base.orgRole.bean.Role;
 import com.markbro.dzd.base.orgRole.dao.RoleMapper;
+import com.markbro.dzd.base.tablekey.service.TableKeyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.markbro.asoiaf.core.service.CrudService;
-import org.springframework.transaction.annotation.Transactional;
-import java.util.HashMap;
+
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 /**
  * Role Service
  * Created by wujiyue on 2016-06-12 22:35:18.
  */
 @Service
 public class RoleService{
+    @Autowired
+    private TableKeyService keyService;
     @Autowired
     private RoleMapper roleMapper;
      /*基础公共方法*/
@@ -49,5 +52,23 @@ public class RoleService{
         roleMapper.deleteBatch(ids);
     }
      /*自定义方法*/
-
+     public Object save(Role m){
+         Msg msg=new Msg();
+         try{
+             if(m.getId()==null||"".equals(m.getId().toString())){
+                 //java.lang.String id= IdGen.getGuid();
+                 String id=keyService.getStringId();
+                 m.setId(id);
+                 roleMapper.add(m);
+             }else{
+                 roleMapper.update(m);
+             }
+             msg.setType(Msg.MsgType.success);
+             msg.setContent("保存信息成功");
+         }catch (Exception ex){
+             msg.setType(Msg.MsgType.error);
+             msg.setContent("保存信息失败");
+         }
+        return msg;
+     }
 }

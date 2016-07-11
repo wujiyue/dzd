@@ -10,6 +10,15 @@ public class SerialBean {
     private  String cpdm;//产品代码
     private  String machinecode;//机器码
     private  String sqdm;//授权代码
+    private Boolean userMachinecode;//使用机器码
+
+    public Boolean getUserMachinecode() {
+        return userMachinecode;
+    }
+
+    public void setUserMachinecode(Boolean userMachinecode) {
+        this.userMachinecode = userMachinecode;
+    }
 
     public String getStarttime() {
         return starttime;
@@ -68,6 +77,7 @@ public class SerialBean {
                 ", cpdm='" + cpdm + '\'' +
                 ", machinecode='" + machinecode + '\'' +
                 ", sqdm='" + sqdm + '\'' +
+                ", userMachinecode=" + userMachinecode +
                 '}';
     }
 }

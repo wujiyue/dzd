@@ -6,10 +6,12 @@ import org.springframework.stereotype.Service;
 import com.markbro.asoiaf.core.service.CrudService;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
+import com.markbro.asoiaf.core.model.Msg;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+[TableKeyImport]
 /**
  * [beanChineseName] Service
  * Created by [author] on [date].
@@ -19,7 +21,8 @@ public class [modelClass][serviceNameSuffix]{
 
     @Autowired
     private [modelClass][daoNameSuffix] [lowerModelClass][daoNameSuffix];
-
+    @Autowired
+    private TableKeyService [keyService];
      /*基础公共方法*/
     public [modelClass][beanNameSuffix] get([PK] id){
         return [lowerModelClass][daoNameSuffix].get(id);
@@ -35,7 +38,26 @@ public class [modelClass][serviceNameSuffix]{
     public void add([modelClass][beanNameSuffix] [lowerModelClass][beanNameSuffix]){
         [lowerModelClass][daoNameSuffix].add([lowerModelClass][beanNameSuffix]);
     }
+    public Object save([modelClass][beanNameSuffix] [lowerModelClass][beanNameSuffix]){
 
+          Msg msg=new Msg();
+                 try{
+                     if([lowerModelClass][beanNameSuffix].getId()==null||"".equals([lowerModelClass][beanNameSuffix].getId().toString())){
+                         [PK] id= [PKGenerator];
+                         [lowerModelClass][beanNameSuffix].setId(id);
+                         [lowerModelClass][daoNameSuffix].add([lowerModelClass][beanNameSuffix]);
+                     }else{
+                         [lowerModelClass][daoNameSuffix].update([lowerModelClass][beanNameSuffix]);
+                     }
+                     msg.setType(Msg.MsgType.success);
+                     msg.setContent("保存信息成功");
+                 }catch (Exception ex){
+                     msg.setType(Msg.MsgType.error);
+                     msg.setContent("保存信息失败");
+                 }
+                return msg;
+
+    }
     public void addBatch(List<[modelClass][beanNameSuffix]> [lowerModelClass][beanNameSuffix]s){
         [lowerModelClass][daoNameSuffix].addBatch([lowerModelClass][beanNameSuffix]s);
     }

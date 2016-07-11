@@ -6,8 +6,8 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import java.util.List;
 import java.util.Map;
 /**
- * Dictionary dao
- * Created by wujiyue on 2016-03-06 22:45:03.
+ * 数据字典 dao
+ * Created by wujiyue on 2016-07-05 22:19:54.
  */
 @Repository
 public interface DictionaryMapper{
@@ -23,5 +23,4 @@ public interface DictionaryMapper{
     public List<Dictionary> find(PageBounds pageBounds,Map<String,Object> map);
     public List<Dictionary> findByMap(PageBounds pageBounds,Map<String,Object> map);
 
-	public List<Dictionary> findByType(PageBounds pageBounds,java.lang.String type);
 }

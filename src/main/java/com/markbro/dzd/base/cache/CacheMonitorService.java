@@ -3,6 +3,7 @@ package com.markbro.dzd.base.cache;
 import com.markbro.asoiaf.core.model.Msg;
 import com.markbro.asoiaf.core.utils.EhCacheUtils;
 import com.markbro.asoiaf.utils.string.StringUtil;
+import com.markbro.dzd.common.util.PatternUtil;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 import org.springframework.stereotype.Service;
@@ -76,13 +77,21 @@ public class CacheMonitorService {
         return m;
     }
     /**
-     * 获得系统缓存详情
+     * 获得缓存详情 0系统缓存，1用户缓存
      * @param map
      * @return
      */
-    public Object getSysCacheInfo(Map<String, Object> map) {
+    public Object getCacheInfo(Map<String, Object> map) {
         //获得系统缓存对象
-        Cache cache = EhCacheUtils.getCacheManager().getCache(EhCacheUtils.SYS_CACHE);
+        String cachetype=String.valueOf(map.get("cachetype"));
+        cachetype= PatternUtil.isNull(cachetype);
+        Cache cache =null;
+        if("1".equals(cachetype)){
+             cache = EhCacheUtils.getCacheManager().getCache(EhCacheUtils.USER_CACHE);
+        }else{
+             cache = EhCacheUtils.getCacheManager().getCache(EhCacheUtils.SYS_CACHE);
+        }
+
         try {
             String page_str=(String)map.get("page");//当前页
             String limit_str=(String)map.get("limit");//每页几条数据
@@ -107,9 +116,10 @@ public class CacheMonitorService {
                 long l = element.getSerializedSize();
                 Map<String, Object> elMap = new HashMap<String, Object>();
                 elMap.put(cacheValueKey, keysList.get(i).toString());
-                DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+                DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(element.getCreationTime());
+                elMap.put("value", element.getValue());
                 elMap.put("creattime", formatter.format(calendar.getTime()));
                 calendar.setTimeInMillis(element.getLatestOfCreationAndUpdateTime());
                 elMap.put("lastupdatetime", formatter.format(calendar.getTime()));
@@ -133,7 +143,7 @@ public class CacheMonitorService {
         }catch (Exception e) {
             Msg msg=new Msg();
             msg.setType(Msg.MsgType.error);
-            msg.setContent("获得系统缓存详情！");
+            msg.setContent("获得系统缓存详情失败！");
             return msg;
         }
 

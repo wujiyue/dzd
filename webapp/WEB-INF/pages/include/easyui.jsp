@@ -26,31 +26,8 @@ user-scalable - 用户是否可以手动缩放
 	var basePath = "${ctx}";
 	var sys_ctx="${ctx}";
 </script>
-<link href="${ctx}/resources/lib/iconfont/iconfont.css" rel="stylesheet" type="text/css" />
-<%--
-<link href="${ctx}/resources/lib/iconfont/iconfont.css" rel="stylesheet" type="text/css" />
-<link href="${ctx}/resources/lib/font-awesome/font-awesome.min.css" rel="stylesheet" type="text/css" />
---%>
-
-<link  href="${ctx}/resources/css/H-ui.css" rel="stylesheet" type="text/css"/>
-<link  href="${ctx}/resources/css/bro.css" rel="stylesheet" type="text/css"/>
-<link href="${ctx}/resources/skin/default/skin.css" rel="stylesheet" type="text/css" id="skin" />
 <link href="${ctx}/resources/lib/Hui-iconfont/1.0.7/iconfont.css" rel="stylesheet" type="text/css" />
 
-<script type="text/javascript" src="${ctx}/resources/lib/laypage/1.2/laypage.js"></script>
-<script type="text/javascript" src="${ctx}/resources/lib/layer/2.1/layer.js"></script>
-<script type="text/javascript" src="${ctx}/resources/js/H-ui.js"></script>
-
-<script type="text/javascript" src="${ctx}/resources/lib/Validform/Validform_v5.3.2.js"></script>
-<script type="text/javascript" src="${ctx}/resources/lib/bootstrap-modal/2.2.4/bootstrap-modalmanager.js"></script>
-<script type="text/javascript" src="${ctx}/resources/lib/bootstrap-modal/2.2.4/bootstrap-modal.js"></script>
-<script  type="text/javascript" src="${ctx}/resources/js/common/broutil.js"></script>
-<script  type="text/javascript" src="${ctx}/resources/js/common/common.js"></script>
-<script  type="text/javascript" src="${ctx}/resources/js/common/mylayer.js"></script>
-<script  type="text/javascript" src="${ctx}/resources/lib/template.js"></script>
-<script  type="text/javascript" src="${ctx}/resources/js/common/brodatagrid.js"></script>
-<script type="text/javascript" src="${ctx}/resources/lib/datatables/jquery.dataTables.css"></script>
-<script type="text/javascript" src="${ctx}/resources/lib/datatables/jquery.dataTables.min.js"></script>
 
 <!-- EasyUI -->
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/lib/easyui/themes/default/easyui.css" />
@@ -60,3 +37,16 @@ user-scalable - 用户是否可以手动缩放
 <script type="text/javascript" src="${ctx}/resources/lib/easyui/locale/easyui-lang-zh_CN.js"></script>
 
 
+
+<link  href="${ctx}/resources/css/H-ui.css" rel="stylesheet" type="text/css"/>
+<link  href="${ctx}/resources/css/bro.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="${ctx}/resources/lib/layer/layer.js"></script>
+<script  type="text/javascript" src="${ctx}/resources/js/common/broutil.js"></script>
+<script type="text/javascript" src="${ctx}/resources/lib/Validform/Validform_v5.3.2.js"></script>
+
+<%if(request.getAttribute("prompt")!=null){%>
+alert('<%=request.getAttribute("prompt")%>');
+<%}%>
+<%if(request.getAttribute("warning")!=null){%>
+alert('<%=request.getAttribute("warning")%>');
+<%}%>

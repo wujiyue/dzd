@@ -29,7 +29,7 @@
 				AND id = #{id}
 		</if>
 			<if test="name != null and name != ''">
-				AND name = #{name}
+				AND name like CONCAT('%',#{name},'%')
 		</if>
 			<if test="description != null and description != ''">
 				AND description = #{description}
@@ -155,7 +155,7 @@
 				AND id = #{id}
 			</if>
 			<if test="name != null and name != ''">
-				AND name = #{name}
+				AND name like CONCAT('%',#{name},'%')
 			</if>
 			<if test="description != null and description != ''">
 				AND description = #{description}

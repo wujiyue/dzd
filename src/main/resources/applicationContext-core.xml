@@ -33,6 +33,12 @@
 	<bean id="gwKeyService" class="com.markbro.dzd.base.tablekey.service.TableKeyService">
 		<property name="key_name" value="org_position"></property>
 	</bean>
+	<bean id="keyService" class="com.markbro.dzd.base.tablekey.service.TableKeyService">
+		<property name="key_name" value="common"></property>
+	</bean>
+	<bean id="yhKeyService" class="com.markbro.dzd.base.tablekey.service.TableKeyService">
+		<property name="key_name" value="sys_user"></property>
+	</bean>
 	<bean id="contextProvider" class="com.markbro.asoiaf.core.ContextProviderImpl"></bean>
 	<bean class="com.markbro.asoiaf.core.utils.SpringContextHolder"></bean>
 
@@ -74,4 +80,7 @@
 		&lt;!&ndash;<aop:pointcut id="allManagerMethod" expression="execution(* com.markbro.dzd.*.*(..))"  />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod" />&ndash;&gt;
 	</aop:config>-->
+
+	<aop:aspectj-autoproxy/>
+
 </beans>

@@ -6,8 +6,8 @@ import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import java.util.List;
 import java.util.Map;
 /**
- * Position dao
- * Created by wujiyue on 2016-06-12 22:37:39.
+ * 岗位 dao
+ * Created by wujiyue on 2016-07-10 10:31:55.
  */
 @Repository
 public interface PositionMapper{
@@ -23,5 +23,5 @@ public interface PositionMapper{
     public List<Position> find(PageBounds pageBounds,Map<String,Object> map);
     public List<Position> findByMap(PageBounds pageBounds,Map<String,Object> map);
 
-	public List<Position> findByOrgid(PageBounds pageBounds,java.lang.String orgid);
+	public List<Position> findByParentid(PageBounds pageBounds,java.lang.String parentid);
 }

@@ -3,8 +3,8 @@ import com.markbro.asoiaf.core.model.AliasModel;
 import com.markbro.asoiaf.core.utils.MyBatisRequestUtil;
 import java.util.Map;
 /**
- * User bean
- * Created by wujiyue on 2016-06-13 19:57:41.
+ * 系统用户 bean
+ * Created by wujiyue on 2016-07-05 22:52:53.
  */
 public class User  implements AliasModel {
 	private java.lang.String id;//主键

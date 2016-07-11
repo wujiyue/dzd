@@ -893,17 +893,25 @@ var sys_bind_formData;//抽取出json中的formData供select组件使用
 function bind(bindValue,flag){//json map结构
     if(flag!=null&&flag!=undefined&&flag==true){
         sys_bind_formData=bindValue;
+    }else{
+        for(var key in bindValue.formData){
+            sys_bind_formData = bindValue.formData;
+            break;
+        }
     }
-    for(var key in bindValue.formData){
-        sys_bind_formData = bindValue.formData;
-        break;
-    }
+
     if (bindValue.result===false){
         window.alert(bindValue.msg);
         return;
     }
-    alert(JSON.stringify(sys_bind_formData));
+   // alert(JSON.stringify(sys_bind_formData));
+    if(typeof bindValue=='string'){
+        bindValue=eval("("+bindValue+")");
+    }
     $.each(bindValue,function(k,v){
+        if(v=='null'||v==null){
+            v="";
+        }
         k=k.toLowerCase();
         if (/selectData.*/ig.test(k))//先显示下拉列表数据
         {bind(v);return;}
@@ -1038,7 +1046,7 @@ function filterTimestamp(str){
 var sys_page_config = {
     showid:'div_show',    // 模式默认在哪个区域显示导航条
     tableId:"table_list",   //主列表TABLE ID
-    table_field:'guid'
+    table_field:'id'
 };
 //列表显示的基础配置
 var table_list_dataGrid = {
@@ -1046,6 +1054,8 @@ var table_list_dataGrid = {
     pagination:true,//显示分页
     rownumbers:false,//行号
     singleSelect:false,//是否可以只选一行
+    pageSize: 15,//每页显示的记录条数，默认为10
+    pageList: [10,15,20,25,30],//可以设置每页记录条数的列表
     width:'auto',
     height:'auto',
     idField:'',
@@ -1099,13 +1109,19 @@ function sys_ReverseSelection(tableid){
 }
 //当前选定的checkbox
 var sys_checkBoxGuid = function(tableid){
-    var selecRow = $("#"+tableid).datagrid("getSelections")
+    var selecRow = $("#"+tableid).datagrid("getSelections");
     var guid = new Array();
     for(var i=0;i<selecRow.length;i++){
         guid[guid.length] = selecRow[i][sys_page_config.table_field]
     }
     return guid;
 }
+/*ajax请求出错*/
+var ajaxError=function(){
+    layer.closeAll('loading');/*移除加载动画*/
+    layer.msg("ajax请求出错！", {icon: 5,time:2500});
+}
+
 /*****************************************表单处理*******************************************/
 //显示或隐藏查询块
 function sys_showQueryForm(divid, btnid){
@@ -1127,9 +1143,10 @@ function floatDiv_click(divid){
     $("#"+divid).show();
     $('#'+divid).window({
         modal: true,
-        shadow: false,
+        shadow: true,
         closed: false,
-        top:'50',
+        //top:'50',
+        top:($(window).height() - $(this).height()) * 0.5+50,
         collapsible: false,
         closable:true,
         minimizable: false,

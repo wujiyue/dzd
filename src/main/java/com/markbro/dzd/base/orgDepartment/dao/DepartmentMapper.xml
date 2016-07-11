@@ -57,8 +57,11 @@
 			<if test="bz != null and bz != ''">
 				AND bz = #{bz}
 		</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+		</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 		</if>
 			<if test="updateTime != null and updateTime != ''">
 				AND updateTime = #{updateTime}
@@ -179,6 +182,7 @@
             and deleted=0
             <include refid="Department_Where_Clause"/>
         </where>
+		order by sort
     </select>
     <select id="findByMap" resultMap="departmentResult"  parameterType="map" >
    		SELECT <include refid="allColumns"/> FROM org_department
@@ -213,8 +217,11 @@
 			<if test="bz != null and bz != ''">
 				AND bz = #{bz}
 			</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+			</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 			</if>
 			<if test="updateTime != null and updateTime != ''">
 				AND updateTime = #{updateTime}
@@ -231,17 +238,55 @@
 			<if test="deleted != null and deleted != ''">
 				AND deleted = #{deleted}
 			</if>
-			
    		</where>
+		order by sort
    	</select>
 
-	<select id="findByOrgid" resultType="com.markbro.dzd.base.orgDepartment.bean.Department">
+	<select id="findByParentid" resultType="com.markbro.dzd.base.orgDepartment.bean.Department">
 		select *
 			from org_department
+		<where>
+			parentid=#{parentid}
+			and deleted=0
+			and available=1
+			and orgid=#{orgid}
+		</where>
+		order by sort
+	</select>
+	<select id="findByParentidCount" resultType="java.lang.Integer">
+		select count(1)
+		from org_department
+		<where>
+			parentid=#{parentid}
+			and deleted=0
+			and available=1
+			and orgid=#{orgid}
+		</where>
+	</select>
+
+	<select id="findByOrgidCount" resultType="java.lang.Integer">
+		select count(1)
+		from org_department
 		<where>
 			orgid=#{orgid}
 			and deleted=0
 			and available=1
 		</where>
 	</select>
+
+	<select id="checkForDelete" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(1) from org_department where deleted=0 and parentid in ('${ids}')
+	</select>
+	<select id="getParentidsById" resultType="java.lang.String" parameterType="java.lang.String">
+		select parentids from org_department where id=#{id}
+	</select>
+
+	<update id="updateSort" parameterType="java.lang.String">
+		update org_department set sort=#{sort} where id=#{id}
+	</update>
+
+	<select id="getMaxSortByParentid" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select IFNULL(Max(sort),0) from org_department where deleted=0 and parentid=#{parentid}
+	</select>
+
 </mapper>

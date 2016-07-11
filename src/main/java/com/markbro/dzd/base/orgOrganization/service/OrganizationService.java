@@ -5,18 +5,22 @@ import org.springframework.stereotype.Service;
 import com.markbro.asoiaf.core.service.CrudService;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
+import com.markbro.asoiaf.core.model.Msg;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.markbro.dzd.base.tablekey.service.TableKeyService;
 /**
- * Organization Service
- * Created by wujiyue on 2016-06-12 22:38:53.
+ * 组织机构 Service
+ * Created by wujiyue on 2016-07-10 10:38:28.
  */
 @Service
 public class OrganizationService{
     @Autowired
     private OrganizationMapper organizationMapper;
+    @Autowired
+    private TableKeyService keyService;
      /*基础公共方法*/
     public Organization get(java.lang.String id){
         return organizationMapper.get(id);
@@ -29,6 +33,24 @@ public class OrganizationService{
     }
     public void add(Organization organization){
         organizationMapper.add(organization);
+    }
+    public Object save(Organization organization){
+          Msg msg=new Msg();
+                 try{
+                     if(organization.getId()==null||"".equals(organization.getId().toString())){
+                         java.lang.String id= keyService.getStringId();
+                         organization.setId(id);
+                         organizationMapper.add(organization);
+                     }else{
+                         organizationMapper.update(organization);
+                     }
+                     msg.setType(Msg.MsgType.success);
+                     msg.setContent("保存信息成功");
+                 }catch (Exception ex){
+                     msg.setType(Msg.MsgType.error);
+                     msg.setContent("保存信息失败");
+                 }
+                return msg;
     }
     public void addBatch(List<Organization> organizations){
         organizationMapper.addBatch(organizations);

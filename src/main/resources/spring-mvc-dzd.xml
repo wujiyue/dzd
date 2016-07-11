@@ -88,7 +88,10 @@
         <mvc:mapping path="/**" />
             <bean class="com.markbro.broadminin.interceptor.MobileInterceptor" />
         </mvc:interceptor>-->
-
+        <mvc:interceptor>
+            <mvc:mapping path="/**"/>
+            <bean class="com.markbro.dzd.interceptor.ActionLogInterceptor"></bean>
+        </mvc:interceptor>
     </mvc:interceptors>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">

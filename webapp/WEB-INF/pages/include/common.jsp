@@ -33,11 +33,10 @@ user-scalable - 用户是否可以手动缩放
 --%>
 
 <link  href="${ctx}/resources/css/H-ui.css" rel="stylesheet" type="text/css"/>
-<link  href="${ctx}/resources/css/bro.css" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/resources/lib/Hui-iconfont/1.0.7/iconfont.css" rel="stylesheet" type="text/css" />
 
 <script type="text/javascript" src="${ctx}/resources/lib/laypage/1.2/laypage.js"></script>
-<script type="text/javascript" src="${ctx}/resources/lib/layer/2.1/layer.js"></script>
+<script type="text/javascript" src="${ctx}/resources/lib/layer/layer.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/H-ui.js"></script>
 
 <script type="text/javascript" src="${ctx}/resources/lib/Validform/Validform_v5.3.2.js"></script>
@@ -56,4 +55,18 @@ user-scalable - 用户是否可以手动缩放
 <script type="text/javascript" src="${ctx}/resources/lib/easyui/easyloader.js"></script>
 <script type="text/javascript" src="${ctx}/resources/lib/easyui/locale/easyui-lang-zh_CN.js"></script>
 
+<style>
+	.main_content{padding:0px 5px;overflow-y: hidden;width:100%;border:1px solid red;float:left;}
+	.bg-readonly{background-color: #DBDBDB;}
+	/* 可以解决ie下树高度不能100% */
+	html,body{  margin:0px;  height:100%;}
 
+	.content-wrapper{margin:0 auto;width:95%;}
+</style>
+
+<%if(request.getAttribute("prompt")!=null){%>
+alert('<%=request.getAttribute("prompt")%>');
+<%}%>
+<%if(request.getAttribute("warning")!=null){%>
+alert('<%=request.getAttribute("warning")%>');
+<%}%>

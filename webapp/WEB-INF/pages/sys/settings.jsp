@@ -17,14 +17,20 @@
 			});*/
 			$.Huitab("#tab-system .tabBar span","#tab-system .tabCon","current","click","0");
 		});
+		function save(){
+
+		}
 	</script>
 </head>
 <body>
-<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span class="c-gray en">&gt;</span> 基本设置 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
+<nav class="breadcrumb"><i class="Hui-iconfont">&#xe67f;</i> 首页 <span class="c-gray en">&gt;</span> 系统管理 <span class="c-gray en">&gt;</span>系统设置 <a class="btn btn-success radius r mr-20" style="line-height:1.6em;margin-top:3px" href="javascript:location.replace(location.href);" title="刷新" ><i class="Hui-iconfont">&#xe68f;</i></a></nav>
 <div class="pd-20">
 	<form action="" method="post" class="form form-horizontal" id="form-article-add">
 		<div id="tab-system" class="HuiTab">
-			<div class="tabBar tabBar-blue cl"><span>基本设置</span><span>安全设置</span><span>邮件设置</span><span>其他设置</span></div>
+			<div class="tabBar tabBar-blue cl"><span>系统设置</span><span>站点设置</span><span>安全设置</span><span>邮件设置</span><span>其他设置</span></div>
+			<div class="tabCon">
+
+			</div>
 			<div class="tabCon">
 				<div class="row cl">
 					<label class="form-label col-2"><span class="c-red">*</span>网站名称：</label>
@@ -41,15 +47,16 @@
 				<div class="row cl">
 					<label class="form-label col-2"><span class="c-red">*</span>描述：</label>
 					<div class="formControls col-10">
-						<input type="text" id="website-description" placeholder="空制在80个汉字，160个字符以内" value="" class="input-text">
+						<%--<input type="text" id="website-description" placeholder="空制在80个汉字，160个字符以内" value="" class="input-text">--%>
+						<textarea id="website-description" class="textarea" placeholder="空制在80个汉字，160个字符以内" ></textarea>
 					</div>
 				</div>
-				<div class="row cl">
+				<%--<div class="row cl">
 					<label class="form-label col-2"><span class="c-red">*</span>css、js、images路径配置：</label>
 					<div class="formControls col-10">
 						<input type="text" id="website-static" placeholder="默认为空，为相对路径" value="" class="input-text">
 					</div>
-				</div>
+				</div>--%>
 				<div class="row cl">
 					<label class="form-label col-2"><span class="c-red">*</span>上传目录配置：</label>
 					<div class="formControls col-10">
@@ -71,7 +78,7 @@
 				<div class="row cl">
 					<label class="form-label col-2">统计代码：</label>
 					<div class="formControls col-10">
-						<textarea class="textarea"></textarea>
+						<textarea id="website-tjdm" class="textarea" placeholder="统计代码"></textarea>
 					</div>
 				</div>
 			</div>
@@ -79,13 +86,13 @@
 				<div class="row cl">
 					<label class="form-label col-2">允许访问后台的IP列表：</label>
 					<div class="formControls col-10">
-						<textarea class="textarea"></textarea>
+						<textarea id="security-accessip" class="textarea"  placeholder="允许访问后台的IP列表"></textarea>
 					</div>
 				</div>
 				<div class="row cl">
 					<label class="form-label col-2">后台登录失败最大次数：</label>
 					<div class="formControls col-10">
-						<input type="text" id="" value="5" class="input-text">
+						<input type="text" id="security-failuretime" value="5" class="input-text">
 					</div>
 				</div>
 			</div>
@@ -133,8 +140,7 @@
 		</div>
 		<div class="row cl">
 			<div class="col-10 col-offset-2">
-				<button onClick="article_save_submit();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
-				<button onClick="layer_close();" class="btn btn-default radius" type="button">&nbsp;&nbsp;取消&nbsp;&nbsp;</button>
+				<button onClick="save();" class="btn btn-primary radius" type="submit"><i class="Hui-iconfont">&#xe632;</i> 保存</button>
 			</div>
 		</div>
 	</form>

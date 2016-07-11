@@ -8,7 +8,7 @@
     <meta name="Keywords" content="">
     <meta name="Description" content="">
     <%@include file="/WEB-INF/pages/include/common.jsp"%>
-    <script type="text/javascript" src="../../../../resources/lib/My97DatePicker/WdatePicker.js"></script>
+    <%@include file="/WEB-INF/pages/include/my97date.jsp"%>
  <script type="text/javascript">
 
         //保存到数据库操作

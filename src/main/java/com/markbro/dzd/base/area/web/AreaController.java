@@ -148,8 +148,9 @@ public class AreaController extends com.markbro.asoiaf.core.web.BaseController{
 	@ResponseBody
 	@RequestMapping("/json/findByParentid/{parentid}")
 	public Object findByParentid(@PathVariable java.lang.Integer parentid) {
-        //return PaginatorUtil.getPageMap(areaService.findByParentid(getPageBounds(), parentid));
-       return areaService.findByParentid(getPageBounds(),parentid);
+
+        Object o=areaService.findByParentid(getPageBounds(),parentid);
+       return o;
 	}
     /**
 	*找到已删除的数据（deleted=1）

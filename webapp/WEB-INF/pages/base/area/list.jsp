@@ -34,7 +34,7 @@
   <script type="text/javascript">
 
  var validform;
-
+    var list_type="1";
  var datagrid;
   function getSel(){
     var arr=datagrid.getSelectedRows();
@@ -58,7 +58,7 @@
          {field:'code',title:'区域代码',hidden:true,align:'right',width:60}
      ],
      //queryParams: $("#query_form").serialize(),
-     url: "${ctx}/base/area/json/findByParentid/"+tmp_parentid,
+     url: "${ctx}/base/area/json/findByParentid/"+tmp_parentid+"&list_type="+list_type,
      pagination: "pagination",
      scriptHtml: "eTableHtml",
      table: "table_list2",
@@ -77,7 +77,7 @@
     })
 
     function add(){
-    layerIframe("新增区域","/base/area/add?parentid="+tmp_parentid+"&areatype="+tmp_areatype,parent);
+    layerIframe("新增区域","/base/area/add?parentid="+tmp_parentid+"&list_type="+list_type+"&areatype="+tmp_areatype,parent);
        // layerDivshow("新增区域","div_show",window.top);
      //   layerDialog("新增区域","#div_show");
     }
@@ -88,7 +88,7 @@
 
      var params=$("#form_show").serialize();
 
-     sys_ajaxPost("/base/area/json/save?"+params,null,function(json){
+     sys_ajaxPost("/base/area/json/save?"+params+"&list_type="+list_type,null,function(json){
 
 
          broAjaxReturnMsg(json);

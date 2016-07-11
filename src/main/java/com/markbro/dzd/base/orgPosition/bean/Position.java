@@ -3,8 +3,8 @@ import com.markbro.asoiaf.core.model.AliasModel;
 import com.markbro.asoiaf.core.utils.MyBatisRequestUtil;
 import java.util.Map;
 /**
- * Position bean
- * Created by wujiyue on 2016-06-12 22:37:38.
+ * 岗位 bean
+ * Created by wujiyue on 2016-07-10 10:31:55.
  */
 public class Position  implements AliasModel {
 	private java.lang.String orgid;//机构组织id
