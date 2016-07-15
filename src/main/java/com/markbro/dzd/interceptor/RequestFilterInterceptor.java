@@ -43,28 +43,30 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
 
             return true;
         }
-        String sysToken = ConstantUtil.NUM_ZERO;//0采用原有cookie方式，1：采用无cookie方式
-        try {
-            sysToken = SysPara.getValue(sysTokenKey);
-        } catch (Exception e) {
-            sysToken = ConstantUtil.NUM_ZERO;
-        }
-        String token = request.getParameter("sys_token_khd");
-        token = PatternUtil.isNull(token, String.valueOf(request.getParameter("sdtjqficttoken")));
-        if(token.equals("")){
-            if(PatternUtil.isNull(sysToken).equals(ConstantUtil.NUM_ZERO)){
-                token = ConstantUtil.getCookieValue(request, sdtjqfIctTokenKey);
-            }else{
-                token = request.getParameter(sysTokenKey);
-            }
-        }else{
-            Cookie cookie = new Cookie(sdtjqfIctTokenKey, token);
-            cookie.setMaxAge(-1);
-            cookie.setPath("/");
-            response.addCookie(cookie);
-        }
 
-        String yhid = loginService.getYhidByToken(token);
+            String sysToken = ConstantUtil.NUM_ZERO;//0采用原有cookie方式，1：采用无cookie方式
+            try {
+                sysToken = SysPara.getValue(sysTokenKey);
+            } catch (Exception e) {
+                sysToken = ConstantUtil.NUM_ZERO;
+            }
+            String token = request.getParameter("sys_token_khd");
+            token = PatternUtil.isNull(token, String.valueOf(request.getParameter("sdtjqficttoken")));
+            if(token.equals("")){
+                if(PatternUtil.isNull(sysToken).equals(ConstantUtil.NUM_ZERO)){
+                    token = ConstantUtil.getCookieValue(request, sdtjqfIctTokenKey);
+                }else{
+                    token = request.getParameter(sysTokenKey);
+                }
+            }else{
+                Cookie cookie = new Cookie(sdtjqfIctTokenKey, token);
+                cookie.setMaxAge(-1);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }
+
+        String  yhid = loginService.getYhidByToken(token);
+
         yhid=PatternUtil.isNull(yhid);
         if (!yhid.equals("")) {
             if (!SysPara.compareValue("session_timeout", ConstantUtil.NUM_ZERO, "30")) {
@@ -99,7 +101,7 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
 			writer.close();
 			return;*/
         }
-        //String method = request.getParameter("method");
+
         try {
             if(!ConstantUtil.CON_ADMIN.equals(yhid)&&!"1".equals(yhid)&&!(uri.indexOf("/json/")>0)){//登录用户调用json数据接口不检测权限
                 AclVerify.verify(yhid, uri);
@@ -107,11 +109,7 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
         } catch (ForbiddenException e) {
             log.warn(yhid + "没有权限访问服务：" + uri + " ");
             throw new ForbiddenException(yhid + "没有权限访问服务：" + uri + " ");
- 			/*response.setContentType("text/html;charset=UTF-8");
-			response.getWriter().println("{alert:'您没有访问uri:" + uri + "的权限'}");
-			response.getWriter().flush();
-			response.getWriter().close();*/
-            //return;
+
         }
        /* catch (UnAuthorizedException e) {
             log.warn(yhid + "没有权限访问服务的方法：" + uri + " " + " " + method);

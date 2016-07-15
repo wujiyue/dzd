@@ -164,7 +164,7 @@
 
 					<li><a _href="/org/role/" data-title="角色管理" href="javascript:void(0)">角色管理</a></li>
 
-					<li><a _href="/sys/user/" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
+					<li><a _href="/org/user/" data-title="管理员列表" href="javascript:void(0)">管理员列表</a></li>
 				</ul>
 			</dd>
 		</dl>
@@ -187,11 +187,13 @@
 			<dd>
 				<ul>
 					<li><a _href="/org/organization" data-title="组织机构" href="javascript:void(0)">组织机构</a></li>
+					<li><a _href="/org/organization/wh" data-title="组织信息维护" href="javascript:void(0)">组织信息维护</a></li>
+
 					<li><a _href="/org/department" data-title="部门管理" href="javascript:void(0)">部门管理</a></li>
 
 					<li><a _href="/org/position" data-title="岗位管理" href="javascript:void(0)">岗位管理</a></li>
 
-					<li><a _href="/org/manager" data-title="组织目录" href="javascript:void(0)">组织目录</a></li>
+					<li><a _href="/org/tree" data-title="组织目录" href="javascript:void(0)">组织目录</a></li>
 
 					<li><a _href="/sys/settings" data-title="系统设置" href="javascript:void(0)">系统设置</a></li>
 					<li><a _href="/base/mkdm" data-title="模块管理" href="javascript:void(0)">模块管理</a></li>
@@ -227,6 +229,11 @@
 			<div style="display:none" class="loading"></div>
 			<%--<iframe scrolling="yes" frameborder="0" src="welcome.html"></iframe>--%>
 			<div class="pd-20" style="padding-top:20px;">
+				<script>
+					function aa(){alert($("#test").val())}
+				</script>
+				<bro:broSelect onchange="aa()" path="test" url="/sys/test"></bro:broSelect>
+				<bro:genderSelect path="sex"></bro:genderSelect>
 				<p class="f-20 text-success">欢迎光临Bro.Admin <span class="f-14">V1.0</span>后台管理系统！</p>
 				<div class="content cl">
 					<p class="text-c f-20">关于Bro.admin</p>

@@ -34,4 +34,11 @@ public interface PermissionMapper{
     public int updateMenuSort(@Param("id")String id, @Param("sort")String sort);
 
     public Integer getMaxSortByParentid(@Param("parentid")String parentid);
+
+    //给一个角色添加一条权限
+    public void addRolePermission(@Param("qxid")String qxid, @Param("jsid")String jsid);
+    //删除一个角色的所有权限
+    public void deleteRolePermission(@Param("jsid")String jsid);
+    //查询一个角色拥有的权限
+    public List<String> findPermissionsByRole(@Param("jsid")String jsid);
 }

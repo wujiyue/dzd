@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.io.StringWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -60,7 +62,23 @@ public class SysController extends com.markbro.asoiaf.core.web.BaseController{
     public String syslog(){
         return "/sys/syslog";
     }
-
+    @RequestMapping("/test")
+    @ResponseBody
+    public Object test(){
+        Map map=getMap(request);
+        Map tmap=null;
+        tmap=new HashMap<String,Object>();
+       List ls=new ArrayList();
+        tmap.put("dm","111");
+        tmap.put("mc","111");
+        ls.add(tmap);
+        tmap=new HashMap<String,Object>();
+        tmap.put("dm","222");
+        tmap.put("mc","222");
+        ls.add(tmap);
+        resultMap.put("test",ls);
+        return resultMap;
+    }
     /**
      * 发送sms短信接口
      * @return

@@ -27,13 +27,23 @@
         where
         [pkColumnName] =#{[pkName]}
 
-    </select> 
-    
+    </select>
+
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from [TABLE]
+            where
+            [pkColumnName] =#{[pkName]}
+
+    </select>
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="[beanPackage].[modelClass][beanNameSuffix]"[FLUSHCACHE]>
     	insert into [TABLE]([ADDCOLUMNS])
     	values ([ADD])
     </insert>
-
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map"[FLUSHCACHE]>
+    	insert into [TABLE]([ADDCOLUMNS])
+    	values ([ADD])
+    </insert>
     <insert id="addBatch"[FLUSHCACHE]>
         insert into [TABLE] ([ADDCOLUMNS])
         values

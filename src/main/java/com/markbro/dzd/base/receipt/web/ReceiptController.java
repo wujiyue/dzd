@@ -1,26 +1,20 @@
 package com.markbro.dzd.base.receipt.web;
+import com.markbro.asoiaf.core.model.Msg;
+import com.markbro.asoiaf.core.model.PageParam;
+import com.markbro.asoiaf.core.utils.IdGen;
 import com.markbro.dzd.base.receipt.bean.Receipt;
 import com.markbro.dzd.base.receipt.service.ReceiptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.apache.ibatis.annotations.Param;
-import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import com.markbro.asoiaf.utils.string.StringUtil;
-import org.springframework.ui.Model;
-import com.markbro.asoiaf.core.model.Msg;
-import com.markbro.asoiaf.core.model.PageParam;
+
 import java.util.HashMap;
 import java.util.Map;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import com.markbro.asoiaf.core.utils.IdGen;
 /**
  * Receipt管理
  * Created by wujiyue on 2016-03-03 23:01:38.
@@ -65,12 +59,7 @@ public class ReceiptController extends com.markbro.asoiaf.core.web.BaseControlle
     @RequestMapping(value={"/list","/",""})
     public String list(PageParam pageParam,Model model){
         Object receipts=null;
-        if(pageParam!=null&& StringUtil.notEmpty(pageParam.getSearchWords())){
-              //todo 这里应该根据搜索关键词模糊查询
-              receipts=receiptService.find(getPageBounds(pageParam),getMap(request));
-        }else{
-              receipts=receiptService.find(getPageBounds(pageParam),getMap(request));
-        }
+        receipts=receiptService.find(getPageBounds(pageParam),getMap(request));
         model.addAttribute("receipts",receipts);
         model.addAttribute("pageParam",pageParam);
         return "/base/receipt/list";

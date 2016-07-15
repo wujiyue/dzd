@@ -1,7 +1,6 @@
 package [beanPackage];
 
 import com.markbro.asoiaf.core.model.AliasModel;
-import com.markbro.asoiaf.core.utils.MyBatisRequestUtil;
 import java.util.Map;
 
 /**
@@ -13,9 +12,6 @@ public class [modelClass][beanNameSuffix]  implements AliasModel {
 [fields]
 
 [fieldsGettersAndSetters]
-    public Map<String, Object> convertBeanToMap([modelClass] bean){
-        Map<String, Object> map = MyBatisRequestUtil.beanConvert2Map(bean);
-    	return map;
-    }
+
 [toStringMethod]
 }

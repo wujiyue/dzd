@@ -62,11 +62,21 @@
         from org_role
         where
         id =#{id}
-    </select> 
-    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgRole.bean.Role" flushCache="true">
+    </select>
+	<select id="getMap"  resultType="java.util.Map">
+		select <include refid="allColumns"/>
+		from org_role
+		where
+		id =#{id}
+	</select>
+	<insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgRole.bean.Role" flushCache="true">
     	insert into org_role(orgid,id,name,description,datascope,createTime,updateTime,createBy,updateBy,available,deleted)
     	values (#{orgid},#{id},#{name},#{description},#{datascope},now(),now(),#{createBy},#{updateBy},1,0)
     </insert>
+	<insert id="addMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+		insert into org_role(orgid,id,name,description,datascope,createTime,updateTime,createBy,updateBy,available,deleted)
+		values (#{orgid},#{id},#{name},#{description},#{datascope},now(),now(),#{createBy},#{updateBy},1,0)
+	</insert>
     <insert id="addBatch" flushCache="true">
         insert into org_role (orgid,id,name,description,datascope,createTime,updateTime,createBy,updateBy,available,deleted)
         values

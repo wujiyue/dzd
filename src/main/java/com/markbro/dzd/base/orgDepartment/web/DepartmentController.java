@@ -153,7 +153,7 @@ public class DepartmentController extends com.markbro.asoiaf.core.web.BaseContro
     @ResponseBody
     @RequestMapping(value = "/json/get/{id}")
     public Object get(@PathVariable java.lang.String id) {
-        return departmentService.get(id);
+        return departmentService.getMap(id);
     }
     /**
      * 获得分页json数据
@@ -253,7 +253,7 @@ public class DepartmentController extends com.markbro.asoiaf.core.web.BaseContro
 
          departmentService.deleteBatch(ids);
     }
-
+    //easyui 动态树
     @ResponseBody
     @RequestMapping("/json/tree")
     public Object tree() {

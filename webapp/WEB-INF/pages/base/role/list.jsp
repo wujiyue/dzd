@@ -12,6 +12,8 @@
     }
     table{width:auto;}
   </style>
+  <script type="text/javascript" src="${ctx}/resources/js/H-ui.js"></script>
+  <script type="text/javascript" src="${ctx}/resources/js/H-ui.admin.js"></script>
   <script type="text/javascript">
     var validform;
     var table_list_td_width = 100;
@@ -25,6 +27,9 @@
       $('#form_show')[0].reset();
       validform.resetForm();
       $(".Validform_checktip").html('');
+    }
+    function addNew(){
+    layer_show("新增角色",sys_ctx+"/org/role/add",'','','',function(){sys_table_list();});
     }
     //根据表单查询
     var query = function(formid){
@@ -49,11 +54,13 @@
       table_list_dataGrid.pagination = true;//明细默认不显示分页
       table_list_dataGrid.url = sys_ctx+'/org/role/json/find';
       table_list_dataGrid.columns = columns;
-      table_list_dataGrid.onClickRow =onClickListRow;
+      table_list_dataGrid.onClickRow=onClickRow;
       $("#table_list").datagrid(table_list_dataGrid);
+      //table_list_dataGrid.onClickRow =onClickListRow;
+      $("#table_list").datagrid("clearChecked");
     }
     //点击一行事件
-    var click_table_line = function(guid){
+    /*var click_table_line = function(guid){
       $.ajax({
         type:"post",
         url:'${ctx}/org/role/json/get/'+guid,
@@ -63,7 +70,28 @@
           bind(json,true);
         }
       });
+    }*/
+    var onClickRow=function(rowIndex, rowData){
+      $(this).datagrid("clearSelections").datagrid("selectRecord",rowData[sys_page_config.table_field]);
+      if(sys_page_config.showid != ''){
+
+        layer_show("编辑角色",sys_ctx+"/org/role/edit?id="+rowData[sys_page_config.table_field],'','');
+      }
+
     }
+    var click_table_line = function(guid){
+
+      /*$.ajax({
+        type:"post",
+        url:'${ctx}/org/role/json/get/'+guid,
+        data:null,
+        success:function(json,textStatus){
+          layer.closeAll();
+          bind(json,true);
+        }
+      });*/
+    }
+
     function save(){
       var b=validform.check(false);
      if(!b){
@@ -87,10 +115,7 @@
     function list_del(tableid){
       var selecRow = $("#"+tableid).datagrid("getSelections");
       if(selecRow.length > 0){
-        layer.confirm("确定这样做吗？", {
-          btn: ['确定','取消'],
-          shade: [0.1,'#000']
-        }, function(){
+        layer.confirm("确定这样做吗？", function(){
           var ids=  sys_checkBoxGuid("table_list");
           $.ajax({
             type:"post",
@@ -137,6 +162,8 @@
           <form id="form_query" >
               <div class="menu-bar-default">
                 <a onclick="add()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</a>
+                <a onclick="addNew()" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</a>
+
                 <a onclick="list_del('table_list')" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
                 <a id="open_search"  onclick="javascript:$('#search_hidden').show();$(this).hide();" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">搜索</a>
               </div>

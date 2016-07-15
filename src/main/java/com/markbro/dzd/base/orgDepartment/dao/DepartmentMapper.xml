@@ -85,7 +85,14 @@
         from org_department
         where
         id =#{id}
-    </select> 
+    </select>
+	<select id="getMap"  resultType="java.util.Map">
+		select a.*,b.name parentname
+		from org_department a left join org_department b
+		on a.parentid=b.id
+		where
+		a.id =#{id}
+	</select>
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgDepartment.bean.Department" flushCache="true">
     	insert into org_department(orgid,id,parentid,parentids,name,sort,phone,fax,email,bz,createTime,updateTime,createBy,updateBy,available,deleted)
     	values (#{orgid},#{id},#{parentid},#{parentids},#{name},#{sort},#{phone},#{fax},#{email},#{bz},now(),now(),#{createBy},#{updateBy},1,0)

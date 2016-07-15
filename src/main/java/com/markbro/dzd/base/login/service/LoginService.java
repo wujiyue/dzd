@@ -16,7 +16,7 @@ import com.markbro.dzd.common.util.ConstantUtil;
 import com.markbro.dzd.common.util.Des;
 import com.markbro.dzd.common.util.Guid;
 import com.markbro.dzd.sys.permission.dao.PermissionMapper;
-import com.markbro.dzd.sys.sysUser.dao.UserMapper;
+import com.markbro.dzd.base.orgUser.dao.UserMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

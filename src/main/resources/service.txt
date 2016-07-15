@@ -27,7 +27,9 @@ public class [modelClass][serviceNameSuffix]{
     public [modelClass][beanNameSuffix] get([PK] id){
         return [lowerModelClass][daoNameSuffix].get(id);
     }
-
+    public Map<String,Object> getMap([PK] id){
+        return [lowerModelClass][daoNameSuffix].getMap(id);
+    }
     public List<[modelClass][beanNameSuffix]> find(PageBounds pageBounds,Map<String,Object> map){
         return [lowerModelClass][daoNameSuffix].find(pageBounds,map);
     }

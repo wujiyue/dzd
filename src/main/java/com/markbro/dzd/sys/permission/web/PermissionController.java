@@ -256,9 +256,21 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
 
 
     @ResponseBody
-    @RequestMapping("/json/tree")
-    public Object tree() {
+      @RequestMapping("/json/tree")
+      public Object tree() {
         Map<String, Object> map = getMap(request);
         return permissionService.tree(map);
+    }
+    @ResponseBody
+    @RequestMapping("/json/findPermissionsForShouquan")
+    public Object findPermissionsForShouquan() {
+        return permissionService.findPermissionsForShouquan();
+    }
+    //保存角色授权，传入jsid和权限id字符串用逗号分割
+    @ResponseBody
+    @RequestMapping("/json/saveRolePermissions")
+    public Object saveRolePermissions() {
+        Map map=getMap(request);
+        return permissionService.saveRolePermissions(map);
     }
 }

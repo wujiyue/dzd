@@ -66,7 +66,7 @@
            	]];
           table_list_dataGrid.queryParams = table_list_query_form;
           table_list_dataGrid.pagination = true;
-          table_list_dataGrid.url = sys_ctx+'/sys/user/json/find';
+          table_list_dataGrid.url = sys_ctx+'/org/user/json/find';
           table_list_dataGrid.columns = columns;
           table_list_dataGrid.onClickRow =onClickListRow;
           $("#table_list").datagrid(table_list_dataGrid);
@@ -75,7 +75,7 @@
      var click_table_line = function(guid){
            $.ajax({
              type:"post",
-             url:'${ctx}/sys/user/json/get/'+guid,
+             url:'${ctx}/org/user/json/get/'+guid,
              data:null,
              success:function(json,textStatus){
                layer.closeAll();
@@ -91,7 +91,7 @@
            var params=$("#form_show").serialize();
            $.ajax({
              type:"post",
-             url:'${ctx}/sys/user/json/save?'+params,
+             url:'${ctx}/org/user/json/save?'+params,
              data:null,
              success:function(json,textStatus){
                closefloatDiv(sys_page_config.showid);
@@ -113,7 +113,7 @@
                var ids=  sys_checkBoxGuid("table_list");
                $.ajax({
                  type:"post",
-                 url:'${ctx}/sys/user/json/removes/'+ids,
+                 url:'${ctx}/org/user/json/removes/'+ids,
                  data:null,
                  success:function(data,textStatus){
                    //layer.closeAll();

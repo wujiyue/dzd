@@ -13,7 +13,9 @@ import java.util.Map;
 public interface [modelClass][daoNameSuffix]{
 
     public [modelClass][beanNameSuffix] get([PK] id);
+    public Map<String,Object> getMap([PK] id);
     public void add([modelClass][beanNameSuffix] [lowerModelClass][beanNameSuffix]);
+    public void addByMap(Map<String,Object> map);
     public void addBatch(List<[modelClass][beanNameSuffix]> [lowerModelClass][beanNameSuffix]s);
     public void update([modelClass][beanNameSuffix] [lowerModelClass][beanNameSuffix]);
     public void updateByMap(Map<String,Object> map);

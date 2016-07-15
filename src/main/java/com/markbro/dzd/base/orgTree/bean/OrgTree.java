@@ -3,10 +3,10 @@ import com.markbro.asoiaf.core.model.AliasModel;
 import com.markbro.asoiaf.core.utils.MyBatisRequestUtil;
 import java.util.Map;
 /**
- * Tree bean
- * Created by wujiyue on 2016-06-12 22:41:01.
+ * 组织目录 bean
+ * Created by wujiyue on 2016-07-14 12:00:59.
  */
-public class Tree  implements AliasModel {
+public class OrgTree implements AliasModel {
 	private java.lang.String orgid;//组织id
 	private java.lang.String id;//机构角色id、主键
 	private java.lang.String parentid;//上级id
@@ -57,7 +57,7 @@ public class Tree  implements AliasModel {
 	public java.lang.Integer getDeleted(){ return deleted ;}
 	public void  setDeleted(java.lang.Integer deleted){this.deleted=deleted; }
 
-    public Map<String, Object> convertBeanToMap(Tree bean){
+    public Map<String, Object> convertBeanToMap(OrgTree bean){
         Map<String, Object> map = MyBatisRequestUtil.beanConvert2Map(bean);
     	return map;
     }

@@ -34,6 +34,9 @@ public class DepartmentService{
     public Department get(java.lang.String id){
         return departmentMapper.get(id);
     }
+    public Map<String,Object> getMap(java.lang.String id){
+        return departmentMapper.getMap(id);
+    }
     public List<Department> find(PageBounds pageBounds,Map<String,Object> map){
         return departmentMapper.find(pageBounds,map);
     }

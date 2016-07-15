@@ -33,27 +33,31 @@ user-scalable - 用户是否可以手动缩放
 --%>
 
 <link  href="${ctx}/resources/css/H-ui.css" rel="stylesheet" type="text/css"/>
+<link  href="${ctx}/resources/css/H-ui.admin.css" rel="stylesheet" type="text/css"/>
 <link href="${ctx}/resources/lib/Hui-iconfont/1.0.7/iconfont.css" rel="stylesheet" type="text/css" />
+
+<link  href="${ctx}/resources/css/bro.css" rel="stylesheet" type="text/css"/>
 
 <script type="text/javascript" src="${ctx}/resources/lib/laypage/1.2/laypage.js"></script>
 <script type="text/javascript" src="${ctx}/resources/lib/layer/layer.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/H-ui.js"></script>
 
 <script type="text/javascript" src="${ctx}/resources/lib/Validform/Validform_v5.3.2.js"></script>
-<script type="text/javascript" src="${ctx}/resources/lib/bootstrap-modal/2.2.4/bootstrap-modalmanager.js"></script>
-<script type="text/javascript" src="${ctx}/resources/lib/bootstrap-modal/2.2.4/bootstrap-modal.js"></script>
+
 <script  type="text/javascript" src="${ctx}/resources/js/common/broutil.js"></script>
 <script  type="text/javascript" src="${ctx}/resources/js/common/common.js"></script>
-<script  type="text/javascript" src="${ctx}/resources/js/common/mylayer.js"></script>
+
 <script  type="text/javascript" src="${ctx}/resources/lib/template.js"></script>
 <script  type="text/javascript" src="${ctx}/resources/js/common/brodatagrid.js"></script>
 
 <!-- EasyUI -->
+
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/lib/easyui/themes/default/easyui.css" />
 <link rel="stylesheet" type="text/css" href="${ctx}/resources/lib/easyui/themes/icon.css">
 <script type="text/javascript" src="${ctx}/resources/lib/easyui/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="${ctx}/resources/lib/easyui/easyloader.js"></script>
 <script type="text/javascript" src="${ctx}/resources/lib/easyui/locale/easyui-lang-zh_CN.js"></script>
+
 
 <style>
 	.main_content{padding:0px 5px;overflow-y: hidden;width:100%;border:1px solid red;float:left;}

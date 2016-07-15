@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC   
     "-//mybatis.org//DTD Mapper 3.0//EN"  
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.markbro.dzd.base.orgTree.dao.TreeMapper">
+<mapper namespace="com.markbro.dzd.base.orgTree.dao.OrgTreeMapper">
 	<!--<sql id="addColumns">orgid,id,parentid,type,sjbmid,lxid,name,py,sort,bz,createTime,updateTime,createBy,updateBy,available,deleted</sql> -->
 	<!--<sql id="updateColumns">orgid,parentid,type,sjbmid,lxid,name,py,sort,bz,updateTime,createBy,updateBy,available,deleted</sql> -->
 	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
 	<sql id="allColumns">orgid,id,parentid,type,sjbmid,lxid,name,py,sort,bz,createTime,updateTime,createBy,updateBy,available,deleted</sql>
 	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
-	<resultMap id="treeResult" type="com.markbro.dzd.base.orgTree.bean.Tree">
+	<resultMap id="treeResult" type="com.markbro.dzd.base.orgTree.bean.OrgTree">
 		<result property="orgid" column="orgid" />
 		<result property="id" column="id" />
 		<result property="parentid" column="parentid" />
@@ -57,8 +57,11 @@
 			<if test="bz != null and bz != ''">
 				AND bz = #{bz}
 		</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+		</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 		</if>
 			<if test="updateTime != null and updateTime != ''">
 				AND updateTime = #{updateTime}
@@ -82,8 +85,18 @@
         from org_tree
         where
         id =#{id}
-    </select> 
-    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgTree.bean.Tree" flushCache="true">
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from org_tree
+            where
+            id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgTree.bean.OrgTree" flushCache="true">
+    	insert into org_tree(orgid,id,parentid,type,sjbmid,lxid,name,py,sort,bz,createTime,updateTime,createBy,updateBy,available,deleted)
+    	values (#{orgid},#{id},#{parentid},#{type},#{sjbmid},#{lxid},#{name},#{py},#{sort},#{bz},now(),now(),#{createBy},#{updateBy},1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
     	insert into org_tree(orgid,id,parentid,type,sjbmid,lxid,name,py,sort,bz,createTime,updateTime,createBy,updateBy,available,deleted)
     	values (#{orgid},#{id},#{parentid},#{type},#{sjbmid},#{lxid},#{name},#{py},#{sort},#{bz},now(),now(),#{createBy},#{updateBy},1,0)
     </insert>
@@ -94,7 +107,7 @@
         	(#{item.orgid},#{item.id},#{item.parentid},#{item.type},#{item.sjbmid},#{item.lxid},#{item.name},#{item.py},#{item.sort},#{item.bz},now(),now(),#{item.createBy},#{item.updateBy},1,0)
         </foreach>
     </insert>
-    <update id="update" parameterType="com.markbro.dzd.base.orgTree.bean.Tree" flushCache="true">
+    <update id="update" parameterType="com.markbro.dzd.base.orgTree.bean.OrgTree" flushCache="true">
     	update org_tree 
     	<set>
     		<if test="orgid != null">orgid=#{orgid},</if>
@@ -213,8 +226,11 @@
 			<if test="bz != null and bz != ''">
 				AND bz = #{bz}
 			</if>
-			<if test="createTime != null and createTime != ''">
-				AND createTime = #{createTime}
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+			</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
 			</if>
 			<if test="updateTime != null and updateTime != ''">
 				AND updateTime = #{updateTime}
@@ -235,7 +251,7 @@
    		</where>
    	</select>
 
-	<select id="findByOrgid" resultType="com.markbro.dzd.base.orgTree.bean.Tree">
+	<select id="findByOrgid" resultType="com.markbro.dzd.base.orgTree.bean.OrgTree">
 		select *
 			from org_tree
 		<where>
@@ -244,4 +260,25 @@
 			and available=1
 		</where>
 	</select>
+	<select id="findByParentid" resultType="com.markbro.dzd.base.orgTree.bean.OrgTree">
+		select *
+			from org_tree
+		<where>
+			parentid=#{parentid}
+			and deleted=0
+			and available=1
+		</where>
+	</select>
+
+	<select id="findByParentidCount" resultType="java.lang.Integer">
+		select count(1)
+		from org_tree
+		<where>
+			parentid=#{parentid}
+			and deleted=0
+			and available=1
+			and orgid=#{orgid}
+		</where>
+	</select>
+
 </mapper>

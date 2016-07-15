@@ -1,8 +1,12 @@
 package com.markbro.dzd.sys.permission.service;
+
+import com.alibaba.fastjson.JSONObject;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.markbro.asoiaf.core.model.Msg;
+import com.markbro.asoiaf.utils.string.StringUtil;
 import com.markbro.dzd.base.tablekey.service.TableKeyService;
 import com.markbro.dzd.sys.permission.bean.Permission;
+import com.markbro.dzd.sys.permission.bean.PermissionVo;
 import com.markbro.dzd.sys.permission.dao.PermissionMapper;
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
@@ -181,5 +185,194 @@ public class PermissionService{
             JSONArray jsonArray = JSONArray.fromObject(nodelist, jsonConfig);
             return jsonArray.toString();
         }
+    }
+    //角色授权功能查询三级权限列表
+    public String findPermissionsForShouquan(){
+        List<Permission> list=null;//一级权限
+        List<Permission> list2=null;//二级权限
+        List<Permission> list3=null;//三级权限
+        List<Map<String,Object>> result=new ArrayList<Map<String,Object>>();
+        List<Map<String,Object>> result2=null;
+        List<Map<String,Object>> result3=null;
+        //三级权限，parentid为0的是第一级
+        Map<String,Object> rmap=null;
+        Map<String,Object> rmap2=null;
+        Map<String,Object> rmap3=null;
+        list=findByParentid(new PageBounds(),"0");
+        String id=null;
+        String id2=null;
+        String id3=null;
+        for(Permission p:list){
+            result2=new ArrayList<Map<String,Object>>();
+            rmap=new HashMap<String,Object>();
+            rmap.put("type","mk");//第一级为模块类型
+            id=p.getId();
+            rmap.put("id",id);
+            rmap.put("name",p.getName());
+           //查询parentid为id的就是二级菜单
+            list2=findByParentid(new PageBounds(),id);
+            for(Permission p2:list2){
+                result3=new ArrayList<Map<String,Object>>();
+                rmap2=new HashMap<String,Object>();
+                rmap2.put("type","ym");//第二级为页面类型
+                id2=p2.getId();
+                rmap2.put("id",id2);
+                rmap2.put("name",p2.getName());
+                //查询parentid为id2的就是三级菜单
+                list3=findByParentid(new PageBounds(),id2);
+                for(Permission p3:list3){
+                    rmap3=new HashMap<String,Object>();
+                    rmap3.put("type","ff");//第三级为方法类型
+                    id3=p3.getId();
+                    rmap3.put("id",id3);
+                    rmap3.put("name",p3.getName());
+                    result3.add(rmap3);
+                }
+                rmap2.put("children",result3);
+                result2.add(rmap2);
+            }
+            rmap.put("children",result2);
+            result.add(rmap);
+        }
+
+        return JSONObject.toJSONString(result);
+    }
+    //角色授权功能查询三级权限列表  新增用到
+    public List<PermissionVo> findPermissionsListForShouquan(){
+        List<Permission> list=null;//一级权限
+        List<Permission> list2=null;//二级权限
+        List<Permission> list3=null;//三级权限
+        List<PermissionVo> result=new ArrayList<PermissionVo>();
+        List<PermissionVo> result2=null;
+        List<PermissionVo> result3=null;
+        //三级权限，parentid为0的是第一级
+        PermissionVo rmap=null;
+        PermissionVo rmap2=null;
+        PermissionVo rmap3=null;
+        list=findByParentid(new PageBounds(),"0");
+        String id=null;
+        String id2=null;
+        String id3=null;
+        for(Permission p:list){
+            result2=new ArrayList<PermissionVo>();
+            rmap=new PermissionVo();
+            rmap.setType("mk");//第一级为模块类型
+            id=p.getId();
+            rmap.setId(id);
+            rmap.setName(p.getName());
+            //查询parentid为id的就是二级菜单
+            list2=findByParentid(new PageBounds(),id);
+            for(Permission p2:list2){
+                result3=new ArrayList<PermissionVo>();
+                rmap2=new PermissionVo();
+                rmap2.setType("ym");//第二级为页面类型
+                id2=p2.getId();
+                rmap2.setId(id2);
+                rmap2.setName(p2.getName());
+                //查询parentid为id2的就是三级菜单
+                list3=findByParentid(new PageBounds(),id2);
+                for(Permission p3:list3){
+                    rmap3=new PermissionVo();
+                    rmap3.setType("ff");//第三级为方法类型
+                    id3=p3.getId();
+                    rmap3.setId(id3);
+                    rmap3.setName(p3.getName());
+                    result3.add(rmap3);
+                }
+
+                rmap2.setChildren(result3);
+                result2.add(rmap2);
+            }
+            rmap.setChildren(result2);
+            result.add(rmap);
+        }
+
+        return result;
+    }
+
+    //角色授权功能查询三级权限列表   编辑用到
+    public List<PermissionVo> findPermissionsListForShouquanEdit(String jsid){
+        List<String> jsqxs=permissionMapper.findPermissionsByRole(jsid);
+
+        List<Permission> list=null;//一级权限
+        List<Permission> list2=null;//二级权限
+        List<Permission> list3=null;//三级权限
+        List<PermissionVo> result=new ArrayList<PermissionVo>();
+        List<PermissionVo> result2=null;
+        List<PermissionVo> result3=null;
+        //三级权限，parentid为0的是第一级
+        PermissionVo rmap=null;
+        PermissionVo rmap2=null;
+        PermissionVo rmap3=null;
+        list=findByParentid(new PageBounds(),"0");
+        String id=null;
+        String id2=null;
+        String id3=null;
+        for(Permission p:list){
+            result2=new ArrayList<PermissionVo>();
+            rmap=new PermissionVo();
+            rmap.setType("mk");//第一级为模块类型
+            id=p.getId();
+            if(StringUtil.isContains(id,jsqxs)){
+                rmap.setChecked("1");//该权限选中
+            }
+            rmap.setId(id);
+            rmap.setName(p.getName());
+            //查询parentid为id的就是二级菜单
+            list2=findByParentid(new PageBounds(),id);
+            for(Permission p2:list2){
+                result3=new ArrayList<PermissionVo>();
+                rmap2=new PermissionVo();
+                rmap2.setType("ym");//第二级为页面类型
+                id2=p2.getId();
+                if(StringUtil.isContains(id2,jsqxs)){
+                    rmap2.setChecked("1");//该权限选中
+                }
+                rmap2.setId(id2);
+                rmap2.setName(p2.getName());
+                //查询parentid为id2的就是三级菜单
+                list3=findByParentid(new PageBounds(),id2);
+                for(Permission p3:list3){
+                    rmap3=new PermissionVo();
+                    rmap3.setType("ff");//第三级为方法类型
+                    id3=p3.getId();
+                    if(StringUtil.isContains(id3,jsqxs)){
+                        rmap3.setChecked("1");//该权限选中
+                    }
+                    rmap3.setId(id3);
+                    rmap3.setName(p3.getName());
+                    result3.add(rmap3);
+                }
+
+                rmap2.setChildren(result3);
+                result2.add(rmap2);
+            }
+            rmap.setChildren(result2);
+            result.add(rmap);
+        }
+
+        return result;
+    }
+    public Object saveRolePermissions(Map map){
+        Msg msg=new Msg();
+        try {
+            String ids= (String) map.get("ids");
+            String jsid= (String) map.get("jsid");
+            String[] arr=ids.split(",");
+            int len=arr.length;
+            if(len>0){
+                permissionMapper.deleteRolePermission(jsid);
+                for(int i=0;i<len;i++){
+                    permissionMapper.addRolePermission(arr[i],jsid);
+                }
+            }
+
+            msg.setType(Msg.MsgType.success);
+            msg.setContent("保存角色权限成功！");
+        }catch (Exception e){
+            msg.setType(Msg.MsgType.error);
+            msg.setContent("保存角色权限失败！");
+        }
+        return msg;
     }
 }

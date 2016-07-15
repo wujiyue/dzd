@@ -1,14 +1,15 @@
-package com.markbro.dzd.sys.sysUser.service;
+package com.markbro.dzd.base.orgUser.service;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.markbro.asoiaf.core.model.Msg;
+import com.markbro.dzd.base.orgUser.bean.User;
+import com.markbro.dzd.base.orgUser.dao.UserMapper;
 import com.markbro.dzd.base.tablekey.service.TableKeyService;
-import com.markbro.dzd.sys.sysUser.bean.User;
-import com.markbro.dzd.sys.sysUser.dao.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+
 /**
  * 系统用户 Service
  * Created by wujiyue on 2016-07-05 22:52:55.
@@ -20,7 +21,7 @@ public class UserService{
     @Autowired
     private TableKeyService yhKeyService;
      /*基础公共方法*/
-    public User get(java.lang.String id){
+    public User get(String id){
         return userMapper.get(id);
     }
     public List<User> find(PageBounds pageBounds,Map<String,Object> map){
@@ -36,7 +37,7 @@ public class UserService{
           Msg msg=new Msg();
                  try{
                      if(user.getId()==null||"".equals(user.getId().toString())){
-                         java.lang.String id= yhKeyService.getStringId();
+                         String id= yhKeyService.getStringId();
                          user.setId(id);
                          userMapper.add(user);
                      }else{
@@ -62,10 +63,10 @@ public class UserService{
     public void updateByMapBatch(Map<String,Object> map){
         userMapper.updateByMapBatch(map);
     }
-    public void delete(java.lang.String id){
+    public void delete(String id){
         userMapper.delete(id);
     }
-    public void deleteBatch(java.lang.String[] ids){
+    public void deleteBatch(String[] ids){
         userMapper.deleteBatch(ids);
     }
      /*自定义方法*/

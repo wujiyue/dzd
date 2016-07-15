@@ -265,4 +265,14 @@
 	<select id="getMaxSortByParentid" resultType="java.lang.Integer" parameterType="java.lang.String">
 		select IFNULL(Max(sort),0) from sys_permission where deleted=0 and parentid=#{parentid}
 	</select>
+	<insert id="addRolePermission" flushCache="true">
+		insert into sys_permission_role(qxid,jsid)
+		values(#{qxid},#{jsid})
+	</insert>
+	<delete id="deleteRolePermission" flushCache="true">
+		delete  from sys_permission_role where jsid =#{jsid}
+	</delete>
+	<select id="findPermissionsByRole" resultType="java.lang.String" parameterType="java.lang.String">
+		select qxid from sys_permission_role where jsid=#{jsid}
+	</select>
 </mapper>

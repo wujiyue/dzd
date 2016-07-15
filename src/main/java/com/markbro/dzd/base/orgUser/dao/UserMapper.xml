@@ -2,13 +2,13 @@
 <!DOCTYPE mapper PUBLIC   
     "-//mybatis.org//DTD Mapper 3.0//EN"  
     "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.markbro.dzd.sys.sysUser.dao.UserMapper">
+<mapper namespace="com.markbro.dzd.base.orgUser.dao.UserMapper">
 	<!--<sql id="addColumns">id,orgid,account,password,usertype,nickname,remark,gender,birthday,age,realname,idcard,hometown,address,qq,email,emailflag,phone,phoneflag,createtype,lastLoginIp,lastLoginTime,openid,createTime,updateTime,available,deleted</sql> -->
 	<!--<sql id="updateColumns">orgid,account,password,usertype,nickname,remark,gender,birthday,age,realname,idcard,hometown,address,qq,email,emailflag,phone,phoneflag,createtype,lastLoginIp,lastLoginTime,openid,updateTime,available,deleted</sql> -->
 	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
 	<sql id="allColumns">id,orgid,account,password,usertype,nickname,remark,gender,birthday,age,realname,idcard,hometown,address,qq,email,emailflag,phone,phoneflag,createtype,lastLoginIp,lastLoginTime,openid,createTime,updateTime,available,deleted</sql>
 	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
-	<resultMap id="userResult" type="com.markbro.dzd.sys.sysUser.bean.User">
+	<resultMap id="userResult" type="com.markbro.dzd.base.orgUser.bean.User">
 		<result property="id" column="id" />
 		<result property="orgid" column="orgid" />
 		<result property="account" column="account" />
@@ -130,7 +130,7 @@
         where
         id =#{id}
     </select> 
-    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.sys.sysUser.bean.User" flushCache="true">
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgUser.bean.User" flushCache="true">
     	insert into sys_user(id,orgid,account,password,usertype,nickname,remark,gender,birthday,age,realname,idcard,hometown,address,qq,email,emailflag,phone,phoneflag,createtype,lastLoginIp,lastLoginTime,openid,createTime,updateTime,available,deleted)
     	values (#{id},#{orgid},#{account},#{password},#{usertype},#{nickname},#{remark},#{gender},#{birthday},#{age},#{realname},#{idcard},#{hometown},#{address},#{qq},#{email},#{emailflag},#{phone},#{phoneflag},#{createtype},#{lastLoginIp},#{lastLoginTime},#{openid},now(),now(),1,0)
     </insert>
@@ -141,7 +141,7 @@
         	(#{item.id},#{item.orgid},#{item.account},#{item.password},#{item.usertype},#{item.nickname},#{item.remark},#{item.gender},#{item.birthday},#{item.age},#{item.realname},#{item.idcard},#{item.hometown},#{item.address},#{item.qq},#{item.email},#{item.emailflag},#{item.phone},#{item.phoneflag},#{item.createtype},#{item.lastLoginIp},#{item.lastLoginTime},#{item.openid},now(),now(),1,0)
         </foreach>
     </insert>
-    <update id="update" parameterType="com.markbro.dzd.sys.sysUser.bean.User" flushCache="true">
+    <update id="update" parameterType="com.markbro.dzd.base.orgUser.bean.User" flushCache="true">
     	update sys_user 
     	<set>
     		<if test="orgid != null">orgid=#{orgid},</if>
@@ -351,7 +351,7 @@
    		</where>
    	</select>
 
-	<select id="findByOrgid" resultType="com.markbro.dzd.sys.sysUser.bean.User">
+	<select id="findByOrgid" resultType="com.markbro.dzd.base.orgUser.bean.User">
 		select *
 			from sys_user
 		<where>

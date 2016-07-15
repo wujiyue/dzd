@@ -175,10 +175,7 @@
     function list_del(tableid){
       var selecRow = $("#"+tableid).datagrid("getSelections");
       if(selecRow.length > 0){
-        layer.confirm("确定这样做吗？", {
-          btn: ['确定','取消'],
-          shade: [0.1,'#fff']
-        }, function(){
+        layer.confirm("确定这样做吗？", function(){
           var ids=  sys_checkBoxGuid("table_list");
           $.ajax({
             type:"post",

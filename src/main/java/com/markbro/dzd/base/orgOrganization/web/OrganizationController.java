@@ -77,7 +77,18 @@ public class OrganizationController extends com.markbro.asoiaf.core.web.BaseCont
          model.addAttribute("organization",organization);
          return "/base/organization/edit";
     }
-   /**
+    /**
+     * 跳转到编辑页面供维护组织信息使用
+     */
+    @RequestMapping(value = "/wh")
+    public String wh(Model model){
+        Map map=getMap(request);
+        Organization organization=organizationService.get((String) map.get("orgid"));
+        model.addAttribute("organization",organization);
+        return "/base/organization/wh";
+    }
+
+    /**
     * 保存新增或者编辑的数据并重定向到列表页面
     */
     @RequestMapping(value="/save",method = RequestMethod.POST)

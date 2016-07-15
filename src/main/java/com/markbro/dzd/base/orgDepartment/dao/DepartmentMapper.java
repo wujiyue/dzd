@@ -13,6 +13,7 @@ import java.util.Map;
 @Repository
 public interface DepartmentMapper{
     public Department get(java.lang.String id);
+    public Map<String,Object> getMap(java.lang.String id);
     public void add(Department department);
     public void addBatch(List<Department> departments);
     public void update(Department department);

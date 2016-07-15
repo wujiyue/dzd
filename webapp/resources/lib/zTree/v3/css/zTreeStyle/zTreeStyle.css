@@ -95,3 +95,20 @@ ul.ztree.zTreeDragUL {margin:0; padding:0; position:absolute; width:auto; height
 	padding:0;
 	background:none;
 }*/
+
+.ztree li span.button.bm_ico_open,.ztree li span.button.bm_ico_docu{    margin-right: 2px;
+	background: url(img/bm_open.png) no-repeat scroll 0 0 transparent;
+	vertical-align: top;}
+.ztree li span.button.bm_ico_close{    margin-right: 2px;
+	background: url(img/bm_close.png) no-repeat scroll 0 0 transparent;
+	vertical-align: top;}
+.ztree li span.button.gw_ico_open,.ztree li span.button.gw_ico_docu{    margin-right: 2px;
+	background: url(img/gw_open.ico) no-repeat scroll 0 0 transparent;
+	vertical-align: top;}
+.ztree li span.button.gw_ico_close{    margin-right: 2px;
+	background: url(img/gw_close.ico) no-repeat scroll 0 0 transparent;
+	vertical-align: top;}
+.ztree li span.button.ry_ico_docu{    margin-right: 2px;
+	background: url(img/ry.png) no-repeat scroll 0 0 transparent;
+	vertical-align: top;}
+

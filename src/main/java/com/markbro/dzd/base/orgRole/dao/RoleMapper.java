@@ -1,8 +1,8 @@
 package com.markbro.dzd.base.orgRole.dao;
-import org.springframework.stereotype.Repository;
-import com.markbro.asoiaf.core.repo.CrudRepo;
-import com.markbro.dzd.base.orgRole.bean.Role;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.markbro.dzd.base.orgRole.bean.Role;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Map;
 /**
@@ -12,7 +12,9 @@ import java.util.Map;
 @Repository
 public interface RoleMapper{
     public Role get(java.lang.String id);
+    public Map<String,Object> getMap(java.lang.String id);
     public void add(Role role);
+    public void addMap(Map<String,Object> map);
     public void addBatch(List<Role> roles);
     public void update(Role role);
     public void updateByMap(Map<String,Object> map);
