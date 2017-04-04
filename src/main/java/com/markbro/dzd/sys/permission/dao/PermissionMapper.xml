@@ -84,8 +84,8 @@
         a.id =#{id}
     </select> 
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.sys.permission.bean.Permission" flushCache="true">
-    	insert into sys_permission(id,parentid,parentids,name,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted)
-    	values (#{id},#{parentid},#{parentids},#{name},#{code},#{url},#{icon},#{sort},#{description},now(),#{createBy},#{updateBy},now(),#{available},0)
+    	insert into sys_permission(id,parentid,parentids,name,qxlx,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted)
+    	values (#{id},#{parentid},#{parentids},#{name},#{qxlx},#{code},#{url},#{icon},#{sort},#{description},now(),#{createBy},#{updateBy},now(),#{available},0)
     </insert>
     <insert id="addBatch" flushCache="true">
         insert into sys_permission (id,parentid,parentids,name,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted)
@@ -100,6 +100,7 @@
     		<if test="parentid != null">parentid=#{parentid},</if>
 			<if test="parentids != null">parentids=#{parentids},</if>
 			<if test="name != null">name=#{name},</if>
+			<if test="qxlx != null">qxlx=#{qxlx},</if>
 			<if test="code != null">code=#{code},</if>
 			<if test="url != null">url=#{url},</if>
 			<if test="icon != null">icon=#{icon},</if>

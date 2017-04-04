@@ -11,6 +11,8 @@ public class Permission  implements AliasModel {
 	private java.lang.String parentid;//权限父ID
 	private java.lang.String parentids;//
 	private java.lang.String name;//权限名称
+	private java.lang.String target;//页面打开方式
+	private java.lang.String qxlx;//权限类型 1页面 2按钮
 	private java.lang.String code;//权限代码
 	private java.lang.String url;//权限url
 	private java.lang.String icon;//
@@ -22,6 +24,22 @@ public class Permission  implements AliasModel {
 	private java.lang.String updateTime;//
 	private java.lang.Integer available;//状态标志
 	private java.lang.Integer deleted;//删除标志
+
+	public String getTarget() {
+		return target;
+	}
+
+	public void setTarget(String target) {
+		this.target = target;
+	}
+
+	public String getQxlx() {
+		return qxlx;
+	}
+
+	public void setQxlx(String qxlx) {
+		this.qxlx = qxlx;
+	}
 
 	public java.lang.String getId(){ return id ;}
 	public void  setId(java.lang.String id){this.id=id; }

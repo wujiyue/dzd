@@ -207,30 +207,38 @@
       </div>
       <div class="form-group">
         <label class="control-label col-sm-2"><span class="text-danger">*</span>权限类型:</label>
-        <input type="hidden" id="qxlx" name="qxlx">
+        <input type="hidden" id="qxlx" name="qxlx" value="1">
         <div class="col-sm-6 formControls">
 
-              <input type="radio" name="option1" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
+          <label><input type="radio"  name="option1" checked>页面</label>
 
-              <input type="radio" name="option1" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; border: 0px; opacity: 0; background: rgb(255, 255, 255);"></ins>
-
+          <label><input type="radio" id="radio_btn" name="option1">按钮</label>
             <script>
+             // $(function(){
+                $("input[type='radio']").click(function(){
+                  if($("#radio_btn").is(":checked")){
+                    $("#qxlx").val("2");
+                  }else{
+                    $("#qxlx").val("1");
+                  }
+                });
+             // })
+
             </script>
         </div>
            <%--<div class="layui-form layui-input-block">
              <input type="radio" name="sex" value="男" title="男"><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon layui-anim-scaleSpring">11</i><span>男</span></div>
              <input type="radio" name="sex" value="女" title="女" checked=""><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon">22</i><span>女</span></div>
            </div>--%>
-        </div>
       <div class="col-sm-4">
         <div class="Validform_checktip"></div>
       </div>
   </div>
 
       <div class="form-group">
-        <label class="control-label col-sm-2"><span class="text-danger">*</span>权限代码:</label>
+        <label class="control-label col-sm-2">权限代码:</label>
         <div class="col-sm-6 formControls">
-          <input type="text" class="form-control"  id="code"  name="code" datatype="*" nullmsg="请输入权限代码"    />
+          <input type="text" class="form-control"  id="code"  name="code"   />
         </div>
         <div class="col-sm-4">
           <div class="Validform_checktip"></div>
