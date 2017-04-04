@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.base.account.dao.SecurityQuestonMapper">
+	<!--<sql id="addColumns">id,question</sql> -->
+	<!--<sql id="updateColumns">question</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,question</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="securityQuestonResult" type="com.markbro.dzd.base.account.bean.SecurityQueston">
+		<result property="id" column="id" />
+		<result property="question" column="question" />
+	</resultMap>
+    <sql id="SecurityQueston_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="question != null and question != ''">
+				AND question = #{question}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="securityQuestonResult">
+        select <include refid="allColumns"/>
+        from account_security_queston
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from account_security_queston
+            where
+            id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.account.bean.SecurityQueston" flushCache="true">
+    	insert into account_security_queston(id,question)
+    	values (#{id},#{question})
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into account_security_queston(id,question)
+    	values (#{id},#{question})
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into account_security_queston (id,question)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(#{item.id},#{item.question})
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.base.account.bean.SecurityQueston" flushCache="true">
+    	update account_security_queston 
+    	<set>
+    		<if test="question != null">question=#{question},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update account_security_queston
+        <set>
+            <if test="question != null">question=#{question},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update account_security_queston
+         <set>
+         <if test="question != null">question=#{question},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from account_security_queston where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from account_security_queston where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="securityQuestonResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM account_security_queston
+        <where>
+            
+            
+            <include refid="SecurityQueston_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="securityQuestonResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM account_security_queston
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="question != null and question != ''">
+				AND question = #{question}
+			</if>
+			
+   		</where>
+   	</select>
+
+
+
+</mapper>

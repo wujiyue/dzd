@@ -1,7 +1,5 @@
 package com.markbro.dzd.base.login.bean;
 
-import com.markbro.dzd.common.util.ConstantUtil;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,7 +24,7 @@ public class LoginBean implements Serializable {
 	private String zzid;//组织机构id
 	private String xm;//显示名
 	private String state;//用户状态
-	private boolean isAdmin;
+	private boolean isAdmin;//特殊的超级管理员，或者以admin角色定义的超级管理员
 	private boolean mobileLogin; // 是否手机登录
 	//登录用户组织信息
 	private Map<String, Object> orgMap =new HashMap<String, Object>();
@@ -38,7 +36,6 @@ public class LoginBean implements Serializable {
 	
 	
 	public boolean isAdmin() {
-		this.isAdmin =this.yhid.equals(ConstantUtil.CON_ADMIN);
 		return isAdmin;
 	}
 

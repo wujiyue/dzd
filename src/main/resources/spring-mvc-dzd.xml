@@ -38,8 +38,8 @@
                     </list>
                 </property>
                 <property name="objectMapper">
-                    <bean class="com.markbro.asoiaf.core.utils.CustomJsonMapper" />
-                    <!--<bean class="com.github.miemiedev.mybatis.paginator.jackson2.PageListJsonMapper" />-->
+                    <!--<bean class="com.markbro.asoiaf.core.utils.CustomJsonMapper" />-->
+                    <bean class="com.github.miemiedev.mybatis.paginator.jackson2.PageListJsonMapper" />
                 </property>
                 <property name="prettyPrint" value="true"/>
             </bean>
@@ -73,25 +73,29 @@
 
         <mvc:interceptor>
             <mvc:mapping path="/**"></mvc:mapping>
+            <mvc:exclude-mapping path="/*.ico" />
             <mvc:exclude-mapping path="/resources/**"/>
-
+            <mvc:exclude-mapping path="/front/**"/>
             <bean class="com.markbro.dzd.interceptor.MonitorInterceptor"></bean>
         </mvc:interceptor>
         <mvc:interceptor>
             <mvc:mapping path="/**"></mvc:mapping>
+            <mvc:exclude-mapping path="/*.ico" />
             <mvc:exclude-mapping path="/resources/**"/>
-
+            <mvc:exclude-mapping path="/front/**"/>
             <bean class="com.markbro.dzd.interceptor.RequestFilterInterceptor"></bean>
         </mvc:interceptor>
         <!-- 手机视图拦截器 -->
-        <!--<mvc:interceptor>
+       <!-- <mvc:interceptor>
         <mvc:mapping path="/**" />
-            <bean class="com.markbro.broadminin.interceptor.MobileInterceptor" />
+            <bean class="com.markbro.dzd.interceptor.MobileInterceptor" />
         </mvc:interceptor>-->
-        <mvc:interceptor>
+        <!--<mvc:interceptor>
             <mvc:mapping path="/**"/>
+            <mvc:exclude-mapping path="/sys/cache/**"/>
+            <mvc:exclude-mapping path="/logout"/>
             <bean class="com.markbro.dzd.interceptor.ActionLogInterceptor"></bean>
-        </mvc:interceptor>
+        </mvc:interceptor>-->
     </mvc:interceptors>
 
     <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
@@ -105,11 +109,7 @@
     <!-- 定义无Controller的path<->view直接映射 -->
   <mvc:view-controller path="/" view-name="/login"/>
 
-   <!-- <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
-        <property name="prefix" value="/WEB-INF/pages/"/>
-        <property name="suffix" value=".jsp"/>
-    </bean>-->
+
     <bean id="jspViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView"></property>
         <property name="prefix" value="/WEB-INF/pages/"/>
@@ -123,11 +123,11 @@
     </bean>
     <bean name="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
     <!-- 系统注册码配置 -->
-    <bean id="serial" class="com.markbro.dzd.common.util.Serial">
+    <!--<bean id="serial" class="com.markbro.dzd.common.util.Serial">
         <property name="serials">
             <list>
                 <value>H822C862C382233JF2238K9766MJ9CJ42FJ3J7J692262337928M26C323G62K2H</value>
             </list>
         </property>
-    </bean>
+    </bean>-->
 </beans>

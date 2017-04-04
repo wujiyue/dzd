@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
- * 组织目录 Service
+ * 组织目录 service
  * Created by wujiyue on 2016-07-14 12:01:01.
  */
 @Service

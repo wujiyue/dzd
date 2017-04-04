@@ -85,7 +85,7 @@
     </select> 
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.sys.permission.bean.Permission" flushCache="true">
     	insert into sys_permission(id,parentid,parentids,name,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted)
-    	values (#{id},#{parentid},#{parentids},#{name},#{code},#{url},#{icon},#{sort},#{description},now(),#{createBy},#{updateBy},now(),1,0)
+    	values (#{id},#{parentid},#{parentids},#{name},#{code},#{url},#{icon},#{sort},#{description},now(),#{createBy},#{updateBy},now(),#{available},0)
     </insert>
     <insert id="addBatch" flushCache="true">
         insert into sys_permission (id,parentid,parentids,name,code,url,icon,sort,description,createTime,createBy,updateBy,updateTime,available,deleted)
@@ -172,7 +172,7 @@
     <select id="find" resultMap="permissionResult" parameterType="java.util.Map">
         SELECT <include refid="allColumns"/> FROM sys_permission
         <where>
-            and available=1
+           <!-- and available=1-->
             and deleted=0
             <include refid="Permission_Where_Clause"/>
         </where>
@@ -247,7 +247,11 @@
 	<!--查询登录用户url权限-->
 	<select id="queryQxByYhid" resultType="java.util.Map"  parameterType="java.lang.String">
 		select * from sys_permission where id in
-		(select qxid from sys_permission_role where jsid in(select jsid from org_yh_js where yhid=1))
+		(
+		select qxid from sys_permission_role where jsid in(select jsid from org_user_role where yhid=#{yhid})
+		UNION
+		select qxid from sys_permission_user where yhid=#{yhid}
+		)
 		and deleted=0
 	</select>
 	<!--删除菜单时检测是否含有子菜单-->

@@ -1,13 +1,16 @@
 package com.markbro.dzd.base.orgDepartment.web;
-
 import com.markbro.asoiaf.core.model.Msg;
 import com.markbro.asoiaf.core.model.PageParam;
+import com.markbro.asoiaf.core.utils.EhCacheUtils;
 import com.markbro.asoiaf.utils.string.StringUtil;
 import com.markbro.dzd.base.orgDepartment.bean.Department;
+import com.markbro.dzd.base.orgDepartment.dao.DepartmentMapper;
 import com.markbro.dzd.base.orgDepartment.service.DepartmentService;
+import com.markbro.dzd.base.orgTree.dao.OrgTreeMapper;
 import com.markbro.dzd.interceptor.ActionLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,23 +23,47 @@ import java.util.Map;
 
 /**
  * 部门管理
- * Created by wujiyue on 2016-07-09 23:04:45.
+ * Created by wujiyue on 2016-07-17 11:52:55.
  */
 @Controller
 @RequestMapping("/org/department")
 public class DepartmentController extends com.markbro.asoiaf.core.web.BaseController{
     @Autowired
     protected DepartmentService departmentService;
+    @Autowired
+    private DepartmentMapper departmentMapper;
+    @Autowired
+    private OrgTreeMapper orgTreeMapper;
     @RequestMapping(value={"","/"})
     public String index(){
-        return "/base/department/manager";
+        return "/base/department/list";
     }
     /**
      * 跳转到新增页面
      */
     @RequestMapping("/add")
-    public String toAdd(Department department,Model model){
+    public String toAdd(Model model){
+        Map map=getMap(request);
+        model.addAttribute("parentid",(String) map.get("parentid"));
+        model.addAttribute("parentname",(String) map.get("parentname"));
         return "/base/department/add";
+    }
+    /**
+     * 跳转到编辑页面
+     */
+    @RequestMapping(value = "/edit")
+    public String toEdit(Model model){
+        Map map=getMap(request);
+        String id=(String)map.get("id");
+        Map<String,Object> res=departmentService.getMap(id);
+        String parentid= (String) res.get("parentid");
+        if("0".equals(parentid)){
+            String yhid= (String) map.get("yhid");
+            Map<String,Object> orgMap= (Map<String, Object>) EhCacheUtils.getUserInfo("orgMap",yhid);
+            res.put("parentname",(String)orgMap.get("name"));
+        }
+        model.addAttribute("department",res);
+        return "/base/department/edit";
     }
     /**
      * 删除数据并重定向到列表页面
@@ -66,17 +93,6 @@ public class DepartmentController extends com.markbro.asoiaf.core.web.BaseContro
         model.addAttribute("departments",departments);
         model.addAttribute("pageParam",pageParam);
         return "/base/department/list";
-    }
-   /**
-    * 跳转到编辑页面
-    */
-    @RequestMapping(value = "/edit")
-    public String toEdit(Department department,Model model){
-        if(department!=null&&department.getId()!=null){
-            department=departmentService.get(department.getId());
-        }
-         model.addAttribute("department",department);
-         return "/base/department/edit";
     }
    /**
     * 保存新增或者编辑的数据并重定向到列表页面
@@ -111,11 +127,10 @@ public class DepartmentController extends com.markbro.asoiaf.core.web.BaseContro
     //-----------json数据接口--------------------
     
 	@ResponseBody
-	@RequestMapping("/json/findByParentid/{parentid}")
-	public Object findByParentid(@PathVariable java.lang.String parentid) {
+	@RequestMapping("/json/findByParentid")
+	public Object findByParentid() {
         Map map=getMap(request);
-        map.put("parentid",parentid);
-		return departmentService.findByParentid(getPageBounds(), map);
+		return departmentService.findByParentid(getPageBounds(),map);
 	}
     /**
 	*找到已删除的数据（deleted=1）
@@ -153,7 +168,7 @@ public class DepartmentController extends com.markbro.asoiaf.core.web.BaseContro
     @ResponseBody
     @RequestMapping(value = "/json/get/{id}")
     public Object get(@PathVariable java.lang.String id) {
-        return departmentService.getMap(id);
+        return departmentService.get(id);
     }
     /**
      * 获得分页json数据
@@ -180,7 +195,8 @@ public class DepartmentController extends com.markbro.asoiaf.core.web.BaseContro
     @RequestMapping(value="/json/save",method = RequestMethod.POST)
     @ActionLog(description="保存部门")
     public Object save() {
-        return  departmentService.save(getMap(request));
+        Map map=getMap(request);
+        return  departmentService.save(map);
     }
     /**
 	* 逻辑删除的数据（deleted=1）
@@ -193,7 +209,7 @@ public class DepartmentController extends com.markbro.asoiaf.core.web.BaseContro
         int count=departmentService.checkForDelete(id);
         if(count>0){
             msg.setType(Msg.MsgType.error);
-            msg.setContent("删除的菜单下不能有子菜单！");
+            msg.setContent("删除的部门下不能有子部门！");
             return msg;
         }else{
             Map<String,Object> map=new HashMap<String,Object>();
@@ -215,14 +231,20 @@ public class DepartmentController extends com.markbro.asoiaf.core.web.BaseContro
 	*/
 	@ResponseBody
 	@RequestMapping("/json/removes/{ids}")
+    @Transactional
 	public Object removes(@PathVariable java.lang.String[] ids){
 	Msg msg=new Msg();
 	try{
+        for(int i=0;i<ids.length;i++)
+        {
+            Department department=departmentMapper.get(ids[0]);
+            orgTreeMapper.deleteByLxidAndType(department.getId(),"bm");
+        }
         String ids_str= StringUtil.arrToString(ids, ",");
         int count=departmentService.checkForDelete(ids_str);
         if(count>0){
             msg.setType(Msg.MsgType.error);
-            msg.setContent("删除的菜单下不能有子菜单！");
+            msg.setContent("删除的部门下不能有子部门！");
             return msg;
         }else{
             Map<String,Object> map=new HashMap<String,Object>();
@@ -249,7 +271,6 @@ public class DepartmentController extends com.markbro.asoiaf.core.web.BaseContro
     @RequestMapping(value = "/json/deletes/{ids}", method = RequestMethod.POST)
     @ActionLog(description="批量物理删除部门")
     public void deletes(@PathVariable java.lang.String[] ids) {//前端传送一个用逗号隔开的id字符串，后端用数组接收，springMVC就可以完成自动转换成数组
-
 
          departmentService.deleteBatch(ids);
     }

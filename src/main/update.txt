@@ -1,0 +1,29 @@
+2016年7月30日
+1.完善权限路经检测。当访问某个模块的json数据接口的时候，用户必须有该模块的权限。比如访问/sys/user/json/find 接口时，要求用户权限url包含/sys/user.
+2.存在的问题。a)由于删除数据功能是ajax请求数据接口../json/removes/..实现的。而不是类似../json/removes?ids=,所以几遍用户权限urls有../json/removes，后台也会报错提示没有请求url  ../json/removes/1  的权限
+    b).ajax请求url没有该url权限是报错前端没有提示。只是在后台抛出异常。
+2016年7月31日
+完善代码生成器功能。
+a).判断该表中有无parentid和parentids.如果有parentid，自动生成findByParentid的dao、service、controller层的方法,findByParentidCount的dao层方法,checkForDelete的dao、service层方法,如果有parentids自动生成getParentidsById的dao层方法
+b).当有parentid字段，逻辑删除remove、removes和屋里删除delete、deletes中判断删除的该条记录是否有子记录，（在controller层中调用service的checkForDelete的方法），如果有不能删除。
+c).当有parentids字段，保存的时候，会自动设置parentids的值
+d).判断该表中有无排序字段（sort）。如果有，自动生成dao层的updateSort、getMaxSortByParentid方法。并且在保存的时候自动设置该记录的排序序号
+2016年8月7日
+1. controller.txt模版新增findAll数据接口可以不分页查询所有符合条件的数据
+2016年8月10日
+1. broSelect标签可以关联外部一个存储id值的隐藏域。并且内部自动实现onchange事件来填充id隐藏域。支持select内容的回填。注意使用到了延迟来实现回显text，以保证设置text时刻该select的options已经加载完毕
+2016年9月17日
+1.数据库sys_para表中配置的baseUrl，其中的urls在RequestFilter中排除在路经检测外。通常配置允许不登陆就能访问的路径比如/login,/reg
+2.数据库sys_para表中配置login_page,它允许用户灵活的切换用哪个页面当登录页面，页面名称无需后缀。比如login、login-simple
+3.数据库sys_para表中配置reg_page,它允许用户灵活的切换用哪个页面当注册页面，页面名称无需后缀。比如reg-simple、reg
+
+2016年10月2日 10:46:14
+复制了一份工程，本工程前端决定采用全新的UI，表格采用Bootsrap Table
+
+2016年12月20日 23:22:03
+在bearinfested-gen基础上修改出bearinfested-gen-velocity模版，采用velocity模版技术
+
+2016年12月29日 17:49:26
+1.新增数据库密码回调解密类，实现配置文件配置数据库密文密码
+2.配置读写分离数据库连接池。通过AOP技术判断执行service何种方法选择调用哪种连接池
+

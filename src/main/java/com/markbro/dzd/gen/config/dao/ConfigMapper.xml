@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.gen.config.dao.ConfigMapper">
+	<!--<sql id="addColumns">id,section,name,value,description,createBy,createTime,updateBy,updateTime,available,deleted</sql> -->
+	<!--<sql id="updateColumns">section,name,value,description,createBy,updateBy,updateTime,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,section,name,value,description,createBy,createTime,updateBy,updateTime,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="configResult" type="com.markbro.dzd.gen.config.bean.Config">
+		<result property="id" column="id" />
+		<result property="section" column="section" />
+		<result property="name" column="name" />
+		<result property="value" column="value" />
+		<result property="description" column="description" />
+		<result property="createBy" column="createBy" />
+		<result property="createTime" column="createTime" />
+		<result property="updateBy" column="updateBy" />
+		<result property="updateTime" column="updateTime" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="Config_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="section != null and section != ''">
+				AND section = #{section}
+		</if>
+			<if test="name != null and name != ''">
+				AND name like CONCAT('%',#{name},'%')
+		</if>
+			<if test="value != null and value != ''">
+				AND value = #{value}
+		</if>
+			<if test="description != null and description != ''">
+				AND description = #{description}
+		</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+		</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+		</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+		</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="configResult">
+        select <include refid="allColumns"/>
+        from gen_config
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from gen_config
+            where
+            id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.gen.config.bean.Config" flushCache="true">
+    	insert into gen_config(id,section,name,value,description,createBy,createTime,updateBy,updateTime,available,deleted)
+    	values (null,#{section},#{name},#{value},#{description},#{createBy},now(),#{updateBy},now(),1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into gen_config(id,section,name,value,description,createBy,createTime,updateBy,updateTime,available,deleted)
+    	values (null,#{section},#{name},#{value},#{description},#{createBy},now(),#{updateBy},now(),1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into gen_config (id,section,name,value,description,createBy,createTime,updateBy,updateTime,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(null,#{item.section},#{item.name},#{item.value},#{item.description},#{item.createBy},now(),#{item.updateBy},now(),1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.gen.config.bean.Config" flushCache="true">
+    	update gen_config 
+    	<set>
+    		<if test="section != null">section=#{section},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="value != null">value=#{value},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update gen_config
+        <set>
+            <if test="section != null">section=#{section},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="value != null">value=#{value},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update gen_config
+         <set>
+         <if test="section != null">section=#{section},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="value != null">value=#{value},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from gen_config where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from gen_config where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="configResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM gen_config
+        <where>
+            and available=1
+            and deleted=0
+            <include refid="Config_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="configResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM gen_config
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="section != null and section != ''">
+				AND section = #{section}
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="value != null and value != ''">
+				AND value = #{value}
+			</if>
+			<if test="description != null and description != ''">
+				AND description = #{description}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+   	</select>
+
+
+
+</mapper>

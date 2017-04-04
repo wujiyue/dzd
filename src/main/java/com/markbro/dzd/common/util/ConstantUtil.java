@@ -124,7 +124,9 @@ public class ConstantUtil {
 	
 	
 	public static final String CACHE_YH_USERBEAN = "userbean";
-	public static final String CACHE_YH_JS = "js";
+	public static final String CACHE_YH_JS_LIST = "jslist";
+	public static final String CACHE_YH_BM_LIST = "bmlist";
+	public static final String CACHE_YH_GW_LIST = "gwlist";
 	public static final String CACHE_YH_ORG = "org";
 	public static final String CACHE_YH_GW_SEL = "gw_sel";
 	public static final String CACHE_YH_URL = "url";

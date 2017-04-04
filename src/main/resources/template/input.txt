@@ -1,0 +1,24 @@
+## 生成input text表单元素区域的宏
+#macro(input_text $title $id)
+  <input type="text" id="$id" name="$id" placeholder="$title" value="${${lowerModelClass}.${id}}" class="form-control" datatype="*" nullmsg="请输入$title" />
+#end
+
+## 生成select表单元素区域的宏
+#macro(select $title $id $items)
+<div>
+  <select id="$id" name="$id">
+#foreach($key in $items.keySet())
+    <option value="$key">$items.get($key)</option>
+#end
+  </select>
+#end
+
+## 生成input password表单元素区域的宏
+#macro(input_password $title $id)
+  <input type="password" id="$id" name="$id" placeholder="$title" class="form-control"  datatype="*" nullmsg="请输入$title"  />
+#end
+
+## 生成input textarea表单元素区域的宏
+#macro(input_textarea $title $id)
+  <textarea id="$id"  name="$id" rows="3"  placeholder="$title" style="width:100%"  class="form-control"   datatype="*" nullmsg="请输入$title" ></textarea>
+#end

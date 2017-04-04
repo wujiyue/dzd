@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.cms.cpupdatelog.dao.CpupdateLogMapper">
+	<!--<sql id="addColumns">id,cpdm,version,gxnr,fbsj,lrr,createTime,createBy,updateTime,updateBy,available,deleted</sql> -->
+	<!--<sql id="updateColumns">cpdm,version,gxnr,fbsj,lrr,createBy,updateTime,updateBy,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,cpdm,version,gxnr,fbsj,lrr,createTime,createBy,updateTime,updateBy,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="cpupdateLogResult" type="com.markbro.dzd.cms.cpupdatelog.bean.CpupdateLog">
+		<result property="id" column="id" />
+		<result property="cpdm" column="cpdm" />
+		<result property="cpmc" column="cpmc" />
+		<result property="version" column="version" />
+		<result property="gxnr" column="gxnr" />
+		<result property="fbsj" column="fbsj" />
+		<result property="lrr" column="lrr" />
+		<result property="createTime" column="createTime" />
+		<result property="createBy" column="createBy" />
+		<result property="updateTime" column="updateTime" />
+		<result property="updateBy" column="updateBy" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="CpupdateLog_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="cpdm != null and cpdm != ''">
+				AND cpdm = #{cpdm}
+		</if>
+			<if test="version != null and version != ''">
+				AND version = #{version}
+		</if>
+			<if test="gxnr != null and gxnr != ''">
+				AND gxnr = #{gxnr}
+		</if>
+			<if test="fbsj != null and fbsj != ''">
+				AND fbsj = #{fbsj}
+		</if>
+			<if test="lrr != null and lrr != ''">
+				AND lrr = #{lrr}
+		</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+		</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+		</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+		</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+	<sql id="CpupdateLog_Where_Clause2">
+		<if test="id != null and id != ''">
+			AND a.id = #{id}
+		</if>
+		<if test="cpdm != null and cpdm != ''">
+			AND a.cpdm = #{cpdm}
+		</if>
+		<if test="version != null and version != ''">
+			AND a.version = #{version}
+		</if>
+		<if test="gxnr != null and gxnr != ''">
+			AND a.gxnr = #{gxnr}
+		</if>
+		<if test="fbsj != null and fbsj != ''">
+			AND a.fbsj = #{fbsj}
+		</if>
+		<if test="lrr != null and lrr != ''">
+			AND a.lrr = #{lrr}
+		</if>
+		<if test="createTime != null and createTime != ''">
+			AND a.createTime = #{createTime}
+		</if>
+		<if test="createBy != null and createBy != ''">
+			AND a.createBy = #{createBy}
+		</if>
+		<if test="updateTime != null and updateTime != ''">
+			AND a.updateTime = #{updateTime}
+		</if>
+		<if test="updateBy != null and updateBy != ''">
+			AND a.updateBy = #{updateBy}
+		</if>
+		<if test="available != null and available != ''">
+			AND a.available = #{available}
+		</if>
+		<if test="deleted != null and deleted != ''">
+			AND a.deleted = #{deleted}
+		</if>
+
+	</sql>
+    <select id="get"  resultMap="cpupdateLogResult">
+        select a.id,a.cpdm,a.version,a.gxnr,a.fbsj,a.lrr,a.createTime,a.createBy,a.updateTime,a.updateBy,a.available,a.deleted,b.cpmc
+        from cms_cpupdate_log a,cms_product b
+        where
+        a.id =#{id} and a.cpdm=b.cpdm
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+		select a.id,a.cpdm,a.version,a.gxnr,a.fbsj,a.lrr,a.createTime,a.createBy,a.updateTime,a.updateBy,a.available,a.deleted,b.cpmc
+		from cms_cpupdate_log a,cms_product b
+		where
+		a.id =#{id} and a.cpdm=b.cpdm
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.cms.cpupdatelog.bean.CpupdateLog" flushCache="true">
+    	insert into cms_cpupdate_log(id,cpdm,version,gxnr,fbsj,lrr,createTime,createBy,updateTime,updateBy,available,deleted)
+    	values (null,#{cpdm},#{version},#{gxnr},now(),#{lrr},now(),#{createBy},now(),#{updateBy},1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into cms_cpupdate_log(id,cpdm,version,gxnr,fbsj,lrr,createTime,createBy,updateTime,updateBy,available,deleted)
+    	values (null,#{cpdm},#{version},#{gxnr},#{fbsj},#{lrr},now(),#{createBy},now(),#{updateBy},1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into cms_cpupdate_log (id,cpdm,version,gxnr,fbsj,lrr,createTime,createBy,updateTime,updateBy,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(null,#{item.cpdm},#{item.version},#{item.gxnr},#{item.fbsj},#{item.lrr},now(),#{item.createBy},now(),#{item.updateBy},1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.cms.cpupdatelog.bean.CpupdateLog" flushCache="true">
+    	update cms_cpupdate_log 
+    	<set>
+    		<if test="cpdm != null">cpdm=#{cpdm},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="gxnr != null">gxnr=#{gxnr},</if>
+			<if test="fbsj != null">fbsj=#{fbsj},</if>
+			<if test="lrr != null">lrr=#{lrr},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			updateTime=now(),
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update cms_cpupdate_log
+        <set>
+            <if test="cpdm != null">cpdm=#{cpdm},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="gxnr != null">gxnr=#{gxnr},</if>
+			<if test="fbsj != null">fbsj=#{fbsj},</if>
+			<if test="lrr != null">lrr=#{lrr},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			updateTime=now(),
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update cms_cpupdate_log
+         <set>
+         <if test="cpdm != null">cpdm=#{cpdm},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="gxnr != null">gxnr=#{gxnr},</if>
+			<if test="fbsj != null">fbsj=#{fbsj},</if>
+			<if test="lrr != null">lrr=#{lrr},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			updateTime=now(),
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from cms_cpupdate_log where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from cms_cpupdate_log where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultType="java.util.Map" parameterType="java.util.Map">
+		select a.id,a.cpdm,a.version,a.gxnr,a.fbsj,a.lrr,a.createTime,a.createBy,a.updateTime,a.updateBy,a.available,a.deleted,b.cpmc
+		from cms_cpupdate_log a,cms_product b
+        <where>
+			a.cpdm=b.cpdm
+            and a.available=1
+            and a.deleted=0
+            <include refid="CpupdateLog_Where_Clause2"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="cpupdateLogResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM cms_cpupdate_log
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="cpdm != null and cpdm != ''">
+				AND cpdm = #{cpdm}
+			</if>
+			<if test="version != null and version != ''">
+				AND version = #{version}
+			</if>
+			<if test="gxnr != null and gxnr != ''">
+				AND gxnr = #{gxnr}
+			</if>
+			<if test="fbsj != null and fbsj != ''">
+				AND fbsj = #{fbsj}
+			</if>
+			<if test="lrr != null and lrr != ''">
+				AND lrr = #{lrr}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+   	</select>
+
+
+
+</mapper>

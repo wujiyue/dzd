@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.cms.article.dao.ArticleMapper">
+	<!--<sql id="addColumns">id,userid,datascope,title,keywords,description,content,articletypes,channelids,source,link,static_url,tags,hit,up_vote,down_vote,hot_flag,new_flag,comment_flag,top_flag,favourite,createTime,updateTime,available,deleted</sql> -->
+	<!--<sql id="updateColumns">userid,datascope,title,keywords,description,content,articletypes,channelids,source,link,static_url,tags,hit,up_vote,down_vote,hot_flag,new_flag,comment_flag,top_flag,favourite,updateTime,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,userid,datascope,title,keywords,description,content,articletypes,channelids,source,link,static_url,tags,hit,up_vote,down_vote,hot_flag,new_flag,comment_flag,top_flag,favourite,createTime,updateTime,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="articleResult" type="com.markbro.dzd.cms.article.bean.Article">
+		<result property="id" column="id" />
+		<result property="userid" column="userid" />
+		<result property="datascope" column="datascope" />
+		<result property="title" column="title" />
+		<result property="keywords" column="keywords" />
+		<result property="description" column="description" />
+		<result property="content" column="content" />
+		<result property="articletypes" column="articletypes" />
+		<result property="channelids" column="channelids" />
+		<result property="source" column="source" />
+		<result property="link" column="link" />
+		<result property="static_url" column="static_url" />
+		<result property="tags" column="tags" />
+		<result property="hit" column="hit" />
+		<result property="up_vote" column="up_vote" />
+		<result property="down_vote" column="down_vote" />
+		<result property="hot_flag" column="hot_flag" />
+		<result property="new_flag" column="new_flag" />
+		<result property="comment_flag" column="comment_flag" />
+		<result property="top_flag" column="top_flag" />
+		<result property="favourite" column="favourite" />
+		<result property="createTime" column="createTime" />
+		<result property="updateTime" column="updateTime" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="Article_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="userid != null and userid != ''">
+				AND userid = #{userid}
+		</if>
+			<if test="datascope != null and datascope != ''">
+				AND datascope = #{datascope}
+		</if>
+			<if test="title != null and title != ''">
+				AND title like concat(concat('%',#{title}),'%')
+		</if>
+			<if test="keywords != null and keywords != ''">
+				AND keywords = #{keywords}
+		</if>
+			<if test="description != null and description != ''">
+				AND description = #{description}
+		</if>
+			<if test="content != null and content != ''">
+				AND content = #{content}
+		</if>
+			<if test="articletypes != null and articletypes != ''">
+				AND articletypes = #{articletypes}
+		</if>
+			<if test="channelids != null and channelids != ''">
+				AND channelids = #{channelids}
+		</if>
+			<if test="source != null and source != ''">
+				AND source = #{source}
+		</if>
+			<if test="link != null and link != ''">
+				AND link = #{link}
+		</if>
+			<if test="static_url != null and static_url != ''">
+				AND static_url = #{static_url}
+		</if>
+			<if test="tags != null and tags != ''">
+				AND tags = #{tags}
+		</if>
+			<if test="hit != null and hit != ''">
+				AND hit = #{hit}
+		</if>
+			<if test="up_vote != null and up_vote != ''">
+				AND up_vote = #{up_vote}
+		</if>
+			<if test="down_vote != null and down_vote != ''">
+				AND down_vote = #{down_vote}
+		</if>
+			<if test="hot_flag != null and hot_flag != ''">
+				AND hot_flag = #{hot_flag}
+		</if>
+			<if test="new_flag != null and new_flag != ''">
+				AND new_flag = #{new_flag}
+		</if>
+			<if test="comment_flag != null and comment_flag != ''">
+				AND comment_flag = #{comment_flag}
+		</if>
+			<if test="top_flag != null and top_flag != ''">
+				AND top_flag = #{top_flag}
+		</if>
+			<if test="favourite != null and favourite != ''">
+				AND favourite = #{favourite}
+		</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+		</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="articleResult">
+        select <include refid="allColumns"/>
+        from cms_article
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from cms_article
+            where
+            id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.cms.article.bean.Article" flushCache="true">
+    	insert into cms_article(id,userid,datascope,title,keywords,description,content,articletypes,channelids,source,link,static_url,tags,hit,up_vote,down_vote,hot_flag,new_flag,comment_flag,top_flag,favourite,createTime,updateTime,available,deleted)
+    	values (#{id},#{userid},#{datascope},#{title},#{keywords},#{description},#{content},#{articletypes},#{channelids},#{source},#{link},#{static_url},#{tags},#{hit},#{up_vote},#{down_vote},#{hot_flag},#{new_flag},#{comment_flag},#{top_flag},#{favourite},now(),now(),1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into cms_article(id,userid,datascope,title,keywords,description,content,articletypes,channelids,source,link,static_url,tags,hit,up_vote,down_vote,hot_flag,new_flag,comment_flag,top_flag,favourite,createTime,updateTime,available,deleted)
+    	values (#{id},#{userid},#{datascope},#{title},#{keywords},#{description},#{content},#{articletypes},#{channelids},#{source},#{link},#{static_url},#{tags},#{hit},#{up_vote},#{down_vote},#{hot_flag},#{new_flag},#{comment_flag},#{top_flag},#{favourite},now(),now(),1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into cms_article (id,userid,datascope,title,keywords,description,content,articletypes,channelids,source,link,static_url,tags,hit,up_vote,down_vote,hot_flag,new_flag,comment_flag,top_flag,favourite,createTime,updateTime,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(#{item.id},#{item.userid},#{item.datascope},#{item.title},#{item.keywords},#{item.description},#{item.content},#{item.articletypes},#{item.channelids},#{item.source},#{item.link},#{item.static_url},#{item.tags},#{item.hit},#{item.up_vote},#{item.down_vote},#{item.hot_flag},#{item.new_flag},#{item.comment_flag},#{item.top_flag},#{item.favourite},now(),now(),1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.cms.article.bean.Article" flushCache="true">
+    	update cms_article 
+    	<set>
+    		<if test="userid != null">userid=#{userid},</if>
+			<if test="datascope != null">datascope=#{datascope},</if>
+			<if test="title != null">title=#{title},</if>
+			<if test="keywords != null">keywords=#{keywords},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="articletypes != null">articletypes=#{articletypes},</if>
+			<if test="channelids != null">channelids=#{channelids},</if>
+			<if test="source != null">source=#{source},</if>
+			<if test="link != null">link=#{link},</if>
+			<if test="static_url != null">static_url=#{static_url},</if>
+			<if test="tags != null">tags=#{tags},</if>
+			<if test="hit != null">hit=#{hit},</if>
+			<if test="up_vote != null">up_vote=#{up_vote},</if>
+			<if test="down_vote != null">down_vote=#{down_vote},</if>
+			<if test="hot_flag != null">hot_flag=#{hot_flag},</if>
+			<if test="new_flag != null">new_flag=#{new_flag},</if>
+			<if test="comment_flag != null">comment_flag=#{comment_flag},</if>
+			<if test="top_flag != null">top_flag=#{top_flag},</if>
+			<if test="favourite != null">favourite=#{favourite},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update cms_article
+        <set>
+            <if test="userid != null">userid=#{userid},</if>
+			<if test="datascope != null">datascope=#{datascope},</if>
+			<if test="title != null">title=#{title},</if>
+			<if test="keywords != null">keywords=#{keywords},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="articletypes != null">articletypes=#{articletypes},</if>
+			<if test="channelids != null">channelids=#{channelids},</if>
+			<if test="source != null">source=#{source},</if>
+			<if test="link != null">link=#{link},</if>
+			<if test="static_url != null">static_url=#{static_url},</if>
+			<if test="tags != null">tags=#{tags},</if>
+			<if test="hit != null">hit=#{hit},</if>
+			<if test="up_vote != null">up_vote=#{up_vote},</if>
+			<if test="down_vote != null">down_vote=#{down_vote},</if>
+			<if test="hot_flag != null">hot_flag=#{hot_flag},</if>
+			<if test="new_flag != null">new_flag=#{new_flag},</if>
+			<if test="comment_flag != null">comment_flag=#{comment_flag},</if>
+			<if test="top_flag != null">top_flag=#{top_flag},</if>
+			<if test="favourite != null">favourite=#{favourite},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update cms_article
+         <set>
+         <if test="userid != null">userid=#{userid},</if>
+			<if test="datascope != null">datascope=#{datascope},</if>
+			<if test="title != null">title=#{title},</if>
+			<if test="keywords != null">keywords=#{keywords},</if>
+			<if test="description != null">description=#{description},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="articletypes != null">articletypes=#{articletypes},</if>
+			<if test="channelids != null">channelids=#{channelids},</if>
+			<if test="source != null">source=#{source},</if>
+			<if test="link != null">link=#{link},</if>
+			<if test="static_url != null">static_url=#{static_url},</if>
+			<if test="tags != null">tags=#{tags},</if>
+			<if test="hit != null">hit=#{hit},</if>
+			<if test="up_vote != null">up_vote=#{up_vote},</if>
+			<if test="down_vote != null">down_vote=#{down_vote},</if>
+			<if test="hot_flag != null">hot_flag=#{hot_flag},</if>
+			<if test="new_flag != null">new_flag=#{new_flag},</if>
+			<if test="comment_flag != null">comment_flag=#{comment_flag},</if>
+			<if test="top_flag != null">top_flag=#{top_flag},</if>
+			<if test="favourite != null">favourite=#{favourite},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from cms_article where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from cms_article where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="articleResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM cms_article
+        <where>
+            and available=1
+            and deleted=0
+            <include refid="Article_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="articleResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM cms_article
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="userid != null and userid != ''">
+				AND userid = #{userid}
+			</if>
+			<if test="datascope != null and datascope != ''">
+				AND datascope = #{datascope}
+			</if>
+			<if test="title != null and title != ''">
+				AND title like concat(concat('%',#{title}),'%')
+			 </if>
+			<if test="keywords != null and keywords != ''">
+				AND keywords = #{keywords}
+			</if>
+			<if test="description != null and description != ''">
+				AND description = #{description}
+			</if>
+			<if test="content != null and content != ''">
+				AND content = #{content}
+			</if>
+			<if test="articletypes != null and articletypes != ''">
+				AND articletypes = #{articletypes}
+			</if>
+			<if test="channelids != null and channelids != ''">
+				AND channelids = #{channelids}
+			</if>
+			<if test="source != null and source != ''">
+				AND source = #{source}
+			</if>
+			<if test="link != null and link != ''">
+				AND link = #{link}
+			</if>
+			<if test="static_url != null and static_url != ''">
+				AND static_url = #{static_url}
+			</if>
+			<if test="tags != null and tags != ''">
+				AND tags = #{tags}
+			</if>
+			<if test="hit != null and hit != ''">
+				AND hit = #{hit}
+			</if>
+			<if test="up_vote != null and up_vote != ''">
+				AND up_vote = #{up_vote}
+			</if>
+			<if test="down_vote != null and down_vote != ''">
+				AND down_vote = #{down_vote}
+			</if>
+			<if test="hot_flag != null and hot_flag != ''">
+				AND hot_flag = #{hot_flag}
+			</if>
+			<if test="new_flag != null and new_flag != ''">
+				AND new_flag = #{new_flag}
+			</if>
+			<if test="comment_flag != null and comment_flag != ''">
+				AND comment_flag = #{comment_flag}
+			</if>
+			<if test="top_flag != null and top_flag != ''">
+				AND top_flag = #{top_flag}
+			</if>
+			<if test="favourite != null and favourite != ''">
+				AND favourite = #{favourite}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+   	</select>
+
+
+
+</mapper>

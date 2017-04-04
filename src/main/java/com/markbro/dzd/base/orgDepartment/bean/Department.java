@@ -1,10 +1,8 @@
 package com.markbro.dzd.base.orgDepartment.bean;
 import com.markbro.asoiaf.core.model.AliasModel;
-import com.markbro.asoiaf.core.utils.MyBatisRequestUtil;
-import java.util.Map;
 /**
  * 部门 bean
- * Created by wujiyue on 2016-07-09 23:04:44.
+ * Created by wujiyue on 2016-07-17 11:52:54.
  */
 public class Department  implements AliasModel {
 	private java.lang.String orgid;//机构、组织id
@@ -57,10 +55,6 @@ public class Department  implements AliasModel {
 	public java.lang.Integer getDeleted(){ return deleted ;}
 	public void  setDeleted(java.lang.Integer deleted){this.deleted=deleted; }
 
-    public Map<String, Object> convertBeanToMap(Department bean){
-        Map<String, Object> map = MyBatisRequestUtil.beanConvert2Map(bean);
-    	return map;
-    }
 	@Override
 	public String toString() {
 	return "Department{" +

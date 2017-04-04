@@ -1,5 +1,4 @@
 package com.markbro.dzd.base.orgOrganization.web;
-
 import com.markbro.asoiaf.core.model.Msg;
 import com.markbro.asoiaf.core.model.PageParam;
 import com.markbro.dzd.base.orgOrganization.bean.Organization;
@@ -19,7 +18,7 @@ import java.util.Map;
 
 /**
  * 组织机构管理
- * Created by wujiyue on 2016-07-10 10:38:28.
+ * Created by wujiyue on 2016-07-18 22:52:36.
  */
 @Controller
 @RequestMapping("/org/organization")
@@ -34,8 +33,30 @@ public class OrganizationController extends com.markbro.asoiaf.core.web.BaseCont
      * 跳转到新增页面
      */
     @RequestMapping("/add")
-    public String toAdd(Organization organization,Model model){
+    public String toAdd(Model model){
+        Map map=getMap(request);
         return "/base/organization/add";
+    }
+    /**
+     * 跳转到编辑页面
+     */
+    @RequestMapping(value = "/edit")
+    public String toEdit(Model model){
+        Map map=getMap(request);
+        String id=(String)map.get("id");
+        Organization organization=organizationService.get(id);
+        model.addAttribute("organization",organization);
+        return "/base/organization/edit";
+    }
+    /**
+     * 跳转到组织信息维护页面
+     */
+    @RequestMapping(value = "/wh")
+    public String wh(Model model){
+        Map map=getMap(request);
+        Organization organization=organizationService.get((String) map.get("orgid"));
+        model.addAttribute("organization",organization);
+        return "/base/organization/wh";
     }
     /**
      * 删除数据并重定向到列表页面
@@ -67,28 +88,6 @@ public class OrganizationController extends com.markbro.asoiaf.core.web.BaseCont
         return "/base/organization/list";
     }
    /**
-    * 跳转到编辑页面
-    */
-    @RequestMapping(value = "/edit")
-    public String toEdit(Organization organization,Model model){
-        if(organization!=null&&organization.getId()!=null){
-            organization=organizationService.get(organization.getId());
-        }
-         model.addAttribute("organization",organization);
-         return "/base/organization/edit";
-    }
-    /**
-     * 跳转到编辑页面供维护组织信息使用
-     */
-    @RequestMapping(value = "/wh")
-    public String wh(Model model){
-        Map map=getMap(request);
-        Organization organization=organizationService.get((String) map.get("orgid"));
-        model.addAttribute("organization",organization);
-        return "/base/organization/wh";
-    }
-
-    /**
     * 保存新增或者编辑的数据并重定向到列表页面
     */
     @RequestMapping(value="/save",method = RequestMethod.POST)

@@ -30,4 +30,8 @@ public interface OrgTreeMapper {
 	public List<OrgTree> findByParentid(PageBounds pageBounds,java.lang.String parentid);
 
     public Integer findByParentidCount(@Param("parentid")String parentid,@Param("orgid")String orgid);
+
+    public OrgTree getByLxidAndType(@Param("lxid")java.lang.String lxid,@Param("type")String type);
+
+    public void deleteByLxidAndType(@Param("lxid")java.lang.String lxid,@Param("type")String type);
 }

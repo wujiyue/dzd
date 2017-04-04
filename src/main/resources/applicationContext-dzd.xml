@@ -38,6 +38,84 @@
         <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
         <property name="sqlSessionFactoryBeanName" value="sqlSessionFactoryDzd"/>
     </bean>
+
+
+    <bean id="readDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <description>只读数据库连接</description>
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="passwordCallback" ref="dbPasswordCallback" />
+        <property name="initialSize" value="${jdbc.pool.init}" />
+        <property name="minIdle" value="${jdbc.pool.minIdle}" />
+        <property name="maxActive" value="${jdbc.pool.maxActive}" />
+        <property name="maxWait" value="60000" />
+        <property name="defaultReadOnly" value="true" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+        <property name="validationQuery" value="${jdbc.testSql}" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <!-- 配置druid监控统计拦截的filters -->
+        <property name="filters" value="stat" />
+        <property name="removeAbandoned" value="true" /> <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandonedTimeout" value="60" /> <!-- 1800秒，也就是30分钟 -->
+        <property name="logAbandoned" value="true" /> <!-- 关闭abanded连接时输出错误日志 -->
+    </bean>
+
+    <bean id="writeDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <description>只写数据库连接</description>
+        <property name="driverClassName" value="${jdbc.driver}" />
+        <property name="url" value="${jdbc.url}" />
+        <property name="username" value="${jdbc.username}" />
+        <property name="password" value="${jdbc.password}" />
+        <property name="passwordCallback" ref="dbPasswordCallback" />
+        <property name="initialSize" value="${jdbc.pool.init}" />
+        <property name="minIdle" value="${jdbc.pool.minIdle}" />
+        <property name="maxActive" value="${jdbc.pool.maxActive}" />
+        <property name="maxWait" value="60000" />
+        <property name="defaultReadOnly" value="false" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+        <property name="validationQuery" value="${jdbc.testSql}" />
+        <property name="testWhileIdle" value="true" />
+        <property name="testOnBorrow" value="false" />
+        <property name="testOnReturn" value="false" />
+        <!-- 配置druid监控统计拦截的filters -->
+        <property name="filters" value="stat" />
+        <property name="removeAbandoned" value="true" /> <!-- 打开removeAbandoned功能 -->
+        <property name="removeAbandonedTimeout" value="60" /> <!-- 1800秒，也就是30分钟 -->
+        <property name="logAbandoned" value="true" /> <!-- 关闭abanded连接时输出错误日志 -->
+    </bean>
+
+    <bean id="dataSource" class="com.markbro.dzd.base.aspect.ChooseDataSource" lazy-init="true">
+        <description>数据源</description>
+        <property name="targetDataSources">
+            <map key-type="java.lang.String" value-type="javax.sql.DataSource">
+                <!-- write -->
+                <entry key="write" value-ref="writeDataSource" />
+                <!-- read -->
+                <entry key="read" value-ref="readDataSource" />
+            </map>
+        </property>
+        <property name="defaultTargetDataSource" ref="writeDataSource" />
+        <property name="methodType">
+            <map key-type="java.lang.String">
+                <!-- read -->
+                <entry key="read" value=",get,getMap,find,findByMap,findBy*,query*,tree,select," />
+                <!-- write -->
+                <entry key="write" value=",add*,update*,updateBy*,delete*,remove*,insert*,create,update,delete,remove," />
+            </map>
+        </property>
+    </bean>
+
+
     <!-- 数据源配置 -->
     <bean id="utilDb" class="com.markbro.asoiaf.core.utils.DbUtil">
         <property name="ds" ref="dataSource">
@@ -49,55 +127,37 @@
         </property>
     </bean>
 
-    <!-- 数据源配置, 使用 阿里巴巴 数据库连接池 -->
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-        <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->
-        <property name="driverClassName" value="${jdbc.driver}" />
 
-        <!-- 基本属性 url、user、password -->
+
+    <!-- 数据源配置, 使用 阿里巴巴 数据库连接池 -->
+    <!--<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        &lt;!&ndash; 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass &ndash;&gt;
+        <property name="driverClassName" value="${jdbc.driver}" />
+        &lt;!&ndash; 基本属性 url、user、password &ndash;&gt;
         <property name="url" value="${jdbc.url}" />
         <property name="username" value="${jdbc.username}" />
         <property name="password" value="${jdbc.password}" />
-
-        <!-- 配置初始化大小、最小、最大 -->
+        <property name="passwordCallback" ref="dbPasswordCallback" />
+        &lt;!&ndash; 配置初始化大小、最小、最大 &ndash;&gt;
         <property name="initialSize" value="${jdbc.pool.init}" />
         <property name="minIdle" value="${jdbc.pool.minIdle}" />
         <property name="maxActive" value="${jdbc.pool.maxActive}" />
-
-        <!-- 配置获取连接等待超时的时间 -->
+        &lt;!&ndash; 配置获取连接等待超时的时间 &ndash;&gt;
         <property name="maxWait" value="60000" />
-
-        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        &lt;!&ndash; 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 &ndash;&gt;
         <property name="timeBetweenEvictionRunsMillis" value="60000" />
-
-        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        &lt;!&ndash; 配置一个连接在池中最小生存的时间，单位是毫秒 &ndash;&gt;
         <property name="minEvictableIdleTimeMillis" value="300000" />
-
         <property name="validationQuery" value="${jdbc.testSql}" />
         <property name="testWhileIdle" value="true" />
         <property name="testOnBorrow" value="false" />
         <property name="testOnReturn" value="false" />
-
-        <!-- 配置druid监控统计拦截的filters -->
+        &lt;!&ndash; 配置druid监控统计拦截的filters &ndash;&gt;
         <property name="filters" value="stat" />
-
-        <property name="removeAbandoned" value="true" /> <!-- 打开removeAbandoned功能 -->
-        <property name="removeAbandonedTimeout" value="60" /> <!-- 1800秒，也就是30分钟 -->
-        <property name="logAbandoned" value="true" /> <!-- 关闭abanded连接时输出错误日志 -->
-    </bean>
-
-
-    <!--<bean id="utilDb" class="com.markbro.dzd.common.util.Db">
-        <property name="ds">
-            <ref local="dataSource" />
-        </property>
-        <property name="dsCownew">
-            <ref local="dsCownew" />
-        </property>
-    </bean>
-    <bean id="jt" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource">
-            <ref local="dataSource" />
-        </property>
+        <property name="removeAbandoned" value="true" /> &lt;!&ndash; 打开removeAbandoned功能 &ndash;&gt;
+        <property name="removeAbandonedTimeout" value="60" /> &lt;!&ndash; 1800秒，也就是30分钟 &ndash;&gt;
+        <property name="logAbandoned" value="true" /> &lt;!&ndash; 关闭abanded连接时输出错误日志 &ndash;&gt;
     </bean>-->
+
+
 </beans>

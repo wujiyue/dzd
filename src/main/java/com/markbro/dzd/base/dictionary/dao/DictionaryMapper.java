@@ -1,8 +1,8 @@
 package com.markbro.dzd.base.dictionary.dao;
-import org.springframework.stereotype.Repository;
-import com.markbro.asoiaf.core.repo.CrudRepo;
-import com.markbro.dzd.base.dictionary.bean.Dictionary;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.markbro.dzd.base.dictionary.bean.Dictionary;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Map;
 /**
@@ -22,5 +22,5 @@ public interface DictionaryMapper{
     //find与findByMap的唯一的区别是在find方法在where条件中多了未删除、有效数据的条件（deleted=0,available=1）
     public List<Dictionary> find(PageBounds pageBounds,Map<String,Object> map);
     public List<Dictionary> findByMap(PageBounds pageBounds,Map<String,Object> map);
-
+    public List<Dictionary> findByType(String type);
 }

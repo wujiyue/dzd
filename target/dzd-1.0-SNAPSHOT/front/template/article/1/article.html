@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <link href="css/animate.css" rel="stylesheet" type="text/css"> 
+  <style type="text/css">
+	*,html,body{margin:0;padding:0;}
+	.clear {
+		clear: both;
+	}
+	#footer {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    text-align: center;
+    color: #000;
+    font-size: 12px;
+	}
+	fieldset, img {
+    border: none;
+	}
+	body {
+    background-image: url(images/bg.gif);
+    background-repeat: repeat;
+    background-color: #FFFDFA;
+	}
+	#home{width:100%;height:100%}
+	body, button, input, select, textarea {
+    font: 12px/1.5 Tahoma, Arial, Helvetica, sans-serif;
+	}
+	#header {
+    height: 40px;
+    width: 100%;
+    background-color: #2175bc;
+	}
+	#blogTitle {
+    display: none;
+	}
+	#navigator, #blogTitle, #main, #footer {
+    /*width: 1000px;*/
+    position: relative;
+    margin: 0 auto;
+	}
+	#navigator {
+    top: 8px;
+	}
+	ul, ol {
+    list-style: none;
+	}
+	#navList li {
+    float: left;
+    margin-right: 25px;
+    display: inline;
+	}
+	#navList li a {
+    font-size: 15px;
+    text-decoration: none;
+    color: #FFF;
+    padding: 10px;
+    background-color: #2175bc;
+	}
+	#navList li a:hover {
+    background-color: #2586d7;
+    margin-top: -2px;
+    padding-bottom: 12px;
+    color: #fff;
+    opacity: 1;
+	}
+	a:link, a:visited {
+    text-decoration: none;
+    color: #3399ff;
+	}
+
+	.blogStats {
+    color: #CACACA;
+    font-size: 12px;
+    text-align: right;
+	}
+
+	/*main*/
+	#main {
+    margin-top: 6px;
+    background-color: rgb(245, 245, 245);
+    margin-bottom: 0px;
+	}
+
+	#sideBar {
+    width: 20%;
+    padding: 16px;
+    display: inline-block;
+    overflow: hidden;
+    color: #2D2D2D;
+	}
+
+	#sideBarMain div {
+    margin-bottom: 26px;
+	}
+
+	#blog-news {
+    overflow: hidden;
+	}
+
+	/*Calender*/
+	.Cal {
+    width: 100%;
+	}
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+	}
+	#mainContent {
+   /* width: 765px;*/
+	    width:75%;margin:0 auto;
+	    background: white;
+    box-shadow: 0px 0px 8px #999;
+    -moz-box-shadow: 0px 0px 8px #999;
+    -web-kit-shadow: 0px 0px 8px #999;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -web-kit-shadow: 6px;
+    float: left;
+    display: inline-block;
+	}	
+	#article{padding: 32px;}
+
+
+	.article-title {
+    font-size: 20px;
+    padding-right: 64px;
+    padding-left: 10px;
+    border-left-width: 3px;
+    border-left-style: solid;
+    border-left-color: #2175bc;
+	}
+	.article-body, .postCon, .entrylistPostSummary {
+    font-size: 14px;
+    color: #444;
+    line-height: 1.8;
+	clear: both;
+    margin-top: 26px;
+	}
+	.article-body blockquote, .postCon blockquote {
+    width: 90%;
+    margin: 0 auto;
+    padding: 6px 0 6px 45px;
+    color: #666;
+    background: white url(images/blockquote.gif) top left no-repeat;
+	}
+	blockquote {
+    background: none;
+    border: 2px solid #efefef;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+	}
+	.article-body h4 {
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #F60;
+    margin: 0 -32px;
+    padding: 0 32px;
+    color: white;
+	margin:10px auto;
+	}
+	/*code*/
+	.cnblogs_code {
+    background-color: #f5f5f5;
+    font-family: Courier New!important;
+    font-size: 12px!important;
+    border: 1px solid #ccc;
+    padding: 5px;
+    overflow: auto;
+    margin: 5px 0;
+    color: #000;
+	}
+	/*文章尾部信息*/
+	#article-tail-infor{padding: 32px;  margin-top: 26px;}
+	#author_profile {
+    float: left;
+    width: 280px;
+    margin-top: 0;
+    margin-bottom: 10px;
+    color: #000;
+    margin-left: 0;
+    font-size: 12px;
+	}
+  </style>
+ <script type="text/javascript" src="/resources/lib/jquery/jquery.min.js"></script>
+  <script type="text/javascript">
+	$(function(){
+	$(window).resize(function(){
+
+	  var w=  $(window).width();
+	   //console.log(w);
+	    if(w<765){
+		$("#sideBar").hide();
+		$("#mainContent").css("width","100%");
+	    }else{$("#sideBar").show();
+		$("#mainContent").css("width","75%");
+		$("#sideBar").css("width","20%");
+	    }
+
+	});
+	    $(window).resize();
+	});
+  </script>
+</head>
+<body>
+
+<div id="home">
+	<!--头部start-->
+	<div id="header">
+			<div id="blogTitle">
+			<a id="lnkBlogLogo" href="http://www.cnblogs.com/hyhnet/"><img id="blogLogo" src="images/logo.gif" alt="返回主页"></a>			
+				<h1><a id="Header1_HeaderTitle" class="headermaintitle" href="http://www.cnblogs.com/hyhnet/">千万之路刚开始</a></h1>
+				<h2></h2>	
+			</div><!--end: blogTitle 博客的标题和副标题 -->
+			<div id="navigator">
+				
+				<ul id="navList">
+				<li><a id="MyLinks1_HomeLink" class="menu" href="http://www.cnblogs.com/">博客园</a></li>
+				<li><a id="MyLinks1_MyHomeLink" class="menu" href="http://www.cnblogs.com/hyhnet/">首页</a></li>
+				<li><a id="MyLinks1_NewPostLink" class="menu" rel="nofollow" href="https://i.cnblogs.com/EditPosts.aspx?opt=1">新随笔</a></li>
+				<li><a id="MyLinks1_ContactLink" class="menu" rel="nofollow" href="http://msg.cnblogs.com/send/%E5%8D%83%E4%B8%87%E4%B9%8B%E8%B7%AF%E5%88%9A%E5%BC%80%E5%A7%8B">联系</a></li>
+				<li><a id="MyLinks1_Syndication" class="menu" href="http://www.cnblogs.com/hyhnet/rss">订阅</a>
+				</li>
+				<li><a id="MyLinks1_Admin" class="menu" rel="nofollow" href="https://i.cnblogs.com/">管理</a></li>
+				</ul>
+						<div class="blogStats">
+							
+							
+				<span id="stats_post_count">随笔 - 11&nbsp; </span>
+				<span id="stats_article_count">文章 - 1&nbsp; </span>
+				<span id="stats-comment_count">评论 - 6</span>
+
+							
+						</div><!--end: blogStats -->
+					</div><!--end: navigator 博客导航栏 -->
+		</div>
+		<!--头部 end-->
+
+		<!--main  start-->
+		<div id="main">
+				
+				<!--侧边栏容器start-->
+				<div id="sideBar">
+					
+					<div id="sideBarMain">
+						
+							<div class="newsItem">
+								<h3 class="catListTitle">公告</h3>
+								
+								<div id="blog-news"><img src="images/o_2016-05-30_111202.png"><center>经济基础决定上层建筑<br>代码改变世界</center><div id="profile_block">昵称：<a href="http://home.cnblogs.com/u/hyhnet/">千万之路刚开始</a><br>园龄：<a href="http://home.cnblogs.com/u/hyhnet/" title="入园时间：2016-01-20">6个月</a><br>粉丝：<a href="http://home.cnblogs.com/u/hyhnet/followers/">4</a><br>关注：<a href="http://home.cnblogs.com/u/hyhnet/followees/">3</a><div id="p_b_follow"><a href="javascript:void(0);" onclick="follow('35584285-2dbf-e511-9fc1-ac853d9f53cc')">+加关注</a></div></div></div>
+
+							</div>
+							<!--日历start-->
+							<div id="blog-calendar" style="">
+									<table id="blogCalendar" class="Cal" cellspacing="0" cellpadding="0" title="Calendar">
+									<tbody><tr><td colspan="7"><table class="CalTitle" cellspacing="0">
+										<tbody><tr><td class="CalNextPrev"><a href="javascript:void(0);" onclick="loadBlogCalendar('2016/07/01');return false;">&lt;</a></td><td align="center">2016年8月</td><td class="CalNextPrev" align="right"><a href="javascript:void(0);" onclick="loadBlogCalendar('2016/09/01');return false;">&gt;</a></td></tr>
+									</tbody></table></td></tr><tr><th class="CalDayHeader" align="center" abbr="日" scope="col">日</th><th class="CalDayHeader" align="center" abbr="一" scope="col">一</th><th class="CalDayHeader" align="center" abbr="二" scope="col">二</th><th class="CalDayHeader" align="center" abbr="三" scope="col">三</th><th class="CalDayHeader" align="center" abbr="四" scope="col">四</th><th class="CalDayHeader" align="center" abbr="五" scope="col">五</th><th class="CalDayHeader" align="center" abbr="六" scope="col">六</th></tr><tr><td class="CalOtherMonthDay" align="center">31</td><td align="center">1</td><td align="center">2</td><td align="center">3</td><td align="center">4</td><td align="center">5</td><td class="CalWeekendDay" align="center">6</td></tr><tr><td class="CalWeekendDay" align="center">7</td><td align="center">8</td><td align="center">9</td><td align="center">10</td><td align="center">11</td><td align="center">12</td><td class="CalWeekendDay" align="center"><a href="http://www.cnblogs.com/hyhnet/archive/2016/08/13.html"><u>13</u></a></td></tr><tr><td class="CalWeekendDay" align="center">14</td><td align="center">15</td><td align="center"><a href="http://www.cnblogs.com/hyhnet/archive/2016/08/16.html"><u>16</u></a></td><td class="CalTodayDay" align="center">17</td><td align="center">18</td><td align="center">19</td><td class="CalWeekendDay" align="center">20</td></tr><tr><td class="CalWeekendDay" align="center">21</td><td align="center">22</td><td align="center">23</td><td align="center">24</td><td align="center">25</td><td align="center">26</td><td class="CalWeekendDay" align="center">27</td></tr><tr><td class="CalWeekendDay" align="center">28</td><td align="center">29</td><td align="center">30</td><td align="center">31</td><td class="CalOtherMonthDay" align="center">1</td><td class="CalOtherMonthDay" align="center">2</td><td class="CalOtherMonthDay" align="center">3</td></tr><tr><td class="CalOtherMonthDay" align="center">4</td><td class="CalOtherMonthDay" align="center">5</td><td class="CalOtherMonthDay" align="center">6</td><td class="CalOtherMonthDay" align="center">7</td><td class="CalOtherMonthDay" align="center">8</td><td class="CalOtherMonthDay" align="center">9</td><td class="CalOtherMonthDay" align="center">10</td></tr>
+								</tbody></table>
+						</div>
+
+
+						<!--日历end-->
+						<div id="leftcontentcontainer">
+							<div id="blog-sidecolumn">
+								<!--常用链接start-->
+								<div id="sidebar_shortcut" class="sidebar-block">
+									<div class="catListLink">
+									<h3 class="catListTitle">常用链接</h3>
+									<ul>
+										<li><a href="http://www.cnblogs.com/hyhnet/p/" title="我的博客的随笔列表">我的随笔</a></li><li><a href="http://www.cnblogs.com/hyhnet/MyComments.html" title="我发表过的评论列表">我的评论</a></li><li><a href="http://www.cnblogs.com/hyhnet/OtherPosts.html" title="我评论过的随笔列表">我的参与</a></li><li><a href="http://www.cnblogs.com/hyhnet/RecentComments.html" title="我的博客的评论列表">最新评论</a></li><li><a href="http://www.cnblogs.com/hyhnet/tag/" title="我的博客的标签列表">我的标签</a></li>
+										<li><a id="itemListLink" onclick="this.blur();WarpClass('itemListLink', 'itemListLin_con');return false;" href="#">更多链接</a></li>
+									</ul>
+									<div id="itemListLin_con" style="display:none;">
+										<ul>
+
+										</ul>
+									</div>
+									</div>
+								</div>
+								<!--常用链接end-->
+								<!--我的标签start-->
+									<div id="sidebar_toptags" class="sidebar-block">
+										<div class="catListTag">
+										<h3 class="catListTitle">我的标签</h3>
+										<ul>
+										<li><a href="http://www.cnblogs.com/hyhnet/tag/java/">java</a>(3)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/JavaScript%20js%20%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%20%E9%AA%8C%E8%AF%81%20%E6%AD%A3%E5%88%99%20%E6%AD%A3%E5%88%99%E5%BC%8F/">JavaScript js 正则表达式 验证 正则 正则式</a>(2)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/%E5%8C%BA%E5%88%AB/">区别</a>(2)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/mybatis/">mybatis</a>(2)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/spring/">spring</a>(2)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/springmvc/">springmvc</a>(1)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/SSH/">SSH</a>(1)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/urlconnection/">urlconnection</a>(1)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/web%20server/">web server</a>(1)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/%E9%98%BF%E9%87%8C%E5%A4%A7%E9%B1%BC/">阿里大鱼</a>(1)</li><li><a href="http://www.cnblogs.com/hyhnet/tag/">更多</a></li>
+										</ul>
+										</div>
+									</div>
+								<!--我的标签end-->
+								<!--随笔档案start-->
+								<div id="sidebar_postarchive" class="catListPostArchive sidebar-block">
+									<h3 class="catListTitle">随笔档案</h3>
+
+									<ul>
+
+									<li><a id="CatList_LinkList_1_Link_0" href="http://www.cnblogs.com/hyhnet/archive/2016/08.html">2016年8月 (2)</a> </li>
+
+									<li><a id="CatList_LinkList_1_Link_1" href="http://www.cnblogs.com/hyhnet/archive/2016/06.html">2016年6月 (6)</a> </li>
+
+									<li><a id="CatList_LinkList_1_Link_2" href="http://www.cnblogs.com/hyhnet/archive/2016/05.html">2016年5月 (3)</a> </li>
+
+									<li><a id="CatList_LinkList_1_Link_3" href="http://www.cnblogs.com/hyhnet/archive/2016/03.html">2016年3月 (1)</a> </li>
+
+									</ul>
+
+								</div>
+								<!--随笔档案end-->
+								<!--文章分类start-->
+								<div id="sidebar_articlecategory" class="catListArticleCategory sidebar-block">
+									<h3 class="catListTitle">文章分类</h3>
+
+									<ul>
+
+									<li><a id="CatList_LinkList_2_Link_0" href="http://www.cnblogs.com/hyhnet/category/805954.html">javascript(1)</a> </li>
+
+									</ul>
+								</div>
+								<!--文章分类end-->
+								<!--相册start-->
+								<div id="sidebar_imagecategory" class="catListImageCategory sidebar-block">
+									<h3 class="catListTitle">相册</h3>
+
+									<ul>
+
+									<li><a id="CatList_LinkList_3_Link_0" href="http://www.cnblogs.com/hyhnet/gallery/835481.html" rel="nofollow">平凡之路(2)</a> </li>
+
+									</ul>
+
+								</div>
+								<!--相册end-->
+
+								<!--最新评论start-->
+								<div id="sidebar_recentcomments" class="sidebar-block"><div id="recent_comments_wrap">
+									<div class="catListComment">
+									<h3 class="catListTitle">最新评论</h3>
+
+										<div id="RecentCommentsBlock"><ul>
+											<li class="recent_comment_title"><a href="http://www.cnblogs.com/hyhnet/p/5775473.html#3490214">1. Re:【微框架】Maven +SpringBoot  集成 阿里大鱼 短信接口详解与Demo</a></li>
+											<li class="recent_comment_body">谢谢分享</li>
+											<li class="recent_comment_author">--沈赟</li>
+											<li class="recent_comment_title"><a href="http://www.cnblogs.com/hyhnet/p/5775473.html#3490131">2. Re:【微框架】Maven +SpringBoot  集成 阿里大鱼 短信接口详解与Demo</a></li>
+											<li class="recent_comment_body">嗯，我也去官网看了下，叫阿里大于。或者是他们官方改名了。<br><br></li>
+											<li class="recent_comment_author">--坤坤</li>
+											<li class="recent_comment_title"><a href="http://www.cnblogs.com/hyhnet/p/5775473.html#3490114">3. Re:【微框架】Maven +SpringBoot  集成 阿里大鱼 短信接口详解与Demo</a></li>
+											<li class="recent_comment_body">@坤坤我看到官网写的是 大于，还以为...</li>
+											<li class="recent_comment_author">--千万之路刚开始</li>
+											<li class="recent_comment_title"><a href="http://www.cnblogs.com/hyhnet/p/5775473.html#3490107">4. Re:【微框架】Maven +SpringBoot  集成 阿里大于 短信接口详解与Demo</a></li>
+											<li class="recent_comment_body">@坤坤马上改...</li>
+											<li class="recent_comment_author">--千万之路刚开始</li>
+											<li class="recent_comment_title"><a href="http://www.cnblogs.com/hyhnet/p/5775473.html#3490103">5. Re:【微框架】Maven +SpringBoot  集成 阿里大于 短信接口详解与Demo</a></li>
+											<li class="recent_comment_body">标题里有错别字。</li>
+											<li class="recent_comment_author">--坤坤</li>
+									</ul>
+									</div>
+									</div>
+									</div>
+								</div>
+								<!--最新评论end-->
+								<!--阅读排行榜start-->
+								<div id="sidebar_topviewedposts" class="sidebar-block"><div id="topview_posts_wrap">
+									<div class="catListView">
+									<h3 class="catListTitle">阅读排行榜</h3>
+										<div id="TopViewPostsBlock"><ul><li><a href="http://www.cnblogs.com/hyhnet/p/5543082.html">1. 【SSM框架】Spring + Springmvc + Mybatis 基本框架搭建集成教程(689)</a></li><li><a href="http://www.cnblogs.com/hyhnet/p/5775473.html">2. 【微框架】Maven +SpringBoot  集成 阿里大鱼 短信接口详解与Demo(685)</a></li><li><a href="http://www.cnblogs.com/hyhnet/p/5613394.html">3. 【java】细说 JAVA中 标注 注解（annotation）(251)</a></li><li><a href="http://www.cnblogs.com/hyhnet/p/5541994.html">4. 【解决方案】cvc-complex-type.2.4.a: Invalid content was found starting with element 'init-param'. One of '{"http://java.sun.com/xml/ns/javaee":run-as,   "http://java.sun.com/xml/ns/javaee":security-role-r(174)</a></li><li><a href="http://www.cnblogs.com/hyhnet/p/5530603.html">5. 【JAVA框架】Hibernate 与Mybatis 区别(172)</a></li></ul></div>
+									</div>
+									</div>
+								</div>
+								<!--阅读排行榜end-->
+								<!--推荐排行榜start-->
+								<div id="sidebar_topdiggedposts" class="sidebar-block"><div id="topdigg_posts_wrap">
+									<div class="catListView">
+									<h3 class="catListTitle">推荐排行榜</h3>
+									<div id="TopDiggPostsBlock"><ul><li><a href="http://www.cnblogs.com/hyhnet/p/5775473.html">1. 【微框架】Maven +SpringBoot  集成 阿里大鱼 短信接口详解与Demo(2)</a></li><li><a href="http://www.cnblogs.com/hyhnet/p/5543082.html">2. 【SSM框架】Spring + Springmvc + Mybatis 基本框架搭建集成教程(2)</a></li><li><a href="http://www.cnblogs.com/hyhnet/p/5613394.html">3. 【java】细说 JAVA中 标注 注解（annotation）(1)</a></li><li><a href="http://www.cnblogs.com/hyhnet/p/5331895.html">4. 【JS】javascript 正则表达式 大全 总结(1)</a></li><li><a href="http://www.cnblogs.com/hyhnet/p/5530603.html">5. 【JAVA框架】Hibernate 与Mybatis 区别(1)</a></li></ul></div>
+									</div></div>
+								</div>
+								<!--推荐排行榜start-->
+
+
+							</div>
+						</div>
+						<div class="clear"></div>
+					
+
+					</div>
+				</div>
+				<!--侧边栏容器end-->
+
+
+				<!--主体内容-->
+				<div id="mainContent">
+					<div id="article">
+						<h1 class="article-title">test123</h1><div class="clear"></div>
+
+						<div class="article-body">
+							<!--引言start-->	
+							<blockquote>
+								<p>Maven+springboot+阿里大于短信验证服务</p>
+								<p><strong>纠结点：</strong>Maven库没有sdk,需要解决</p>
+								<p>　　　　Maven打包找不到相关类，需要解决</p>
+							</blockquote><!--引言end-->	
+							
+							<h4>一、本文简介</h4>
+							<p>　　在工作当中的项目中，我遇到过这种情况，公司架构选型SpringBoot ,这是个基于Maven构建的项目，需要集成阿里大鱼短信系统，然后暴露REST风格的API接口出去。本文重点讲解。</p>
+							<h4>二、开发准备</h4>
+							<p>　　阿里大于，是阿里的通讯产品之一，提供短信验证码服务。</p>
+							<p>　　1、需要注册阿里大鱼账户、充值、设置，这一块不多讲，官网有文档。</p>
+							<p>　　　　（<a href="https://www.alidayu.com/" target="_blank">https://www.alidayu.com/</a>）</p>
+							<p>　　2、下载官网开发包（SDK）</p>
+							<p>　　3、官方给的demo例子（先参考下，主要看我的Demo）</p>
+							<div class="cnblogs_code">
+								<pre>
+TaobaoClient client = <span style="color: #0000ff;">new</span><span style="color: #000000;"> DefaultTaobaoClient(url, appkey, secret);
+AlibabaAliqinFcSmsNumSendRequest req </span>= <span style="color: #0000ff;">new</span><span style="color: #000000;"> AlibabaAliqinFcSmsNumSendRequest();
+req.setExtend(</span>"123456"<span style="color: #000000;">);
+req.setSmsType(</span>"normal"<span style="color: #000000;">);
+req.setSmsFreeSignName(</span>"阿里大于"<span style="color: #000000;">);
+req.setSmsParamString(</span>"{\"code\":\"1234\",\"product\":\"alidayu\"}"<span style="color: #000000;">);
+req.setRecNum(</span>"13000000000"<span style="color: #000000;">);
+req.setSmsTemplateCode(</span>"SMS_585014"<span style="color: #000000;">);
+AlibabaAliqinFcSmsNumSendResponse rsp </span>=<span style="color: #000000;"> client.execute(req);
+System.out.println(rsp.getBody());</span>
+								</pre>
+							</div>
+							<div class="clear"></div>
+
+
+
+
+						</div>
+						<div class="clear"></div>
+					</div><!--article  end-->
+					<div class="clear"></div>
+
+					<!--article-tail-infor  start-->
+					<div id="article-tail-infor">
+						<div id="BlogPostCategory">分类: <a href="http://www.cnblogs.com/hyhnet/category/834083.html">JAVA 框架</a></div>
+						<div id="EntryTag">标签: <a href="http://www.cnblogs.com/hyhnet/tag/spring/">spring</a>, <a href="http://www.cnblogs.com/hyhnet/tag/Maven/">Maven</a>, <a href="http://www.cnblogs.com/hyhnet/tag/%E9%98%BF%E9%87%8C%E5%A4%A7%E9%B1%BC/">阿里大鱼</a>, <a href="http://www.cnblogs.com/hyhnet/tag/%E5%A4%A7%E4%BA%8E/">大于</a>, <a href="http://www.cnblogs.com/hyhnet/tag/boot/">boot</a>, <a href="http://www.cnblogs.com/hyhnet/tag/%E6%9C%AC%E5%9C%B0/">本地</a>, <a href="http://www.cnblogs.com/hyhnet/tag/jar/">jar</a>, <a href="http://www.cnblogs.com/hyhnet/tag/%E4%BB%93%E5%BA%93/">仓库</a>
+						</div>
+
+						<div id="author_profile">
+							<div id="author_profile_info" class="author_profile_info">
+									<a href="http://home.cnblogs.com/u/hyhnet/" target="_blank"><img src="images/20160223115835.png" class="author_avatar" alt=""></a>
+								<div id="author_profile_detail" class="author_profile_info">
+									<a href="http://home.cnblogs.com/u/hyhnet/">千万之路刚开始</a><br>
+									<a href="http://home.cnblogs.com/u/hyhnet/followees">关注 - 3</a><br>
+									<a href="http://home.cnblogs.com/u/hyhnet/followers">粉丝 - 5</a>
+								</div>
+							</div>
+							<div class="clear"></div>
+							<div id="author_profile_honor"></div>
+							<div id="author_profile_follow">
+										<a href="javascript:void(0);" onclick="follow('35584285-2dbf-e511-9fc1-ac853d9f53cc');return false;">+加关注</a>
+							</div>
+						</div>
+
+						<div id="div_digg">
+							<div class="diggit" onclick="votePost(5775473,'Digg')">
+								<span class="diggnum" id="digg_count">2</span>
+							</div>
+							<div class="buryit" onclick="votePost(5775473,'Bury')">
+								<span class="burynum" id="bury_count">0</span>
+							</div>
+							<div class="clear"></div>
+							<div class="diggword" id="digg_tips">
+							</div>
+						</div>
+						<div id="post_next_prev"><a href="http://www.cnblogs.com/hyhnet/p/5767698.html" class="p_n_p_prefix">« </a> 上一篇：<a href="http://www.cnblogs.com/hyhnet/p/5767698.html" title="发布于2016-08-13 11:50">[转]利用URLConnection来发送POST和GET请求</a><br></div>
+						</div>
+					</div><!--article-infor  end-->
+					<div class="clear"></div>
+
+					
+					
+				</div><!--主体内容end-->
+
+
+
+		</div>
+		<!--main  end-->
+		<div class="clear"></div>
+		<div id="footer">Copyright ©2016 千万之路刚开始</div>
+		<!--footer  end-->
+</div>
+<!--end: home 自定义的最大容器 -->
+
+</body>
+</html>

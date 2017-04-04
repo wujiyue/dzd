@@ -25,26 +25,6 @@
 	<context:component-scan base-package="com.markbro.dzd">
 		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
-
-	<!--主键生成service-->
-	<bean id="bmKeyService" class="com.markbro.dzd.base.tablekey.service.TableKeyService">
-		<property name="key_name" value="org_department"></property>
-	</bean>
-	<bean id="gwKeyService" class="com.markbro.dzd.base.tablekey.service.TableKeyService">
-		<property name="key_name" value="org_position"></property>
-	</bean>
-	<bean id="keyService" class="com.markbro.dzd.base.tablekey.service.TableKeyService">
-		<property name="key_name" value="common"></property>
-	</bean>
-	<bean id="yhKeyService" class="com.markbro.dzd.base.tablekey.service.TableKeyService">
-		<property name="key_name" value="sys_user"></property>
-	</bean>
-	<bean id="contextProvider" class="com.markbro.asoiaf.core.ContextProviderImpl"></bean>
-	<bean class="com.markbro.asoiaf.core.utils.SpringContextHolder"></bean>
-
-	<!--开发模式下配置此bean，修改xml映射文件后不用重启服务，开发模式打开-->
-	<!--<bean id="mapperLoader" class="com.markbro.asoiaf.core.utils.MapperLoader"></bean>-->
-
 	<!-- 配置 JSR303 Bean Validator 定义 -->
 	<!--<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />-->
 	<!-- ehCache缓存配置 主要用于缓存系统常用的数据，而应用数据使用mbts.xml配置的cache-->
@@ -53,7 +33,8 @@
 	</bean>
 
 	<!--开启@Aspect的aop的实现方式-->
-	<!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
+	<aop:aspectj-autoproxy proxy-target-class="false"/>
+
 	<!-- 定义事务管理器 -->
 
 	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -67,20 +48,23 @@
 			<tx:method name="get*" propagation="SUPPORTS" read-only="true"/>
 			<tx:method name="find*" propagation="SUPPORTS" read-only="true"/>
 			<tx:method name="add*" propagation="REQUIRED"/>
+			<tx:method name="save*" propagation="REQUIRED"/>
 			<tx:method name="remove*" propagation="REQUIRED"/>
 			<tx:method name="delete*" propagation="REQUIRED"/>
 			<tx:method name="update*" propagation="REQUIRED"/>
-			<tx:method name="test*" propagation="REQUIRED"/>
+			&lt;!&ndash;<tx:method name="test*" propagation="REQUIRED"/>&ndash;&gt;
 			<tx:method name="*" propagation="SUPPORTS" read-only="true" />
 		</tx:attributes>
 	</tx:advice>
 	<aop:config>
-		<aop:pointcut id="serviceMethod" expression="execution(* com.markbro.dzd.*.service.*.*(..))" />
+		<aop:pointcut id="serviceMethod" expression="execution(* com.markbro.dzd..service.*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="serviceMethod"></aop:advisor>
 		&lt;!&ndash;<aop:pointcut id="allManagerMethod" expression="execution(* com.markbro.dzd.*.*(..))"  />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="allManagerMethod" />&ndash;&gt;
 	</aop:config>-->
 
-	<aop:aspectj-autoproxy/>
+	<!--<aop:aspectj-autoproxy/>-->
+	<!-- 切面 -->
+	<!--<bean class="com.markbro.dzd.base.aspect.DataSourceAspect" />-->
 
 </beans>

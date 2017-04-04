@@ -10,7 +10,7 @@
 	</select>
 
 	<update id="updateUserSessionATime" parameterType="java.lang.String">
-		update t_session set active_time=now() where token =#{token} and zt_dm=1
+		update t_session set active_time=now() where token =#{token} and deleted=0
 	</update>
 
 
@@ -34,16 +34,16 @@
 
 
 	<select id="queryYhidByDlmc" resultType="java.util.Map" parameterType="java.lang.String" >
-		select id yhid,nickName xm,password dlmm from sys_user
+		select id yhid,nickName xm,password dlmm,available,deleted from sys_user
 		where account = #{dlmc} limit 1
 	</select>
 	<!--查询登录用户的org-->
 	<select id="queryOrgMapByYhid" resultType="java.util.Map" parameterType="java.lang.String">
-		select org.* from org_organization org,sys_user yh where yh.id=#{yhid} and yh.orgid=org.id
+		select org.* from org_organization org,sys_user yh where yh.id=#{yhid} and yh.orgid=org.id limit 1
 	</select>
 	<!--查询登录用户的角色列表，角色id和角色名称（dm,mc）-->
 	<select id="queryLoginJsList" resultType="java.util.Map" parameterType="java.lang.String">
-		select id dm,name mc from org_role where id in(select jsid from org_yh_js where orgid=#{zzid} and yhid=#{yhid})  and deleted=0
+		select id dm,name mc from org_role where id in(select jsid from org_user_role where  yhid=#{yhid}) and available=1   and deleted=0
 	</select>
 	<!--查询登录用户的岗位列表，岗位id和岗位名称（dm,mc）-->
 	<select id="queryLoginGwList" resultType="java.util.Map" parameterType="java.lang.String">
@@ -55,9 +55,11 @@
 		select distinct sjbmid as dm, b.name mc from org_tree a,org_department b
 		where a.sjbmid = b.id and a.type='ry' and a.orgid=#{zzid} and a.lxid=#{yhid} and a.deleted=0 order by sjbmid
 	</select>
+
+	<!--查询登录用户的岗位和部门信息（bm_mc,gw_mc,bmid,gwid）-->
 	<select id="queryLoginOrgInfo" resultType="java.util.Map"  parameterType="java.lang.String">
 		select b.name as bm_mc,c.name as gw_mc,b.lxid as bmid,c.lxid as gwid from org_tree a,org_tree b,org_tree c
 		where a.sjbmid=b.lxid and a.parentid=c.id and c.sjbmid=b.lxid
-		and a.lxid=#{yhid} and a.deleted=0 and b.deleted=0 and c.deleted=0
+		and a.lxid=#{yhid} and a.deleted=0 and b.deleted=0 and a.orgid=#{zzid} and c.deleted=0
 	</select>
 </mapper>

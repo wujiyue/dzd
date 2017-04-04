@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.cms.image.dao.ImageMapper">
+	<!--<sql id="addColumns">id,yhid,datascope,name,url,url_small,size,suffixes,keywords,resourcetypeid,createBy,createTime,updateBy,updateTime,available,deleted</sql> -->
+	<!--<sql id="updateColumns">yhid,datascope,name,url,url_small,size,suffixes,keywords,resourcetypeid,createBy,updateBy,updateTime,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,yhid,datascope,name,url,url_small,size,suffixes,keywords,resourcetypeid,createBy,createTime,updateBy,updateTime,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="imageResult" type="com.markbro.dzd.cms.image.bean.Image">
+		<result property="id" column="id" />
+		<result property="yhid" column="yhid" />
+		<result property="datascope" column="datascope" />
+		<result property="name" column="name" />
+		<result property="url" column="url" />
+		<result property="url_small" column="url_small" />
+		<result property="size" column="size" />
+		<result property="suffixes" column="suffixes" />
+		<result property="keywords" column="keywords" />
+		<result property="resourcetypeid" column="resourcetypeid" />
+		<result property="createBy" column="createBy" />
+		<result property="createTime" column="createTime" />
+		<result property="updateBy" column="updateBy" />
+		<result property="updateTime" column="updateTime" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="Image_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="yhid != null and yhid != ''">
+				AND yhid = #{yhid}
+		</if>
+			<if test="datascope != null and datascope != ''">
+				AND datascope = #{datascope}
+		</if>
+			<if test="name != null and name != ''">
+				AND name like concat(concat('%',#{name}),'%')
+		</if>
+			<if test="url != null and url != ''">
+				AND url = #{url}
+		</if>
+			<if test="url_small != null and url_small != ''">
+				AND url_small = #{url_small}
+		</if>
+			<if test="size != null and size != ''">
+				AND size = #{size}
+		</if>
+			<if test="suffixes != null and suffixes != ''">
+				AND suffixes = #{suffixes}
+		</if>
+			<if test="keywords != null and keywords != ''">
+				AND keywords = #{keywords}
+		</if>
+			<if test="resourcetypeid != null and resourcetypeid != ''">
+				AND resourcetypeid = #{resourcetypeid}
+		</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+		</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+		</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+		</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="imageResult">
+        select <include refid="allColumns"/>
+        from cms_image
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from cms_image
+            where
+            id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.cms.image.bean.Image" flushCache="true">
+    	insert into cms_image(id,yhid,datascope,name,url,url_small,size,suffixes,keywords,resourcetypeid,createBy,createTime,updateBy,updateTime,available,deleted)
+    	values (#{id},#{yhid},#{datascope},#{name},#{url},#{url_small},#{size},#{suffixes},#{keywords},#{resourcetypeid},#{createBy},now(),#{updateBy},now(),1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into cms_image(id,yhid,datascope,name,url,url_small,size,suffixes,keywords,resourcetypeid,createBy,createTime,updateBy,updateTime,available,deleted)
+    	values (#{id},#{yhid},#{datascope},#{name},#{url},#{url_small},#{size},#{suffixes},#{keywords},#{resourcetypeid},#{createBy},now(),#{updateBy},now(),1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into cms_image (id,yhid,datascope,name,url,url_small,size,suffixes,keywords,resourcetypeid,createBy,createTime,updateBy,updateTime,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(#{item.id},#{item.yhid},#{item.datascope},#{item.name},#{item.url},#{item.url_small},#{item.size},#{item.suffixes},#{item.keywords},#{item.resourcetypeid},#{item.createBy},now(),#{item.updateBy},now(),1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.cms.image.bean.Image" flushCache="true">
+    	update cms_image 
+    	<set>
+    		<if test="yhid != null">yhid=#{yhid},</if>
+			<if test="datascope != null">datascope=#{datascope},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="url != null">url=#{url},</if>
+			<if test="url_small != null">url_small=#{url_small},</if>
+			<if test="size != null">size=#{size},</if>
+			<if test="suffixes != null">suffixes=#{suffixes},</if>
+			<if test="keywords != null">keywords=#{keywords},</if>
+			<if test="resourcetypeid != null">resourcetypeid=#{resourcetypeid},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update cms_image
+        <set>
+            <if test="yhid != null">yhid=#{yhid},</if>
+			<if test="datascope != null">datascope=#{datascope},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="url != null">url=#{url},</if>
+			<if test="url_small != null">url_small=#{url_small},</if>
+			<if test="size != null">size=#{size},</if>
+			<if test="suffixes != null">suffixes=#{suffixes},</if>
+			<if test="keywords != null">keywords=#{keywords},</if>
+			<if test="resourcetypeid != null">resourcetypeid=#{resourcetypeid},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update cms_image
+         <set>
+         <if test="yhid != null">yhid=#{yhid},</if>
+			<if test="datascope != null">datascope=#{datascope},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="url != null">url=#{url},</if>
+			<if test="url_small != null">url_small=#{url_small},</if>
+			<if test="size != null">size=#{size},</if>
+			<if test="suffixes != null">suffixes=#{suffixes},</if>
+			<if test="keywords != null">keywords=#{keywords},</if>
+			<if test="resourcetypeid != null">resourcetypeid=#{resourcetypeid},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from cms_image where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from cms_image where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="imageResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM cms_image
+        <where>
+            and available=1
+            and deleted=0
+            <include refid="Image_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="imageResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM cms_image
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="yhid != null and yhid != ''">
+				AND yhid = #{yhid}
+			</if>
+			<if test="datascope != null and datascope != ''">
+				AND datascope = #{datascope}
+			</if>
+			<if test="name != null and name != ''">
+				AND name like concat(concat('%',#{name}),'%')
+			 </if>
+			<if test="url != null and url != ''">
+				AND url = #{url}
+			</if>
+			<if test="url_small != null and url_small != ''">
+				AND url_small = #{url_small}
+			</if>
+			<if test="size != null and size != ''">
+				AND size = #{size}
+			</if>
+			<if test="suffixes != null and suffixes != ''">
+				AND suffixes = #{suffixes}
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND keywords = #{keywords}
+			</if>
+			<if test="resourcetypeid != null and resourcetypeid != ''">
+				AND resourcetypeid = #{resourcetypeid}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+   	</select>
+
+
+
+</mapper>

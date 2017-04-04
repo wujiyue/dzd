@@ -86,14 +86,18 @@
         where
         id =#{id}
     </select>
-	<select id="getMap"  resultType="java.util.Map">
-		select a.*,b.name parentname
-		from org_department a left join org_department b
-		on a.parentid=b.id
-		where
-		a.id =#{id}
-	</select>
+    <select id="getMap"  resultType="java.util.Map">
+            select a.*,b.name parentname
+            from org_department a left join org_department b
+			on a.parentid=b.id
+            where
+            a.id =#{id}
+    </select>
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgDepartment.bean.Department" flushCache="true">
+    	insert into org_department(orgid,id,parentid,parentids,name,sort,phone,fax,email,bz,createTime,updateTime,createBy,updateBy,available,deleted)
+    	values (#{orgid},#{id},#{parentid},#{parentids},#{name},#{sort},#{phone},#{fax},#{email},#{bz},now(),now(),#{createBy},#{updateBy},1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
     	insert into org_department(orgid,id,parentid,parentids,name,sort,phone,fax,email,bz,createTime,updateTime,createBy,updateBy,available,deleted)
     	values (#{orgid},#{id},#{parentid},#{parentids},#{name},#{sort},#{phone},#{fax},#{email},#{bz},now(),now(),#{createBy},#{updateBy},1,0)
     </insert>
@@ -245,13 +249,14 @@
 			<if test="deleted != null and deleted != ''">
 				AND deleted = #{deleted}
 			</if>
+			
    		</where>
 		order by sort
    	</select>
 
 	<select id="findByParentid" resultType="com.markbro.dzd.base.orgDepartment.bean.Department">
 		select *
-			from org_department
+		from org_department
 		<where>
 			parentid=#{parentid}
 			and deleted=0
@@ -260,6 +265,8 @@
 		</where>
 		order by sort
 	</select>
+
+
 	<select id="findByParentidCount" resultType="java.lang.Integer">
 		select count(1)
 		from org_department

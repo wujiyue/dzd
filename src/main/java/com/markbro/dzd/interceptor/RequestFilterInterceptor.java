@@ -4,6 +4,7 @@ import com.markbro.asoiaf.core.exception.ForbiddenException;
 import com.markbro.asoiaf.core.utils.EhCacheUtils;
 import com.markbro.asoiaf.core.utils.SysPara;
 import com.markbro.dzd.base.filter.AclVerify;
+import com.markbro.dzd.base.login.bean.LoginBean;
 import com.markbro.dzd.base.login.service.LoginService;
 import com.markbro.dzd.common.util.ConstantUtil;
 import com.markbro.dzd.common.util.PatternUtil;
@@ -24,7 +25,7 @@ import java.io.PrintWriter;
 public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
     private String baseUrl;
     private final String sysTokenKey = "sys_token";
-    private final String sdtjqfIctTokenKey = "sdtjqf_ict_token";
+    private final String sdtjqfIctTokenKey = "markbro_token";
     Logger log= LoggerFactory.getLogger(RequestFilterInterceptor.class);
     @Autowired
     LoginService loginService;
@@ -51,7 +52,7 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
                 sysToken = ConstantUtil.NUM_ZERO;
             }
             String token = request.getParameter("sys_token_khd");
-            token = PatternUtil.isNull(token, String.valueOf(request.getParameter("sdtjqficttoken")));
+            token = PatternUtil.isNull(token, String.valueOf(request.getParameter("markbro_token")));
             if(token.equals("")){
                 if(PatternUtil.isNull(sysToken).equals(ConstantUtil.NUM_ZERO)){
                     token = ConstantUtil.getCookieValue(request, sdtjqfIctTokenKey);
@@ -103,11 +104,12 @@ public class RequestFilterInterceptor extends HandlerInterceptorAdapter {
         }
 
         try {
-            if(!ConstantUtil.CON_ADMIN.equals(yhid)&&!"1".equals(yhid)&&!(uri.indexOf("/json/")>0)){//登录用户调用json数据接口不检测权限
+            LoginBean lb= (LoginBean) EhCacheUtils.getUserInfo(ConstantUtil.CACHE_YH_USERBEAN,yhid);
+            if(!lb.isAdmin()){//登录用户调用json数据接口不检测权限
                 AclVerify.verify(yhid, uri);
             }
         } catch (ForbiddenException e) {
-            log.warn(yhid + "没有权限访问服务：" + uri + " ");
+            log.warn("{}没有权限访问服务：{}",new Object[]{yhid,uri});
             throw new ForbiddenException(yhid + "没有权限访问服务：" + uri + " ");
 
         }

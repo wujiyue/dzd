@@ -7,10 +7,12 @@ import com.markbro.dzd.base.tablekey.service.TableKeyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
- * 数据字典 Service
+ * 数据字典 service
  * Created by wujiyue on 2016-07-05 22:19:54.
  */
 @Service
@@ -69,5 +71,19 @@ public class DictionaryService{
         dictionaryMapper.deleteBatch(ids);
     }
      /*自定义方法*/
-
+     public Object  select(Map<String,Object> map){
+         Map<String,Object> returnMap=new HashMap<String,Object>();
+         String type=(String) map.get("type");
+         List<Map<String,Object>> res=new ArrayList<Map<String,Object>>();
+         List<Dictionary> list=dictionaryMapper.findByType(type);
+         Map<String,Object> tmap=null;
+         for(Dictionary d:list){
+             tmap=new HashMap<String,Object>();
+             tmap.put("dm",d.getValue());
+             tmap.put("mc",d.getLabel());
+             res.add(tmap);
+         }
+         returnMap.put("dicSelect_"+type,res);
+         return returnMap;
+     }
 }

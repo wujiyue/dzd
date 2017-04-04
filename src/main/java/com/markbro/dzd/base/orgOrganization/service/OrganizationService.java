@@ -1,19 +1,17 @@
 package com.markbro.dzd.base.orgOrganization.service;
+import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.markbro.asoiaf.core.model.Msg;
 import com.markbro.dzd.base.orgOrganization.bean.Organization;
 import com.markbro.dzd.base.orgOrganization.dao.OrganizationMapper;
+import com.markbro.dzd.base.tablekey.service.TableKeyService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.markbro.asoiaf.core.service.CrudService;
-import org.springframework.transaction.annotation.Transactional;
-import java.util.HashMap;
-import com.markbro.asoiaf.core.model.Msg;
+
 import java.util.List;
 import java.util.Map;
-import org.springframework.beans.factory.annotation.Autowired;
-import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
-import com.markbro.dzd.base.tablekey.service.TableKeyService;
 /**
- * 组织机构 Service
- * Created by wujiyue on 2016-07-10 10:38:28.
+ * 组织机构 service
+ * Created by wujiyue on 2016-07-18 22:52:36.
  */
 @Service
 public class OrganizationService{
@@ -24,6 +22,9 @@ public class OrganizationService{
      /*基础公共方法*/
     public Organization get(java.lang.String id){
         return organizationMapper.get(id);
+    }
+    public Map<String,Object> getMap(java.lang.String id){
+        return organizationMapper.getMap(id);
     }
     public List<Organization> find(PageBounds pageBounds,Map<String,Object> map){
         return organizationMapper.find(pageBounds,map);

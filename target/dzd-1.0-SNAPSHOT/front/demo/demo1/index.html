@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>js随机飘动的广告图片代码</title>
+        <meta name="description" content="js位置随机飘动的图片广告，鼠标悬浮上去，将不再上下左右漂移，而且有按钮关闭广告。" />
+    </head>
+
+    <body>
+
+        <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
+        <script type="text/javascript">
+
+        </script>
+
+        <div id="wzsse" style="position:absolute;">
+            <div style="text-align:right;cursor:pointer;" id="closepiaofu">关闭</div>
+            <a href="http://www.sucaihuo.com/" target="_blank"><img src="images/kejian.jpg" border="0" width="214" height="73" /></a>
+        </div>
+
+        <script type="text/javascript" src="js/floatadv.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                $("#closepiaofu").click(function() {
+                    $("#wzsse").hide();
+                });
+            })
+            var ad1 = new AdMove("wzsse", true);
+            ad1.Run();
+        </script>
+
+
+    </body>
+</html>
+

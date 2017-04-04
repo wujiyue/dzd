@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>锁屏页面</title>
+        <script type="text/javascript" src="/resources/lib/jquery/jquery.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="/resources/css/H-ui.css">
+        <link type="text/css" rel="stylesheet" href="/resources/css/animate.min.css">
+        <script type="text/javascript">
+
+        </script>
+        <style>
+            .gray-bg {
+                background-color: #f3f3f4;
+            }
+            .lockscreen.middle-box {
+                width: 200px;
+                padding-top: 110px;
+            }
+            .middle-box {
+                max-width: 400px;
+                z-index: 100;
+                margin: 0 auto;
+                padding-top: 40px;
+            }
+            .m-b-md {
+                margin-bottom: 20px;
+            }
+
+            img {
+                vertical-align: middle;
+            }
+            .img-circle {
+                border-radius: 50%;
+            }
+            img.circle-border {
+                border: 6px solid #FFF;
+                border-radius: 50%;
+            }
+            h3, h4, h5 {
+                margin-top: 5px;
+                font-weight: 600;
+            }
+            h3 {
+                font-size: 16px;
+            }
+            p {
+                margin: 0 0 10px;
+            }
+            .text-center {
+                text-align: center;
+            }
+            .m-t {
+                margin-top: 15px;
+            }
+
+        </style>
+    </head>
+
+    <body class="gray-bg">
+    <div class="middle-box text-center lockscreen animated fadeInDown">
+        <div>
+            <div class="m-b-md">
+                <img alt="image" class="img-circle circle-border" src="../../images/a1.jpg">
+            </div>
+            <h3>Beaut-zihan</h3>
+            <p>您需要再次输入密码</p>
+            <form class="m-t" action="index.html">
+                <div class="formControls m-t">
+                    <input type="password" class="input-text " placeholder="******" required="">
+                </div>
+                <div class="formControls m-t">
+                    <button type="submit" class="btn btn-primary btn-block">登录到H+</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    </body>
+</html>
+

@@ -1,0 +1,87 @@
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <meta http-equiv="pragma" content="no-cache"> 
+	<meta http-equiv="cache-control" content="no-cache"> 
+	<meta http-equiv="expires" content="0">
+    <title> test</title>
+    <link rel="stylesheet" type="text/css" href="css/m.reset.css">
+    <link rel="stylesheet" type="text/css" href="css/weui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/validate.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css" />
+    <style type="text/css">
+        .page_title {
+            text-align: center;
+            font-size: 34px;
+            color: #3cc51f;
+            font-weight: 400;
+            margin: 0 15%;
+        }
+    </style>
+</head>
+<body>
+<div class="g-container" id="g-container">
+
+    <div class="actionsheet">
+        <div class="hd">
+            <h1 class="page_title">ActionSheet</h1>
+        </div>
+        <div class="bd spacing">
+            <span  class="weui_btn weui_btn_primary" onclick="showActionSheet()" id="showActionSheet">点击上拉ActionSheet</span>
+        </div>
+    </div>
+        <!--BEGIN actionSheet-->
+        <div id="actionSheet_wrap">
+            <div class="weui_mask_transition" id="mask" style="display: block;"></div>
+            <div class="weui_actionsheet" id="weui_actionsheet">
+                <div class="weui_actionsheet_menu">
+                    <div class="weui_actionsheet_cell">示例菜单</div>
+                    <div class="weui_actionsheet_cell">示例菜单</div>
+                    <div class="weui_actionsheet_cell">示例菜单</div>
+                    <div class="weui_actionsheet_cell">示例菜单</div>
+                </div>
+                <div class="weui_actionsheet_action">
+                    <div class="weui_actionsheet_cell" id="actionsheet_cancel">取消</div>
+                </div>
+            </div>
+        </div>
+        <!--END actionSheet-->
+
+
+
+
+</div>
+</body>
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/zepto.fx.js"></script>
+<script type="text/javascript" src="js/zepto-mvalidate.js"></script>
+<script type="text/javascript" src="js/zepto.cookie.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+  <script type="text/javascript">
+
+      $(function(){
+            //common_showConfirm("您确定这样做吗？",function(){alert("您点击了确认");},function(){alert("您点击了取消");})
+          //common_showAlert("删除成功！");
+          //common_showToastNew("123");
+         // common_showWarning("错误！",5000);
+
+     /*   $("#showActionSheet").bind("click",function(){
+
+        });*/
+
+      })
+        function   showActionSheet(){
+            alert(123);
+            $("#mask").addClass("weui_fade_toggle").show();
+            $("#weui_actionsheet").addClass("weui_fade_toggle");
+      }
+
+  </script>
+</html>

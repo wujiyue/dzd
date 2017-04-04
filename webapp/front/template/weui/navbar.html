@@ -1,0 +1,96 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <meta http-equiv="pragma" content="no-cache"> 
+	<meta http-equiv="cache-control" content="no-cache"> 
+	<meta http-equiv="expires" content="0">
+    <title> test</title>
+    <link rel="stylesheet" type="text/css" href="css/m.reset.css">
+    <link rel="stylesheet" type="text/css" href="css/weui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/validate.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css" />
+      <style type="text/css">
+          .weui_label{
+              display: block;
+              width: 105px;
+              word-wrap: break-word;
+              word-break: break-all;
+              width:100px;text-align:right;
+              font-size:14px;
+          }
+          .cl:after,.clearfix:after{content:"\20";display:block;height:0;clear:both;visibility:hidden}.cl,.clearfix{zoom:1}
+          a.weui_tabbar_item.weui_bar_item_on{ display:inline-block;   background-color: #EAEAEA;}
+          .ms-mt{position:relative;bottom:0px;}
+      </style>
+</head>
+<body>
+<div class="g-container" id="g-container">
+
+    <div class="navbar">
+        <div class="bd" style="height: 100%;">
+            <div class="weui_tab">
+                <div class="weui_navbar">
+                    <div class="weui_navbar_item weui_bar_item_on">
+                        选项一
+                    </div>
+                    <div class="weui_navbar_item">
+                        选项二
+                    </div>
+                    <div class="weui_navbar_item">
+                        选项三
+                    </div>
+                </div>
+                <div class="weui_tab_bd">
+                        <div class="main-content cl">
+
+                            11111111111
+                        </div>
+                        <div class="main-content cl" style="display: none;">
+                            2222222
+                        </div>
+                        <div class="main-content cl" style="display: none;">
+                            33333333
+                        </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+</div>
+
+</body>
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/zepto.fx.js"></script>
+<script type="text/javascript" src="js/zepto-mvalidate.js"></script>
+<script type="text/javascript" src="js/zepto.cookie.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+  <script type="text/javascript">
+
+      $(function(){
+            //common_showConfirm("您确定这样做吗？",function(){alert("您点击了确认");},function(){alert("您点击了取消");})
+          //common_showAlert("删除成功！");
+          //common_showToastNew("123");
+         // common_showWarning("错误！",5000);
+
+          var $content = $('.navbar .weui_tab .weui_tab_bd .main-content');
+          $('.g-container').on('click', '.weui_navbar .weui_navbar_item', function (e) {
+              $(this).addClass('weui_bar_item_on').siblings('.weui_bar_item_on').removeClass('weui_bar_item_on');
+              var index = $(this).index();
+              var $div=$content.eq(index);
+              $div.show().siblings().hide();
+              e.preventDefault();
+          });
+
+      })
+
+
+  </script>
+</html>

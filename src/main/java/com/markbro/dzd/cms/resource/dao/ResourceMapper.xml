@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.cms.resource.dao.ResourceMapper">
+	<!--<sql id="addColumns">id,resourcetypeid,name,keywords,from,url,urlsmall,locaurl,suffix,targetid,resourcestate,createTime,updateTime,createBy,updateBy,available,deleted</sql> -->
+	<!--<sql id="updateColumns">resourcetypeid,name,keywords,from,url,urlsmall,locaurl,suffix,targetid,resourcestate,updateTime,createBy,updateBy,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,resourcetypeid,name,keywords,comefrom,url,urlsmall,locaurl,suffix,targetid,resourcestate,createTime,updateTime,createBy,updateBy,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="resourceResult" type="com.markbro.dzd.cms.resource.bean.Resource">
+		<result property="id" column="id" />
+		<result property="resourcetypeid" column="resourcetypeid" />
+		<result property="name" column="name" />
+		<result property="keywords" column="keywords" />
+		<result property="comefrom" column="comefrom" />
+		<result property="url" column="url" />
+		<result property="urlsmall" column="urlsmall" />
+		<result property="locaurl" column="locaurl" />
+		<result property="suffix" column="suffix" />
+		<result property="targetid" column="targetid" />
+		<result property="resourcestate" column="resourcestate" />
+		<result property="createTime" column="createTime" />
+		<result property="updateTime" column="updateTime" />
+		<result property="createBy" column="createBy" />
+		<result property="updateBy" column="updateBy" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="Resource_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="resourcetypeid != null and resourcetypeid != ''">
+				AND resourcetypeid = #{resourcetypeid}
+		</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+		</if>
+			<if test="keywords != null and keywords != ''">
+				AND keywords = #{keywords}
+		</if>
+			<if test="comefrom != null and comefrom != ''">
+				AND comefrom = #{comefrom}
+		</if>
+			<if test="url != null and url != ''">
+				AND url = #{url}
+		</if>
+			<if test="urlsmall != null and urlsmall != ''">
+				AND urlsmall = #{urlsmall}
+		</if>
+			<if test="locaurl != null and locaurl != ''">
+				AND locaurl = #{locaurl}
+		</if>
+			<if test="suffix != null and suffix != ''">
+				AND suffix = #{suffix}
+		</if>
+			<if test="targetid != null and targetid != ''">
+				AND targetid = #{targetid}
+		</if>
+			<if test="resourcestate != null and resourcestate != ''">
+				AND resourcestate = #{resourcestate}
+		</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+		</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+		</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+		</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="resourceResult">
+        select <include refid="allColumns"/>
+        from cms_resource
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select a.*,b.name resourcetypename
+            from cms_resource a ,cms_resourcetype b
+            where
+			a.resourcetypeid=b.id and
+            a.id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.cms.resource.bean.Resource" flushCache="true">
+    	insert into cms_resource(id,resourcetypeid,name,keywords,comefrom,url,urlsmall,locaurl,suffix,targetid,resourcestate,createTime,updateTime,createBy,updateBy,available,deleted)
+    	values (#{id},#{resourcetypeid},#{name},#{keywords},#{comefrom},#{url},#{urlsmall},#{locaurl},#{suffix},#{targetid},#{resourcestate},now(),now(),#{createBy},#{updateBy},1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into cms_resource(id,resourcetypeid,name,keywords,comefrom,url,urlsmall,locaurl,suffix,targetid,resourcestate,createTime,updateTime,createBy,updateBy,available,deleted)
+    	values (#{id},#{resourcetypeid},#{name},#{keywords},#{comefrom},#{url},#{urlsmall},#{locaurl},#{suffix},#{targetid},#{resourcestate},now(),now(),#{createBy},#{updateBy},1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into cms_resource (id,resourcetypeid,name,keywords,comefrom,url,urlsmall,locaurl,suffix,targetid,resourcestate,createTime,updateTime,createBy,updateBy,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(#{item.id},#{item.resourcetypeid},#{item.name},#{item.keywords},#{item.comefrom},#{item.url},#{item.urlsmall},#{item.locaurl},#{item.suffix},#{item.targetid},#{item.resourcestate},now(),now(),#{item.createBy},#{item.updateBy},1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.cms.resource.bean.Resource" flushCache="true">
+    	update cms_resource 
+    	<set>
+    		<if test="resourcetypeid != null">resourcetypeid=#{resourcetypeid},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="keywords != null">keywords=#{keywords},</if>
+			<if test="from != null">comefrom=#{comefrom},</if>
+			<if test="url != null">url=#{url},</if>
+			<if test="urlsmall != null">urlsmall=#{urlsmall},</if>
+			<if test="locaurl != null">locaurl=#{locaurl},</if>
+			<if test="suffix != null">suffix=#{suffix},</if>
+			<if test="targetid != null">targetid=#{targetid},</if>
+			<if test="resourcestate != null">resourcestate=#{resourcestate},</if>
+			updateTime=now(),
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update cms_resource
+        <set>
+            <if test="resourcetypeid != null">resourcetypeid=#{resourcetypeid},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="keywords != null">keywords=#{keywords},</if>
+			<if test="from != null">comefrom=#{comefrom},</if>
+			<if test="url != null">url=#{url},</if>
+			<if test="urlsmall != null">urlsmall=#{urlsmall},</if>
+			<if test="locaurl != null">locaurl=#{locaurl},</if>
+			<if test="suffix != null">suffix=#{suffix},</if>
+			<if test="targetid != null">targetid=#{targetid},</if>
+			<if test="resourcestate != null">resourcestate=#{resourcestate},</if>
+			updateTime=now(),
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update cms_resource
+         <set>
+         <if test="resourcetypeid != null">resourcetypeid=#{resourcetypeid},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="keywords != null">keywords=#{keywords},</if>
+			<if test="from != null">comefrom=#{comefrom},</if>
+			<if test="url != null">url=#{url},</if>
+			<if test="urlsmall != null">urlsmall=#{urlsmall},</if>
+			<if test="locaurl != null">locaurl=#{locaurl},</if>
+			<if test="suffix != null">suffix=#{suffix},</if>
+			<if test="targetid != null">targetid=#{targetid},</if>
+			<if test="resourcestate != null">resourcestate=#{resourcestate},</if>
+			updateTime=now(),
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from cms_resource where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from cms_resource where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="resourceResult" parameterType="java.util.Map">
+        SELECT a.*,b.name resourcetypename FROM cms_resource a,cms_resourcetype b
+        <where>
+			a.resourcetypeid=b.id
+            and a.available=1
+            and a.deleted=0
+			<if test="resourcetypeid != null and resourcetypeid != ''">
+				AND a.resourcetypeid = #{resourcetypeid}
+			</if>
+			<if test="name != null and name != ''">
+				AND a.name = #{name}
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND a.keywords = #{keywords}
+			</if>
+			<if test="from != null and from != ''">
+				AND a.from = #{from}
+			</if>
+			<if test="suffix != null and suffix != ''">
+				AND a.suffix = #{suffix}
+			</if>
+			<if test="resourcestate != null and resourcestate != ''">
+				AND a.resourcestate = #{resourcestate}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND a.createBy = #{createBy}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND a.updateBy = #{updateBy}
+			</if>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="resourceResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM cms_resource
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="resourcetypeid != null and resourcetypeid != ''">
+				AND resourcetypeid = #{resourcetypeid}
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="keywords != null and keywords != ''">
+				AND keywords = #{keywords}
+			</if>
+			<if test="from != null and from != ''">
+				AND comefrom = #{comefrom}
+			</if>
+			<if test="url != null and url != ''">
+				AND url = #{url}
+			</if>
+			<if test="urlsmall != null and urlsmall != ''">
+				AND urlsmall = #{urlsmall}
+			</if>
+			<if test="locaurl != null and locaurl != ''">
+				AND locaurl = #{locaurl}
+			</if>
+			<if test="suffix != null and suffix != ''">
+				AND suffix = #{suffix}
+			</if>
+			<if test="targetid != null and targetid != ''">
+				AND targetid = #{targetid}
+			</if>
+			<if test="resourcestate != null and resourcestate != ''">
+				AND resourcestate = #{resourcestate}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+   	</select>
+
+</mapper>

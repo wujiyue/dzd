@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.cms.brand.dao.BrandMapper">
+	<!--<sql id="addColumns">id,ppdm,ppmc,ppfl,createBy,createTime,available,deleted</sql> -->
+	<!--<sql id="updateColumns">ppdm,ppmc,ppfl,createBy,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,ppdm,ppmc,ppfl,createBy,createTime,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="brandResult" type="com.markbro.dzd.cms.brand.bean.Brand">
+		<result property="id" column="id" />
+		<result property="ppdm" column="ppdm" />
+		<result property="ppmc" column="ppmc" />
+		<result property="ppfl" column="ppfl" />
+		<result property="createBy" column="createBy" />
+		<result property="createTime" column="createTime" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="Brand_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="ppdm != null and ppdm != ''">
+				AND ppdm = #{ppdm}
+		</if>
+			<if test="ppmc != null and ppmc != ''">
+				AND ppmc = #{ppmc}
+		</if>
+			<if test="ppfl != null and ppfl != ''">
+				AND ppfl = #{ppfl}
+		</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+		</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="brandResult">
+        select <include refid="allColumns"/>
+        from cms_brand
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from cms_brand
+            where
+            id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.cms.brand.bean.Brand" flushCache="true">
+    	insert into cms_brand(id,ppdm,ppmc,ppfl,createBy,createTime,available,deleted)
+    	values (null,#{ppdm},#{ppmc},#{ppfl},#{createBy},now(),1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into cms_brand(id,ppdm,ppmc,ppfl,createBy,createTime,available,deleted)
+    	values (null,#{ppdm},#{ppmc},#{ppfl},#{createBy},now(),1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into cms_brand (id,ppdm,ppmc,ppfl,createBy,createTime,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(null,#{item.ppdm},#{item.ppmc},#{item.ppfl},#{item.createBy},now(),1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.cms.brand.bean.Brand" flushCache="true">
+    	update cms_brand 
+    	<set>
+    		<if test="ppdm != null">ppdm=#{ppdm},</if>
+			<if test="ppmc != null">ppmc=#{ppmc},</if>
+			<if test="ppfl != null">ppfl=#{ppfl},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update cms_brand
+        <set>
+            <if test="ppdm != null">ppdm=#{ppdm},</if>
+			<if test="ppmc != null">ppmc=#{ppmc},</if>
+			<if test="ppfl != null">ppfl=#{ppfl},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update cms_brand
+         <set>
+         <if test="ppdm != null">ppdm=#{ppdm},</if>
+			<if test="ppmc != null">ppmc=#{ppmc},</if>
+			<if test="ppfl != null">ppfl=#{ppfl},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from cms_brand where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from cms_brand where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="brandResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM cms_brand
+        <where>
+            and available=1
+            and deleted=0
+            <include refid="Brand_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="brandResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM cms_brand
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="ppdm != null and ppdm != ''">
+				AND ppdm = #{ppdm}
+			</if>
+			<if test="ppmc != null and ppmc != ''">
+				AND ppmc = #{ppmc}
+			</if>
+			<if test="ppfl != null and ppfl != ''">
+				AND ppfl = #{ppfl}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+   	</select>
+
+
+
+</mapper>

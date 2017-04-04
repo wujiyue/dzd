@@ -1,0 +1,404 @@
+*,html,body{marin:0;padding: 0;}
+/*定义网页主题宽度*/
+
+.content_wrapper{margin:10px;position:relative;
+ 		    font: 400 14px/24px "Microsoft Yahei","冬青黑体简体中文 w3","宋体"; height: 100%;
+ }
+  .set-tab {
+	  border-bottom: 1px solid #e5e5e5;
+	  height: 30px;
+  }
+  .tab-normal {
+	  padding-left: 10px;
+  }
+.tab-normal li {
+	position: relative;
+}
+.set-tab li {
+	float: left;
+	display: inline;
+	padding-right: 30px;
+	cursor: pointer;
+}
+.set-tab .selected a {
+	position: relative;
+	color: #699f00;
+	border-bottom: 3px solid #699f00;
+	background-color: #fff;
+	line-height: 23px;
+	bottom: -1px;
+}
+.set-tab a {
+	color: #333;
+	line-height: 25px;
+	height: 28px;
+	display: inline-block;
+	font-size: 14px;
+}
+.set-tab a:hover {
+	color: #699f00;
+	text-decoration: none;
+}
+.usrSetting-wrap {
+	padding: 15px;
+	border: 1px solid #eaeaea;
+}
+.userSetting-head {
+	position: relative;
+}
+.userSetting-head:hover .userSetting-changehead {
+	display: block;
+	background-color: #eaf4f5;
+	cursor: pointer;
+}
+.userSetting-changehead {
+	display: none;
+	position: absolute;
+	_width: 70px;
+	height: 22px;
+	background: 0;
+	line-height: 22px;
+	text-align: center;
+	color: #333;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	opacity: .9;
+	filter: alpha(opacity=90);
+}
+
+.userSetting-item {
+	min-height: 28px;
+	height: auto!important;
+	height: 28px;
+	font-size: 14px;
+}
+.vl-inline {
+	display: inline-block;
+	vertical-align: middle;
+}
+em, strong {
+	font-style: normal;
+	font-weight: normal;
+}
+.mainColor {
+	color: #333!important;
+}
+.input-size-small {
+	width: 120px;
+}
+.input-common {
+	display: inline-block;
+	width: 228px;
+	height: 28px;
+	border: 1px solid #e4e4e4;
+	padding: 0 5px;
+	line-height: 28px\9;
+	vertical-align: middle;
+}
+[placeholder] {
+	font-family: "\5FAE\8F6F\96C5\9ED1";
+}
+.mb5 {
+	margin-bottom: 5px;
+}
+.fl {
+	float: left;
+	display: inline;
+}
+a {
+	color: #000;
+	text-decoration: none;
+	outline: 0;
+}
+a.disabled, a.disabled:hover {
+	text-decoration: none;
+	color: #999;
+	cursor: default;
+}
+.userSetting-item .qyv-rank {
+	float: none;
+}
+.qyv-rank {
+	float: left;
+	display: inline-block;
+	width: 22px;
+	height: 16px;
+	margin-left: 2px;
+	position: relative;
+	top: 3px;
+}
+.qyvr-gray {
+	background: url(/resources/images/vg-gray-rank.png) no-repeat;
+	_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled="true",sizingMethod="scale",src="http://www.qiyipic.com/common/fix/vip-grow/vg-gray-rank.png");
+	_background: 0;
+}
+.btn-renew {
+	display: inline-block;
+	padding: 0 10px;
+	line-height: 20px;
+	border: 1px solid #ff722c;
+	background-color: #fff;
+	color: #ff722c;
+}
+.btn-renew:hover {
+	background-color: #ff722c;
+	color: #fff;
+	text-decoration: none;
+}
+/*手机和邮件div*/
+.usrSetting-wrap-twoCol {
+	border: 1px solid #eaeaea;
+	margin-top: -1px;
+	background-color: #fcfcfc;
+}
+.usrSetting-wrap-twoCol a{color:#333}
+.usrSetting-wrap-twoCol a.c-green{color:green}
+.usrSetting-wrap-twoCol a:hover {
+	text-decoration: none;
+	color: green;
+}
+
+
+
+
+@media screen and (min-width:980px){
+	.usrSetting-wrap-twoCol .w50 {
+		width: 45%;
+		padding: 25px 15px 15px 15px;
+	}
+	.usrSetting-wrap-twoCol .cutLine {
+		display: inline;
+		float: left;
+		width: 1px;
+		height: 125px;
+		background-color: #eaeaea;
+	}
+
+}
+@media screen and (max-width:980px){
+	.usrSetting-wrap-twoCol .w50 {
+		width: 100%;
+		padding: 25px 15px 15px 15px;
+	}
+	.usrSetting-wrap-twoCol .cutLine {
+		display: inline;
+		float: left;
+		width: 100%;
+		height: 1px;
+		background-color: #eaeaea;
+	}
+
+}
+.userSetting-icon_edit {
+	display: block;
+	width: 70px;
+	height: 70px;
+	background: url(/resources/images/userSetting-icon_edit.png) no-repeat;
+}
+.phone-done {
+	background-position: 0 -240px;
+}
+.phone-default {
+	background-position: 0 0;
+}
+.mail-default {
+	background-position: -80px 0;
+}
+.mail-default:hover {
+	background-position: -80px -80px;
+}
+/*其它信息*/
+.userSetting-setWrap .userSetting-setWrap-item {
+	height: 40px;
+	line-height: 34px;
+	padding: 0 20px;
+	font-size: 14px;
+}
+.userSetting-setWrap .odd {
+	background-color: #fafafa;
+}
+div:after, ul:after, dl:after {
+	content: "";
+	display: inline;
+	clear: both;
+	height: 0;
+	visibility: visible;
+}
+.userSetting-setWrap-item .item-opt {
+	float: right;
+	margin-top: 4px;
+}
+.userSetting-setWrap-item .item-opt a {
+	color: #699f00;
+}
+.userSetting-setWrap-item .item-title {
+	width: 120px;
+}
+.userSetting-setWrap-item .item-opt {
+	float: right;
+	margin-top: 4px;
+}
+
+/*头像设置*/
+ .header-list-div{
+	 float:right;
+	;width: 871px;height:148px;
+ }
+.user-header-upload{
+	position: relative;
+	height: 148px;float:left;border:1px solid red;
+}
+.user-header-upload img{display: inline-block;margin: 0 auto;}
+.user-header-upload a{margin-top: 25px;}
+@media screen and (min-width: 1150px){
+	.user-header-upload{
+		width: 225px;
+	}
+	.user-header-upload img{margin-left: 45px;}
+	.user-header-upload a{margin-left: 45px;}
+}
+@media screen and (min-width: 1300px){
+	.user-header-upload{
+		width: 415px;
+	}
+}
+.header-list-div .header-list{
+	border:1px solid red;height:148px;
+	float:left;
+	/*margin:0 auto;*/
+	margin-left: 10px;
+}
+
+.header-list .header-box{
+	float:left;
+	height: 100%;
+	padding: 0 12px;
+}
+.header-box img{
+	width:110px;height:110px;border: none;
+	border:1px solid #fff;
+	cursor: pointer;
+}
+.header-box p.desc{
+	width: 100%;text-align: center;font-size: 12px;
+}
+a.scrollListBtn{
+	display: inline-block;
+	text-decoration: none;
+	outline: 0;
+	float: left;
+	width: 19px;
+	height: 33px;
+	background: url(/resources/images/userHead-Btn.png) no-repeat;
+	cursor: pointer;
+	margin-top: 43px;
+}
+a:hover.scrollList_leftBtn {
+	background-position: -93px 0;
+}
+a.scrollList_rightBtn {
+	float: right;
+	background-position: -36px 0;
+}
+a:hover.scrollList_rightBtn {
+	background-position: -121px 0;
+}
+a.scrollList_rightBtn.disabled, a:hover.scrollList_rightBtn.disabled {
+	background-position: -209px 0;
+}
+a.scrollList_leftBtn.disabled , a:hover.scrollList_leftBtn.disabled  {
+	background-position: -184px 0;
+}
+
+
+.vl-inline {
+	color: #333;
+	display: inline-block;
+	vertical-align: middle;
+}
+.userSetting-setWrap-item .item-opt {
+	float: right;
+	margin-top: 4px;
+}
+.userSetting-setWrap-item .item-opt a {
+	color: #699f00;
+}
+.ml10 {
+	margin-left: 10px;
+}
+.radio-selected .icon-radio {
+	background-position: -60px -40px;
+}
+.icon-radio {
+	margin-right: 0;
+	background-position: -60px -20px;
+}
+.site-icons {
+	display: inline-block;
+	vertical-align: middle;
+	width: 15px;
+	height: 15px;
+	margin-right: 5px;
+	cursor: pointer;
+	background: url(/resources/images/site-icons-v10-20150512.png) no-repeat;
+}
+.icon-radio {
+	margin-right: 0;
+	background-position: -60px -20px;
+}
+body{
+	font: 12px/18px "\5FAE\8F6F\96C5\9ED1",Arial,sans-serif,"\5B8B\4F53";
+}
+.mr10 {
+	margin-right: 10px;
+}
+
+/*select*/
+
+.checkBox_wrap {
+	position: relative;
+	display: inline-block;
+	vertical-align: middle;
+}
+.checkBox_wrap-normal .checkBox {
+	width: 60px;
+}
+.checkBox_wrap .checkBox {
+	overflow: hidden;
+	width: 90px;
+	display: inline;
+	float: left;
+	height:30px;
+	line-height: 30px;
+	border: 1px solid #dadada;
+	margin: 0px;
+	padding: 0 10px;
+	background-color: #fff;
+	color: #333;
+}
+.checkBoxBtn {
+	display: inline;
+	float: left;
+	width: 29px;
+	height: 30px;
+	background: url(/resources/images/checkBoxBtn.png) no-repeat;
+	cursor: pointer;
+}
+
+
+.userSetting-setWrap-item .item-input {
+	margin-top: 1px;
+}
+.input-common {
+	display: inline-block;
+	width: 228px;
+	height: 28px;
+	border: 1px solid #e4e4e4;
+	padding: 0 5px;
+	line-height: 28px\9;
+	vertical-align: middle;
+}
+[placeholder] {
+	font-family: "\5FAE\8F6F\96C5\9ED1";
+}

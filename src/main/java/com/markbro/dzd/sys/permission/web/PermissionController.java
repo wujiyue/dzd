@@ -35,7 +35,12 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
      * 跳转到新增页面
      */
     @RequestMapping("/add")
-    public String toAdd(Permission permission,Model model){
+    public String toAdd(Model model){
+        Map map=getMap(request);
+        String parentid= (String) map.get("parentid");
+        String parentname= (String) map.get("parentname");
+        model.addAttribute("parentid",parentid);
+        model.addAttribute("parentname",parentname);
         return "/sys/permission/add";
     }
     /**
@@ -272,5 +277,16 @@ public class PermissionController extends com.markbro.asoiaf.core.web.BaseContro
     public Object saveRolePermissions() {
         Map map=getMap(request);
         return permissionService.saveRolePermissions(map);
+    }
+
+    //后台登录查询用户菜单
+    @ResponseBody
+    @RequestMapping("/json/getUserMenus")
+    public Object getUserMenus() {
+        Map map=getMap(request);
+        String yhid=String.valueOf(map.get("yhid"));
+        Map<String, Object> m = new HashMap<String, Object>();
+        m.put("qxlist", permissionService.getUserMenus(yhid));
+        return m;
     }
 }

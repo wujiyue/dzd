@@ -77,8 +77,18 @@
         from org_organization
         where
         id =#{id}
-    </select> 
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from org_organization
+            where
+            id =#{id}
+    </select>
     <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.orgOrganization.bean.Organization" flushCache="true">
+    	insert into org_organization(id,name,orgtypeid,orgtypename,phone,fax,description,createtype,createTime,updateTime,createBy,updateBy,available,deleted)
+    	values (#{id},#{name},#{orgtypeid},#{orgtypename},#{phone},#{fax},#{description},#{createtype},now(),now(),#{createBy},#{updateBy},1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
     	insert into org_organization(id,name,orgtypeid,orgtypename,phone,fax,description,createtype,createTime,updateTime,createBy,updateBy,available,deleted)
     	values (#{id},#{name},#{orgtypeid},#{orgtypename},#{phone},#{fax},#{description},#{createtype},now(),now(),#{createBy},#{updateBy},1,0)
     </insert>

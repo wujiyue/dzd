@@ -1,6 +1,8 @@
 package com.markbro.dzd.sys;
 
 import com.markbro.asoiaf.core.model.Msg;
+import com.markbro.asoiaf.core.utils.SysPara;
+import com.markbro.dzd.base.aspect.Test;
 import com.markbro.dzd.base.tablekey.service.TableKeyService;
 import com.markbro.dzd.base.util.dao.BasicUtilMapper;
 import com.markbro.dzd.common.util.PatternUtil;
@@ -18,9 +20,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +30,8 @@ import java.util.Map;
 @Controller
 @RequestMapping("/sys")
 public class SysController extends com.markbro.asoiaf.core.web.BaseController{
+    @Autowired
+    Test test;
     @Autowired
     TableKeyService bmKeyService;
     @Autowired
@@ -49,6 +51,20 @@ public class SysController extends com.markbro.asoiaf.core.web.BaseController{
         return "/sys/sensitivewords";
     }
     /**
+     * 跳转到首页页面
+     */
+    @RequestMapping("/front")
+    public String front(){
+
+        String s="";
+        try {
+             s=SysPara.getValue("sys_frontpage");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return s;
+    }
+    /**
      * 跳转到基础设置页面
      */
     @RequestMapping("/settings")
@@ -65,7 +81,10 @@ public class SysController extends com.markbro.asoiaf.core.web.BaseController{
     @RequestMapping("/test")
     @ResponseBody
     public Object test(){
-        Map map=getMap(request);
+      //  com.markbro.dzd.base.aspect.Test t=new com.markbro.dzd.base.aspect.Test();
+        test.sleep();
+        return  new Msg(Msg.MsgType.success,"成功测试！");
+      /*  Map map=getMap(request);
         Map tmap=null;
         tmap=new HashMap<String,Object>();
        List ls=new ArrayList();
@@ -77,8 +96,43 @@ public class SysController extends com.markbro.asoiaf.core.web.BaseController{
         tmap.put("mc","222");
         ls.add(tmap);
         resultMap.put("test",ls);
-        return resultMap;
+        return resultMap;*/
     }
+    @RequestMapping("/testEx")
+    @ResponseBody
+    public Object testEx(){
+        //  com.markbro.dzd.base.aspect.Test t=new com.markbro.dzd.base.aspect.Test();
+        test.testEx();
+        return  new Msg(Msg.MsgType.success,"成功测试testEx！");
+      /*  Map map=getMap(request);
+        Map tmap=null;
+        tmap=new HashMap<String,Object>();
+       List ls=new ArrayList();
+        tmap.put("dm","111");
+        tmap.put("mc","111");
+        ls.add(tmap);
+        tmap=new HashMap<String,Object>();
+        tmap.put("dm","222");
+        tmap.put("mc","222");
+        ls.add(tmap);
+        resultMap.put("test",ls);
+        return resultMap;*/
+    }
+    @RequestMapping("/testEx2")
+    @ResponseBody
+    public Object testEx2(){
+        //  com.markbro.dzd.base.aspect.Test t=new com.markbro.dzd.base.aspect.Test();
+        test.testEx2();
+        return  new Msg(Msg.MsgType.success,"成功测试testEx2！");
+
+    }
+   /* @RequestMapping("/testSendQueueMsg")
+    @ResponseBody
+    public Object testSendQueueMsg(){
+        //  com.markbro.dzd.base.aspect.Test t=new com.markbro.dzd.base.aspect.Test();
+        test.testSendQueueMsg();
+        return  new Msg(Msg.MsgType.success,"成功测试testSendQueueMsg！");
+    }*/
     /**
      * 发送sms短信接口
      * @return
@@ -99,7 +153,6 @@ public class SysController extends com.markbro.asoiaf.core.web.BaseController{
             msg.setContent("发送短信失败！");
         }
         return msg;
-
     }
 
     @Autowired

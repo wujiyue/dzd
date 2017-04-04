@@ -1,6 +1,6 @@
 package codegen;
 
-import com.markbro.bearinfested.gen.core.Generator;
+import com.markbro.bearinfested.gen.velocity.core.Generator;
 
 /**
  * Created by Administrator on 2016/2/1.

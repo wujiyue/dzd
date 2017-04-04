@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.cms.timeline.dao.TimelineMapper">
+	<!--<sql id="addColumns">id,orgid,bmid,gwid,yhid,timeline_type,content_type,content,createBy,createTime,available,deleted</sql> -->
+	<!--<sql id="updateColumns">orgid,bmid,gwid,yhid,timeline_type,content_type,content,createBy,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,orgid,bmid,gwid,yhid,timeline_type,content_type,content,createBy,createTime,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="timelineResult" type="com.markbro.dzd.cms.timeline.bean.Timeline">
+		<result property="id" column="id" />
+		<result property="orgid" column="orgid" />
+		<result property="bmid" column="bmid" />
+		<result property="gwid" column="gwid" />
+		<result property="yhid" column="yhid" />
+		<result property="timeline_type" column="timeline_type" />
+		<result property="content_type" column="content_type" />
+		<result property="content" column="content" />
+		<result property="createBy" column="createBy" />
+		<result property="createTime" column="createTime" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="Timeline_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="orgid != null and orgid != ''">
+				AND orgid = #{orgid}
+		</if>
+			<if test="bmid != null and bmid != ''">
+				AND bmid = #{bmid}
+		</if>
+			<if test="gwid != null and gwid != ''">
+				AND gwid = #{gwid}
+		</if>
+			<if test="yhid != null and yhid != ''">
+				AND yhid = #{yhid}
+		</if>
+			<if test="timeline_type != null and timeline_type != ''">
+				AND timeline_type = #{timeline_type}
+		</if>
+			<if test="content_type != null and content_type != ''">
+				AND content_type = #{content_type}
+		</if>
+			<if test="content != null and content != ''">
+				AND content = #{content}
+		</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+		</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="timelineResult">
+        select <include refid="allColumns"/>
+        from cms_timeline
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from cms_timeline
+            where
+            id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.cms.timeline.bean.Timeline" flushCache="true">
+    	insert into cms_timeline(id,orgid,bmid,gwid,yhid,timeline_type,content_type,content,createBy,createTime,available,deleted)
+    	values (null,#{orgid},#{bmid},#{gwid},#{yhid},#{timeline_type},#{content_type},#{content},#{createBy},now(),1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into cms_timeline(id,orgid,bmid,gwid,yhid,timeline_type,content_type,content,createBy,createTime,available,deleted)
+    	values (null,#{orgid},#{bmid},#{gwid},#{yhid},#{timeline_type},#{content_type},#{content},#{createBy},now(),1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into cms_timeline (id,orgid,bmid,gwid,yhid,timeline_type,content_type,content,createBy,createTime,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(null,#{item.orgid},#{item.bmid},#{item.gwid},#{item.yhid},#{item.timeline_type},#{item.content_type},#{item.content},#{item.createBy},now(),1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.cms.timeline.bean.Timeline" flushCache="true">
+    	update cms_timeline 
+    	<set>
+    		<if test="orgid != null">orgid=#{orgid},</if>
+			<if test="bmid != null">bmid=#{bmid},</if>
+			<if test="gwid != null">gwid=#{gwid},</if>
+			<if test="yhid != null">yhid=#{yhid},</if>
+			<if test="timeline_type != null">timeline_type=#{timeline_type},</if>
+			<if test="content_type != null">content_type=#{content_type},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update cms_timeline
+        <set>
+            <if test="orgid != null">orgid=#{orgid},</if>
+			<if test="bmid != null">bmid=#{bmid},</if>
+			<if test="gwid != null">gwid=#{gwid},</if>
+			<if test="yhid != null">yhid=#{yhid},</if>
+			<if test="timeline_type != null">timeline_type=#{timeline_type},</if>
+			<if test="content_type != null">content_type=#{content_type},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update cms_timeline
+         <set>
+         <if test="orgid != null">orgid=#{orgid},</if>
+			<if test="bmid != null">bmid=#{bmid},</if>
+			<if test="gwid != null">gwid=#{gwid},</if>
+			<if test="yhid != null">yhid=#{yhid},</if>
+			<if test="timeline_type != null">timeline_type=#{timeline_type},</if>
+			<if test="content_type != null">content_type=#{content_type},</if>
+			<if test="content != null">content=#{content},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from cms_timeline where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from cms_timeline where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="timelineResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM cms_timeline
+        <where>
+            and available=1
+            and deleted=0
+            <include refid="Timeline_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="timelineResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM cms_timeline
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="orgid != null and orgid != ''">
+				AND orgid = #{orgid}
+			</if>
+			<if test="bmid != null and bmid != ''">
+				AND bmid = #{bmid}
+			</if>
+			<if test="gwid != null and gwid != ''">
+				AND gwid = #{gwid}
+			</if>
+			<if test="yhid != null and yhid != ''">
+				AND yhid = #{yhid}
+			</if>
+			<if test="timeline_type != null and timeline_type != ''">
+				AND timeline_type = #{timeline_type}
+			</if>
+			<if test="content_type != null and content_type != ''">
+				AND content_type = #{content_type}
+			</if>
+			<if test="content != null and content != ''">
+				AND content = #{content}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+			</if>
+			<if test="createTime != null and createTime != ''">
+				AND createTime = #{createTime}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+   	</select>
+
+
+
+</mapper>

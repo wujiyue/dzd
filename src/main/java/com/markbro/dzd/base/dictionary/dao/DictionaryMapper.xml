@@ -200,5 +200,12 @@
 			
    		</where>
    	</select>
-
+	<select id="findByType" resultMap="dictionaryResult" parameterType="java.lang.String">
+		SELECT <include refid="allColumns"/> FROM base_dictionary
+		<where>
+			and type=#{type}
+			and available=1
+			and deleted=0
+		</where>
+	</select>
 </mapper>

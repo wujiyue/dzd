@@ -86,6 +86,13 @@
         where
         id =#{id}
     </select>
+	<select id="getByLxidAndType"  resultMap="treeResult" parameterType="java.lang.String">
+		select <include refid="allColumns"/>
+		from org_tree
+		where
+		lxid =#{lxid} and type=#{type} and deleted=0
+	</select>
+
     <select id="getMap"  resultType="java.util.Map">
             select <include refid="allColumns"/>
             from org_tree
@@ -280,5 +287,11 @@
 			and orgid=#{orgid}
 		</where>
 	</select>
+
+	<update id="deleteByLxidAndType"  flushCache="true" parameterType="java.lang.String">
+		update org_tree
+		set deleted=1
+		where lxid=#{lxid} and type=#{type} and deleted=0
+	</update>
 
 </mapper>

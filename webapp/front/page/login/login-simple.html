@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>登录</title>
+        <script type="text/javascript" src="/resources/lib/jquery/jquery.min.js"></script>
+        <link type="text/css" rel="stylesheet" href="/resources/css/H-ui.css">
+        <link type="text/css" rel="stylesheet" href="/resources/css/animate.min.css">
+        <script type="text/javascript">
+
+        </script>
+        <style>
+            .gray-bg {
+                background-color: #f3f3f4;
+            }
+            .loginscreen.middle-box {
+                width: 300px;
+            }
+            .middle-box {
+                max-width: 400px;
+                z-index: 100;
+                margin: 0 auto;
+                padding-top: 40px;
+            }
+            .text-center {
+                text-align: center;
+            }
+            h3, h4, h5 {
+                margin-top: 5px;
+                font-weight: 600;
+            }
+            h3 {
+                font-size: 16px;
+            }
+            .logo-name {
+                color: #e6e6e6;
+                font-size: 180px;
+                font-weight: 800;
+                letter-spacing: -10px;
+                margin-bottom: 0;
+            }
+            .m-t {
+                margin-top: 15px;
+            }
+            p {
+                margin-bottom: 10px;
+            }
+            a {
+                color: #337ab7;
+                text-decoration: none;
+            }
+            a:focus, a:hover {
+                color: #23527c;
+                text-decoration: none;
+            }
+            .uname {
+                background: #fff url(../../images/user.png) no-repeat 95% center;
+                color: #333;
+            }
+            .pword {
+                background: #fff url(../../images/locked.png) no-repeat 95% center;
+                color: #333;
+            }
+        </style>
+    </head>
+
+    <body class="gray-bg">
+    <div class="middle-box text-center loginscreen  animated fadeInDown">
+        <div>
+            <div>
+
+                <h1 class="logo-name">H+</h1>
+
+            </div>
+            <h3>欢迎使用 H+</h3>
+
+            <form class="m-t" role="form" action="index.html">
+                <div class="formControls m-t">
+                    <input type="email" class="input-text uname" placeholder="用户名" required="" >
+                </div>
+                <div class="formControls m-t">
+                    <input type="password" class="input-text pword" placeholder="密码" required="">
+                </div>
+                <div class="formControls m-t">
+                    <button type="submit" class="btn btn-primary btn-block m-b">登&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;录</button>
+                </div>
+
+                <p class="text-muted text-center m-t"> <a href="login.html#"><small>忘记密码了？</small></a> | <a href="reg-simple.html">注册一个新账号</a>
+                </p>
+
+            </form>
+        </div>
+    </div>
+
+
+    </body>
+</html>
+

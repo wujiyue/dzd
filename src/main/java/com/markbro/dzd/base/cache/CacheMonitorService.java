@@ -1,5 +1,6 @@
 package com.markbro.dzd.base.cache;
 
+import com.alibaba.fastjson.JSON;
 import com.markbro.asoiaf.core.model.Msg;
 import com.markbro.asoiaf.core.utils.EhCacheUtils;
 import com.markbro.asoiaf.utils.string.StringUtil;
@@ -113,13 +114,15 @@ public class CacheMonitorService {
             List<Map<String, Object>> mapList = new ArrayList<Map<String, Object>>();
             for (int i = start * limit; i < keysCount && i < (start+1) * limit; i++) {
                 Element element = cache.getQuiet(keysList.get(i).toString());
+                //JSONObject jsonValue=JSONObject.fromObject(element.getValue());
+
                 long l = element.getSerializedSize();
                 Map<String, Object> elMap = new HashMap<String, Object>();
                 elMap.put(cacheValueKey, keysList.get(i).toString());
                 DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(element.getCreationTime());
-                elMap.put("value", element.getValue());
+                elMap.put("value",  JSON.toJSONString(element.getValue()));
                 elMap.put("creattime", formatter.format(calendar.getTime()));
                 calendar.setTimeInMillis(element.getLatestOfCreationAndUpdateTime());
                 elMap.put("lastupdatetime", formatter.format(calendar.getTime()));

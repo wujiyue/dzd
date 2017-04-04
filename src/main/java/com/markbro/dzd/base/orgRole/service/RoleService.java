@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 /**
- * Role Service
+ * Role service
  * Created by wujiyue on 2016-06-12 22:35:18.
  */
 @Service
@@ -92,29 +92,41 @@ public class RoleService{
                 map.put("id",id);
                 roleMapper.addMap(map);
                 //保存角色的权限
-                String[] arr=ids.split(",");
-                int len=arr.length;
-                if(len>0){
-                    permissionMapper.deleteRolePermission(id);
-                    for(int i=0;i<len;i++){
-                        permissionMapper.addRolePermission(arr[i],id);
+                if(ids.indexOf(",")>0){
+                    String[] arr=ids.split(",");
+                    int len=arr.length;
+                    if(len>0){
+                        permissionMapper.deleteRolePermission(id);
+                        for(int i=0;i<len;i++){
+                            permissionMapper.addRolePermission(arr[i],id);
+                        }
                     }
+                    msg.setType(Msg.MsgType.success);
+                    msg.setContent("新增角色并授权成功");
+                }else{
+                    msg.setType(Msg.MsgType.success);
+                    msg.setContent("新增角色成功");
                 }
-                msg.setType(Msg.MsgType.success);
-                msg.setContent("新增角色并授权成功");
+
             }else{
                 roleMapper.updateByMap(map);
                 //保存角色的权限
-                String[] arr=ids.split(",");
-                int len=arr.length;
-                if(len>0){
-                    permissionMapper.deleteRolePermission((String) map.get("id"));
-                    for(int i=0;i<len;i++){
-                        permissionMapper.addRolePermission(arr[i],(String) map.get("id"));
+                if(ids.indexOf(",")>0){
+                    String[] arr=ids.split(",");
+                    int len=arr.length;
+                    if(len>0){
+                        permissionMapper.deleteRolePermission((String) map.get("id"));
+                        for(int i=0;i<len;i++){
+                            permissionMapper.addRolePermission(arr[i],(String) map.get("id"));
+                        }
                     }
+                    msg.setType(Msg.MsgType.success);
+                    msg.setContent("更新角色和角色权限成功");
+                }else {
+                    msg.setType(Msg.MsgType.success);
+                    msg.setContent("更新角色成功");
                 }
-                msg.setType(Msg.MsgType.success);
-                msg.setContent("更新角色和角色权限成功");
+
             }
 
         }catch (Exception ex){

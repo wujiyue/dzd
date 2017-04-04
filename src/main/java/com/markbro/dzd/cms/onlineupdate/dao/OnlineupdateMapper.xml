@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.cms.onlineupdate.dao.OnlineupdateMapper">
+	<!--<sql id="addColumns">id,updateflag,mustflag,fileaddr,version,cplb,bz</sql> -->
+	<!--<sql id="updateColumns">updateflag,mustflag,fileaddr,version,cplb,bz</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,updateflag,mustflag,fileaddr,version,cplb,bz</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="onlineupdateResult" type="com.markbro.dzd.cms.onlineupdate.bean.Onlineupdate">
+		<result property="id" column="id" />
+		<result property="updateflag" column="updateflag" />
+		<result property="mustflag" column="mustflag" />
+		<result property="fileaddr" column="fileaddr" />
+		<result property="version" column="version" />
+		<result property="cplb" column="cplb" />
+		<result property="bz" column="bz" />
+	</resultMap>
+    <sql id="Onlineupdate_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="updateflag != null and updateflag != ''">
+				AND updateflag = #{updateflag}
+		</if>
+			<if test="mustflag != null and mustflag != ''">
+				AND mustflag = #{mustflag}
+		</if>
+			<if test="fileaddr != null and fileaddr != ''">
+				AND fileaddr = #{fileaddr}
+		</if>
+			<if test="version != null and version != ''">
+				AND version = #{version}
+		</if>
+			<if test="cplb != null and cplb != ''">
+				AND cplb = #{cplb}
+		</if>
+			<if test="bz != null and bz != ''">
+				AND bz = #{bz}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="onlineupdateResult">
+        select <include refid="allColumns"/>
+        from cms_onlineupdate
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from cms_onlineupdate
+            where
+            id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.cms.onlineupdate.bean.Onlineupdate" flushCache="true">
+    	insert into cms_onlineupdate(id,updateflag,mustflag,fileaddr,version,cplb,bz)
+    	values (null,#{updateflag},#{mustflag},#{fileaddr},#{version},#{cplb},#{bz})
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into cms_onlineupdate(id,updateflag,mustflag,fileaddr,version,cplb,bz)
+    	values (null,#{updateflag},#{mustflag},#{fileaddr},#{version},#{cplb},#{bz})
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into cms_onlineupdate (id,updateflag,mustflag,fileaddr,version,cplb,bz)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(null,#{item.updateflag},#{item.mustflag},#{item.fileaddr},#{item.version},#{item.cplb},#{item.bz})
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.cms.onlineupdate.bean.Onlineupdate" flushCache="true">
+    	update cms_onlineupdate 
+    	<set>
+    		<if test="updateflag != null">updateflag=#{updateflag},</if>
+			<if test="mustflag != null">mustflag=#{mustflag},</if>
+			<if test="fileaddr != null">fileaddr=#{fileaddr},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="cplb != null">cplb=#{cplb},</if>
+			<if test="bz != null">bz=#{bz},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update cms_onlineupdate
+        <set>
+            <if test="updateflag != null">updateflag=#{updateflag},</if>
+			<if test="mustflag != null">mustflag=#{mustflag},</if>
+			<if test="fileaddr != null">fileaddr=#{fileaddr},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="cplb != null">cplb=#{cplb},</if>
+			<if test="bz != null">bz=#{bz},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update cms_onlineupdate
+         <set>
+         <if test="updateflag != null">updateflag=#{updateflag},</if>
+			<if test="mustflag != null">mustflag=#{mustflag},</if>
+			<if test="fileaddr != null">fileaddr=#{fileaddr},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="cplb != null">cplb=#{cplb},</if>
+			<if test="bz != null">bz=#{bz},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from cms_onlineupdate where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from cms_onlineupdate where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="onlineupdateResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM cms_onlineupdate
+        <where>
+            
+            
+            <include refid="Onlineupdate_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="onlineupdateResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM cms_onlineupdate
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="updateflag != null and updateflag != ''">
+				AND updateflag = #{updateflag}
+			</if>
+			<if test="mustflag != null and mustflag != ''">
+				AND mustflag = #{mustflag}
+			</if>
+			<if test="fileaddr != null and fileaddr != ''">
+				AND fileaddr = #{fileaddr}
+			</if>
+			<if test="version != null and version != ''">
+				AND version = #{version}
+			</if>
+			<if test="cplb != null and cplb != ''">
+				AND cplb = #{cplb}
+			</if>
+			<if test="bz != null and bz != ''">
+				AND bz = #{bz}
+			</if>
+			
+   		</where>
+   	</select>
+
+
+
+</mapper>

@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+    <meta content="yes" name="apple-mobile-web-app-capable">
+    <meta content="black" name="apple-mobile-web-app-status-bar-style">
+    <meta content="telephone=no" name="format-detection">
+    <meta content="email=no" name="format-detection">
+    <meta http-equiv="pragma" content="no-cache"> 
+	<meta http-equiv="cache-control" content="no-cache"> 
+	<meta http-equiv="expires" content="0">
+    <title> test</title>
+    <link rel="stylesheet" type="text/css" href="css/m.reset.css">
+    <link rel="stylesheet" type="text/css" href="css/weui.min.css">
+    <link rel="stylesheet" type="text/css" href="css/validate.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css" />
+      <style type="text/css">
+          .weui_label{
+              display: block;
+              width: 105px;
+              word-wrap: break-word;
+              word-break: break-all;
+              width:100px;text-align:right;
+              font-size:14px;
+          }
+          .cl:after,.clearfix:after{content:"\20";display:block;height:0;clear:both;visibility:hidden}.cl,.clearfix{zoom:1}
+          a.weui_tabbar_item.weui_bar_item_on{ display:inline-block;   background-color: #EAEAEA;}
+          .ms-mt{position:relative;bottom:0px;}
+      </style>
+</head>
+<body>
+<div class="g-container" id="g-container">
+
+      <div class="weui_tab">
+
+          <div class="weui_tab_bd">
+              <div class="main-content cl">
+
+
+                  <div class="qyxx">
+
+                      <div class="weui_panel_bd">
+
+                          <div class="weui_media_box weui_media_text">
+
+                              <form action="" id="myform_0">
+                                  <!--  <input type="hidden" id="id_0" name="id_0" value="0yvynl"> -->
+                                  <div class=" weui_cells_form">
+                                      <h4 style="text-align:center;color:#9C0;font-size:20px;">发票扫描</h4>
+                                      <h4 class="weui_media_title">企业信息</h4>
+                                      <div class="weui_cell" style="padding: 10px 0px;font-size:13px;">
+                                          <div class="weui_cell_hd"><label class="weui_label">企业税号:</label></div>
+                                          <div class="weui_cell_bd weui_cell_primary">
+                                              <input class="weui_input " readonly type="text" id="username" style="background:#EAE9E9"    name="username" maxlength="35">
+                                          </div>
+                                      </div>
+                                      <div class="weui_cell" style="padding: 10px 0px;font-size:13px;">
+                                          <div class="weui_cell_hd"><label class="weui_label">分机号:</label></div>
+                                          <div class="weui_cell_bd weui_cell_primary">
+                                              <input class="weui_input" type="text" id="fjh" readonly  style="background:#EAE9E9"   name="fjh" data-required="fjh" data-descriptions="fjh" >
+                                          </div>
+                                      </div>
+                                      <div class="weui_cell" style="padding: 10px 0px;font-size:13px;">
+                                          <div class="weui_cell_hd"><label class="weui_label">企业名称:</label></div>
+                                          <div class="weui_cell_bd weui_cell_primary">
+                                              <input class="weui_input" type="text" id="qymc" readonly  style="background:#EAE9E9"   name="qymc" data-required="username" data-descriptions="username" maxlength="35">
+                                          </div>
+                                      </div>
+
+                                      <h4 class="weui_media_title">发票信息</h4>
+                                      <div class="weui_cell" style="padding: 10px 0px;font-size:13px;">
+                                          <div class="weui_cell_hd">
+                                              <label class="weui_label">发票代码:</label></div>
+                                          <div class="weui_cell_bd weui_cell_primary">
+                                              <input class="weui_input" type="text" id="fpdm" readonly name="fpdm" value="" placeholder="等待扫描"></div>
+                                      </div>
+                                      <div class="weui_cell" style="padding: 10px 0px;font-size:13px;">
+                                          <div class="weui_cell_hd">
+                                              <label class="weui_label">
+                                                  发票号码:</label></div>
+                                          <div class="weui_cell_bd weui_cell_primary">
+                                              <input class="weui_input" type="text" id="fphm" readonly name="fphm" value="" placeholder="等待扫描"></div>
+                                      </div>
+                                      <div class="weui_cell" style="padding: 10px 0px;font-size:13px;">
+                                          <div class="weui_cell_hd">
+                                              <label class="weui_label">金&nbsp;&nbsp;&nbsp;&nbsp;额:</label></div>
+                                          <div class="weui_cell_bd weui_cell_primary">
+                                              <input class="weui_input" type="text" id="je" readonly name="je" value=""  placeholder="等待扫描"></div>
+                                      </div>
+                                      <div class="weui_cell" style="padding: 10px 0px;font-size:13px;">
+                                          <div class="weui_cell_hd">
+                                              <label class="weui_label">开票日期:</label></div>
+                                          <div class="weui_cell_bd weui_cell_primary">
+                                              <input class="weui_input" type="text" id="kpsj" readonly name="kpsj" value="" placeholder="等待扫描" ></div>
+                                      </div>
+                                  </div>
+                              </form>
+                          </div>
+                      </div>
+                  </div>
+
+                  <div class="" style="margin:5px 15px;">
+                      <input type="button" id="scan" class='weui_btn weui_btn_primary' value="扫描二维码" onclick="scan()"/>
+                  </div>
+              </div>
+
+              <!-- 发票列表DIV -->
+              <div class="main-content cl" style="display: none;">
+
+                  <div class=" weui_cells_form">
+
+                      <h4 style="text-align:center;color:#9C0;margin:15px 0;font-size:20px;">发票查询</h4>
+                      <div class="weui_cell">
+                          <div class="weui_cell_hd"><label class="weui_label">发票代码:</label></div>
+                          <div class="weui_cell_bd weui_cell_primary">
+                              <input class="weui_input" type="number" pattern="[0-9]*" id="cx_fpdm" placeholder="请输入发票代码">
+                          </div>
+                      </div>
+                      <div class="weui_cell">
+                          <div class="weui_cell_hd"><label for="" class="weui_label">开票日期起:</label></div>
+                          <div class="weui_cell_bd weui_cell_primary">
+                              <input class="weui_input" type="date" id="kprq_q" placeholder="请选择开票日期起" value="">
+                          </div>
+                      </div>
+                      <div class="weui_cell">
+                          <div class="weui_cell_hd"><label for="" class="weui_label">开票日期止:</label></div>
+                          <div class="weui_cell_bd weui_cell_primary">
+                              <input class="weui_input" type="date"  id="kprq_z" placeholder="请选择开票日期止"  value="">
+                          </div>
+                      </div>
+
+                  </div>
+
+
+                  <div class="weui_btn_area">
+                      <a class="weui_btn weui_btn_primary" href="javascript:" id="showTooltips" onclick="query()">查询</a>
+                      <a href="javascript:void(0);"  class="weui_btn weui_btn_warn " onclick="reset()">重置</a>
+                  </div>
+
+              </div>
+
+              <div class="main-content cl">
+                  test_tab
+              </div>
+          </div>
+
+
+          <div class="weui_tabbar">
+              <a href="javascript:;" class="weui_tabbar_item weui_bar_item_on">
+                  <div class="weui_tabbar_icon">
+                      <img src="./images/icon_nav_button.png" alt="">
+                  </div>
+                  <p class="weui_tabbar_label">发票扫描</p>
+              </a>
+
+              <a href="javascript:;" id="fpcx_tab" class="weui_tabbar_item">
+                  <div class="weui_tabbar_icon">
+                      <img src="./images/icon_nav_article.png" alt="">
+                  </div>
+                  <p class="weui_tabbar_label">发票查询</p>
+              </a>
+              <a href="javascript:;" id="fpcx_tab2" class="weui_tabbar_item">
+                  <div class="weui_tabbar_icon">
+                      <img src="./images/icon_nav_article.png" alt="">
+                  </div>
+                  <p class="weui_tabbar_label">发票查询2</p>
+              </a>
+          </div>
+      </div>
+
+  </div>
+
+</body>
+<script type="text/javascript" src="js/zepto.min.js"></script>
+<script type="text/javascript" src="js/zepto.fx.js"></script>
+<script type="text/javascript" src="js/zepto-mvalidate.js"></script>
+<script type="text/javascript" src="js/zepto.cookie.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+  <script type="text/javascript">
+
+      $(function(){
+            //common_showConfirm("您确定这样做吗？",function(){alert("您点击了确认");},function(){alert("您点击了取消");})
+          //common_showAlert("删除成功！");
+          //common_showToastNew("123");
+         // common_showWarning("错误！",5000);
+
+          var $content = $('.weui_tab_bd .main-content');
+          $('.g-container').on('click', '.weui_tabbar_item', function (e) {
+              $(this).addClass('weui_bar_item_on').siblings('.weui_bar_item_on').removeClass('weui_bar_item_on');
+              var index = $(this).index();
+              //$(sub[index]).addClass('weui_btn_disabled');
+              var $div=$content.eq(index);
+              $div.show().siblings().hide();
+              e.preventDefault();
+          });
+
+      })
+
+
+  </script>
+</html>

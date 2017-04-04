@@ -226,4 +226,11 @@ public class DictionaryController extends com.markbro.asoiaf.core.web.BaseContro
     public void deletes(@PathVariable java.lang.Integer[] ids) {//前端传送一个用逗号隔开的id字符串，后端用数组接收，springMVC就可以完成自动转换成数组
          dictionaryService.deleteBatch(ids);
     }
+
+    @ResponseBody
+    @RequestMapping(value = "/json/select")
+    public Object select() {
+        Map map=getMap(request);
+        return dictionaryService.select(map);
+    }
 }

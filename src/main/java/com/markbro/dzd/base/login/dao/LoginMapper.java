@@ -15,7 +15,7 @@ public interface LoginMapper {
 
     public String queryUserSession(@Param("token")String token);
     public int updateUserSessionATime(@Param("token")String token);
-    public Map<String,String> queryYhidByDlmc(@Param("dlmc")String dlmc);
+    public Map<String,Object> queryYhidByDlmc(@Param("dlmc")String dlmc);
     public int updateUserSession(@Param("yhid")String yhid);
     public String queryLoginToken(@Param("yhid")String yhid);
     public int deleteUserSession(@Param("yhid")String yhid);

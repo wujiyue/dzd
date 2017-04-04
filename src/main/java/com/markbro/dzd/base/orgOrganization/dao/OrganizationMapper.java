@@ -1,18 +1,20 @@
 package com.markbro.dzd.base.orgOrganization.dao;
-import org.springframework.stereotype.Repository;
-import com.markbro.asoiaf.core.repo.CrudRepo;
-import com.markbro.dzd.base.orgOrganization.bean.Organization;
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
+import com.markbro.dzd.base.orgOrganization.bean.Organization;
+import org.springframework.stereotype.Repository;
+
 import java.util.List;
 import java.util.Map;
 /**
  * 组织机构 dao
- * Created by wujiyue on 2016-07-10 10:38:28.
+ * Created by wujiyue on 2016-07-18 22:52:35.
  */
 @Repository
 public interface OrganizationMapper{
     public Organization get(java.lang.String id);
+    public Map<String,Object> getMap(java.lang.String id);
     public void add(Organization organization);
+    public void addByMap(Map<String,Object> map);
     public void addBatch(List<Organization> organizations);
     public void update(Organization organization);
     public void updateByMap(Map<String,Object> map);

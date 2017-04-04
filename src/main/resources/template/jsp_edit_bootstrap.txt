@@ -1,0 +1,167 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@include file="/WEB-INF/pages/include/taglib.jsp"%>
+#parse('input.txt')
+<!DOCTYPE html>
+<html>
+<head>
+  <title>编辑${beanChineseName}</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="keywords" content="H+后台主题,后台bootstrap框架,会员中心主题,后台HTML,响应式后台">
+	<meta name="description" content="H+是一个完全响应式，基于Bootstrap3最新版本开发的扁平化主题，她采用了主流的左右两栏式布局，使用了Html5+CSS3等现代技术">
+
+	<link rel="shortcut icon" href="favicon.ico">
+
+	<link  href="/resources/lib/bootstrap/css/bootstrap.css" rel="stylesheet" type="text/css"/>
+	<link type="text/css" rel="stylesheet" href="/resources/lib/fontawesome/css/font-awesome.min.css">
+	<link href="/resources/lib/bootstrap/table/bootstrap-table.min.css" rel="stylesheet">
+	<link href="/resources/css/animate.min.css" rel="stylesheet">
+	<link href="/resources/css/index/index.css" rel="stylesheet">
+	<link href="/resources/css/bro.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="wrapper  animated fadeInRight">
+  <div class="container-fluid">
+    <form action="" id="form_show" method="post" class="form-horizontal" role="form">
+    <input type="hidden" value="${${lowerModelClass}.id}" id="id" name="id"/>
+		<h2 class="text-center">编辑${beanChineseName}</h2>
+
+#if($formValidate=='bootstrapValidator')
+#foreach($input in $jspShowColumns)
+<div class="form-group">
+              <label class="col-sm-3 control-label">${input.comment}：</label>
+               <div class="col-sm-9">
+#if($input.input.type=='text')
+#input_text($input.comment $input.name)
+#elseif($input.input.type=='textarea')
+#input_area($input.comment $input.name)
+#elseif($input.input.type=='password')
+#input_password($input.comment $input.name)
+#elseif($input.input.type=='select')
+#select($select.title $select.id $select.items)
+#else
+#input_text($input.comment $input.name)
+#end
+</div>
+         </div>
+#end
+#else
+#foreach($input in $jspShowColumns)
+        <div class="form-group">
+              <label class="col-sm-2 control-label">${input.comment}：</label>
+               <div class="col-sm-6 formControls">
+#if($input.input.type=='text')
+#input_text($input.comment $input.name)
+#elseif($input.input.type=='textarea')
+#input_area($input.comment $input.name)
+#elseif($input.input.type=='password')
+#input_password($input.comment $input.name)
+#elseif($input.input.type=='select')
+#select($select.title $select.id $select.items)
+#else
+#input_text($input.comment $input.name)
+#end
+              </div>
+              <div class="col-sm-4">
+              		<div class="Validform_checktip"></div>
+              </div>
+         </div>
+#end
+#end
+
+		<div class="form-group">
+        <div class=" col-sm-10 col-sm-offset-2">
+          <button type="button" onclick="save()" class="btn btn-primary " ><i class="icon-ok"></i>保存</button>
+        </div>
+      </div>
+    </form></div>
+</div>
+
+<script type="text/javascript" src="/resources/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap.min.js?v=3.3.6"></script>
+<script src="/resources/js/content.min.js"></script>
+
+<script type="text/javascript" src="${ctx}/resources/lib/layer/layer.js"></script>
+<script type="text/javascript" src="${ctx}/resources/js/common/broutil.js"></script>
+#if($formValidate=='bootstrapValidator')
+<script src="/resources/lib/bootstrap-validator/js/bootstrapValidator.min.js"></script>
+#else
+<script type="text/javascript" src="${ctx}/resources/lib/Validform/Validform_v5.3.2.js"></script>
+#end
+
+<script type="text/javascript">
+#if($formValidate=='bootstrapValidator')
+#else
+	   var validform;
+#end
+	function save(){
+#if($formValidate=='bootstrapValidator')
+		var b=$("#form_show").data('bootstrapValidator').isValid();
+#else
+	    var b=validform.check(false);
+#end
+		if(!b)
+		{
+			return;
+		}
+		var params=$("#form_show").serialize();
+		$.ajax({
+			type:"post",
+			url:'${ctx}/${module}/${lowerModelClass}/json/save?'+params,
+			data:null,
+			success:function(json,textStatus){
+				broAjaxReturnMsg(json);
+				setTimeout(function(){
+					var index = parent.layer.getFrameIndex(window.name);
+					parent.layer.close(index);
+				},1000);
+			}
+		});
+	}
+	$(function(){
+#if($formValidate=='bootstrapValidator')
+     $('form').bootstrapValidator({
+                         message: 'This value is not valid',
+                         excluded: [':disabled'],
+                         feedbackIcons: {
+                             valid: 'glyphicon glyphicon-ok',
+                             invalid: 'glyphicon glyphicon-remove',
+                             validating: 'glyphicon glyphicon-refresh'
+                         },
+
+                         fields: {
+#foreach($input in $jspShowColumns)
+     $input.name: {
+                                 message: '$input.comment验证失败',
+                                 validators: {
+                                     notEmpty: {
+                                         message: '$input.comment不能为空'
+                                     }
+                                 }
+                             },
+#end
+                         },
+                         submitHandler: function (validator, form, submitButton) {
+                             alert("submit");
+                         }
+                     }).on('success.form.bv', function (e) {
+                         e.preventDefault();
+                         save();
+                     });
+#else
+	 validform=$("#form_show").Validform({
+     		  btnReset:"#reset",
+             tiptype:2,
+             postonce:true,//至提交一次
+             ajaxPost:false,//ajax方式提交
+             showAllError:true //默认 即逐条验证,true验证全部
+           });
+#end
+
+
+	})
+</script>
+
+</body>
+</html>

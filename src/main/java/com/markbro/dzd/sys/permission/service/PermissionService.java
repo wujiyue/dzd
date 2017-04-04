@@ -14,12 +14,11 @@ import net.sf.json.util.CycleDetectionStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
+
 /**
- * 菜单权限 Service
+ * 菜单权限 service
  * Created by wujiyue on 2016-07-07 21:47:44.
  */
 @Service
@@ -49,14 +48,23 @@ public class PermissionService{
                          permission.setId(id);
                          String parentid=permission.getParentid();
                          String pids= permissionMapper.getParentidsById(parentid);
+                         if("null".equals(pids)||pids==null){
+                             pids="0,";
+                         }
                          pids+=id+",";
                          permission.setParentids(pids);
                          int sort=permissionMapper.getMaxSortByParentid(parentid);
                          permission.setSort(sort+1);
+                         if(permission.getAvailable()==null){
+                             permission.setAvailable(1);
+                         }
                          permissionMapper.add(permission);
                      }else{
                          String parentid=permission.getParentid();
                          String pids= permissionMapper.getParentidsById(parentid);
+                         if("null".equals(pids)||pids==null){
+                             pids="0,";
+                         }
                          pids+=permission.getId()+",";
                          permission.setParentids(pids);
                          permissionMapper.update(permission);
@@ -161,7 +169,6 @@ public class PermissionService{
             nodelist = new ArrayList<Map<String,Object>>();
             if(list!=null&&list.size()>0){
                 rootNode.put("state", "open");
-
                 for(Permission area:list){
                     node=new HashMap<String, Object>();
                     attributes=new HashMap<String, Object>();
@@ -375,4 +382,43 @@ public class PermissionService{
         }
         return msg;
     }
+
+    /**
+     * 用户的权限列表
+     * @param yhid
+     * @return
+     */
+    @SuppressWarnings("unchecked")
+    public List<Map<String, Object>> getQxByYhid(String yhid) {
+        List<Map<String,Object>> qxList=permissionMapper.queryQxByYhid(yhid);
+
+        return qxList;
+    }
+    /**
+     * 用户的菜单列表
+     * @param yhid
+     * @return
+     */
+    public List<Map<String, Object>> getUserMenus(String yhid) {
+        List<Map<String,Object>> qxList=permissionMapper.queryQxByYhid(yhid);
+        //List<Map<String,Object>> one=
+        List<Map<String,Object>> one= qxList.stream().filter(qx->{if(((String)qx.get("parentid")).equals("0")&&((String)qx.get("qxlx")).equals("1")) return  true;else return  false;}).sorted((qx1,qx2)-> ((Integer)qx1.get("sort")).compareTo((Integer)qx2.get("sort"))).collect(Collectors.toList());
+
+        List<Map<String,Object>> two=null;
+        List<Map<String,Object>> three=null;
+        for(Map<String,Object> m:one){
+            final String id=(String)m.get("id");
+            two=new ArrayList<Map<String,Object>>();
+            two=qxList.stream().filter(qx->{if(((String)qx.get("parentid")).equals(id)&&((String)qx.get("qxlx")).equals("1")) return  true;else return  false;}).sorted((qx1, qx2) -> ((Integer) qx1.get("sort")).compareTo((Integer) qx2.get("sort"))).collect(Collectors.toList());
+            for(Map<String,Object> mm:two){
+                final String id2=(String)mm.get("id");
+                three=new ArrayList<Map<String,Object>>();
+                three=qxList.stream().filter(qx->{if(((String)qx.get("parentid")).equals(id2)&&((String)qx.get("qxlx")).equals("1")) return  true;else return  false;}).sorted((qx1, qx2) -> ((Integer) qx1.get("sort")).compareTo((Integer) qx2.get("sort"))).collect(Collectors.toList());
+                mm.put("children",three);
+            }
+            m.put("children",two);
+        }
+        return one;
+    }
+
 }

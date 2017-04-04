@@ -1,9 +1,11 @@
 package com.markbro.dzd.base.login.web;
 
 import com.markbro.asoiaf.core.model.Msg;
+import com.markbro.asoiaf.core.utils.SysPara;
 import com.markbro.asoiaf.core.web.BaseController;
 import com.markbro.dzd.base.login.service.LoginService;
 import com.markbro.dzd.common.util.RequestUtil;
+import com.markbro.dzd.interceptor.ActionLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -26,7 +28,21 @@ public class LoginController extends BaseController {
 
     @RequestMapping (value = {"/login","/"}, method = RequestMethod.GET)
      public String toLogin () {
-        return "/login";
+        //return "/login";
+        String loginpage= "";
+        try {
+            loginpage = SysPara.getValue("login_page");
+        } catch (Exception e) {
+            loginpage = "login";
+        }
+        if(loginpage.indexOf('.')>0)
+        {
+            loginpage=loginpage.substring(0,loginpage.indexOf('.'));
+        }
+        if(!loginpage.startsWith("/")){
+            loginpage="/"+loginpage;
+        }
+        return loginpage;
     }
 
     /**
@@ -35,9 +51,10 @@ public class LoginController extends BaseController {
      * @param model
      * @return
      */
+    @ActionLog(description = "后台登录")
     @RequestMapping (value = "/login", method = RequestMethod.POST)
     public String doLogin(HttpServletRequest request, Model model) {
-        return loginService.validate(request, response);
+        return loginService.validate(request, response,model);
     }
 
     /**
@@ -46,6 +63,7 @@ public class LoginController extends BaseController {
      * @param response
      * @return
      */
+    @ActionLog(description = "后台退出")
     @RequestMapping(value = "/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response){
         return loginService.logout(request, response);

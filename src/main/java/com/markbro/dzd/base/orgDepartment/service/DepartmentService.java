@@ -1,33 +1,37 @@
 package com.markbro.dzd.base.orgDepartment.service;
+
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.markbro.asoiaf.core.model.Msg;
 import com.markbro.asoiaf.core.utils.EhCacheUtils;
 import com.markbro.dzd.base.login.bean.LoginBean;
 import com.markbro.dzd.base.orgDepartment.bean.Department;
 import com.markbro.dzd.base.orgDepartment.dao.DepartmentMapper;
-import com.markbro.dzd.base.orgOrganization.dao.OrganizationMapper;
+import com.markbro.dzd.base.orgTree.bean.OrgTree;
+import com.markbro.dzd.base.orgTree.dao.OrgTreeMapper;
 import com.markbro.dzd.base.tablekey.service.TableKeyService;
 import com.markbro.dzd.common.util.ConstantUtil;
+import com.markbro.dzd.common.util.Guid;
 import net.sf.json.JSONArray;
 import net.sf.json.JsonConfig;
 import net.sf.json.util.CycleDetectionStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 /**
- * 部门 Service
- * Created by wujiyue on 2016-07-09 23:04:45.
+ * 部门 service
+ * Created by wujiyue on 2016-07-17 11:52:55.
  */
 @Service
 public class DepartmentService{
     @Autowired
     private DepartmentMapper departmentMapper;
     @Autowired
-    private OrganizationMapper organizationMapper;
+    private OrgTreeMapper orgTreeMapper;
     @Autowired
     private TableKeyService bmKeyService;
      /*基础公共方法*/
@@ -38,52 +42,64 @@ public class DepartmentService{
         return departmentMapper.getMap(id);
     }
     public List<Department> find(PageBounds pageBounds,Map<String,Object> map){
-        return departmentMapper.find(pageBounds,map);
+        return departmentMapper.find(pageBounds, map);
     }
     public List<Department> findByMap(PageBounds pageBounds,Map<String,Object> map){
-        return departmentMapper.findByMap(pageBounds,map);
+        return departmentMapper.findByMap(pageBounds, map);
     }
     public void add(Department department){
         departmentMapper.add(department);
     }
+    @Transactional
     public Object save(Map<String,Object> map){
 
-            Msg msg=new Msg();
-                 try{
-                     Department department=com.markbro.asoiaf.utils.string.MapUtils.toObject(Department.class,map);
+        Msg msg=new Msg();
+        try{
+            Department department=com.markbro.asoiaf.utils.string.MapUtils.toObject(Department.class,map);
 
-                     if(department.getId()==null||"".equals(department.getId().toString())){
-                         java.lang.String id= bmKeyService.getStringId();
-                         department.setId(id);
-                         String orgid= (String) map.get("orgid");
-                         department.setOrgid(orgid);
-                         String parentid=department.getParentid();
-                         String pids= departmentMapper.getParentidsById(parentid);
-                         if("null".equals(pids)||pids==null){
-                             pids="0,";
-                         }
-                         pids+=id+",";
-                         department.setParentids(pids);
-                         int sort=departmentMapper.getMaxSortByParentid(parentid);
-                         department.setSort(sort+1);
-                         departmentMapper.add(department);
-                     }else{
-                         String parentid=department.getParentid();
-                         String pids= departmentMapper.getParentidsById(parentid);
-                         if("null".equals(pids)||pids==null){
-                             pids="0,";
-                         }
-                         pids+=department.getId()+",";
-                         department.setParentids(pids);
-                         departmentMapper.update(department);
-                     }
-                     msg.setType(Msg.MsgType.success);
-                     msg.setContent("保存信息成功");
-                 }catch (Exception ex){
-                     msg.setType(Msg.MsgType.error);
-                     msg.setContent("保存信息失败");
-                 }
-                return msg;
+            if(department.getId()==null||"".equals(department.getId().toString())){
+                java.lang.String id= bmKeyService.getStringId();
+                department.setId(id);
+                String orgid= (String) map.get("orgid");
+                department.setOrgid(orgid);
+                String parentid=department.getParentid();
+                String pids= departmentMapper.getParentidsById(parentid);
+                if("null".equals(pids)||pids==null){
+                    pids="0,";
+                }
+                pids+=id+",";
+                department.setParentids(pids);
+                int sort=departmentMapper.getMaxSortByParentid(parentid);
+                department.setSort(sort+1);
+                departmentMapper.add(department);
+                //插入org_tree记录
+                OrgTree tree=new OrgTree();
+                tree.setOrgid(orgid);
+                tree.setId(Guid.get());
+                OrgTree treeTemp= orgTreeMapper.getByLxidAndType(department.getParentid(), "bm");
+                tree.setParentid(treeTemp.getId());
+                tree.setType("bm");
+                tree.setSjbmid(treeTemp.getLxid());
+                tree.setLxid(department.getId());
+                tree.setName(department.getName());
+                orgTreeMapper.add(tree);
+            }else{
+                String parentid =department.getParentid();
+                String pids= departmentMapper.getParentidsById(parentid);
+                if("null".equals(pids)||pids==null){
+                    pids="0,";
+                }
+                pids+=department.getId()+",";
+                department.setParentids(pids);
+                departmentMapper.update(department);
+            }
+            msg.setType(Msg.MsgType.success);
+            msg.setContent("保存信息成功");
+        }catch (Exception ex){
+            msg.setType(Msg.MsgType.error);
+            msg.setContent("保存信息失败");
+        }
+        return msg;
     }
     public void addBatch(List<Department> departments){
         departmentMapper.addBatch(departments);
@@ -97,21 +113,30 @@ public class DepartmentService{
     public void updateByMapBatch(Map<String,Object> map){
         departmentMapper.updateByMapBatch(map);
     }
+    @Transactional
     public void delete(java.lang.String id){
+        Department department=departmentMapper.get(id);
+        orgTreeMapper.deleteByLxidAndType(department.getId(),"bm");
         departmentMapper.delete(id);
     }
+    @Transactional
     public void deleteBatch(java.lang.String[] ids){
+        for(int i=0;i<ids.length;i++)
+        {
+            Department department=departmentMapper.get(ids[0]);
+            orgTreeMapper.deleteByLxidAndType(department.getId(),"bm");
+        }
         departmentMapper.deleteBatch(ids);
     }
      /*自定义方法*/
 
-	 public List<Department> findByParentid(PageBounds pageBounds,Map<String,Object> map){
-		return departmentMapper.findByParentid(pageBounds,map);
-	}
+    public List<Department> findByParentid(PageBounds pageBounds,Map<String,Object> map){
+        return departmentMapper.findByParentid(pageBounds,map);
+    }
 
     public String tree(Map<String, Object> map){
         String yhid=(String) map.get("yhid");
-        LoginBean loginBean=(LoginBean)EhCacheUtils.getUserInfo(ConstantUtil.CACHE_YH_USERBEAN, yhid);
+        LoginBean loginBean=(LoginBean) EhCacheUtils.getUserInfo(ConstantUtil.CACHE_YH_USERBEAN, yhid);
         Map<String, Object> orgMap = loginBean.getOrgMap();
         String orgid= (String) orgMap.get("id");
         String orgName= (String) orgMap.get("name");
@@ -129,39 +154,39 @@ public class DepartmentService{
         Map<String, Object> node=null;//节点
         if("0".equals(parentid)){
 
-                //查当前登录用户所属的组织信息作为部门树的根节点
-                //组装根节点
-                rootNode.put("id","0");//根节点id总是0，这里不是组织的id
-                rootNode.put("text", orgName);
-                //attributes=new HashMap<String, Object>();
-               // attributes.put("type","org");
-                //rootNode.put("attributes", attributes);
+            //查当前登录用户所属的组织信息作为部门树的根节点
+            //组装根节点
+            rootNode.put("id","0");//根节点id总是0，这里不是组织的id
+            rootNode.put("text", orgName);
+            //attributes=new HashMap<String, Object>();
+            // attributes.put("type","org");
+            //rootNode.put("attributes", attributes);
 
-                list=departmentMapper.findByParentid(new PageBounds(),m);
-                nodelist = new ArrayList<Map<String,Object>>();
-                if(list!=null&&list.size()>0){
-                    rootNode.put("state", "open");
+            list=departmentMapper.findByParentid(new PageBounds(),m);
+            nodelist = new ArrayList<Map<String,Object>>();
+            if(list!=null&&list.size()>0){
+                rootNode.put("state", "open");
 
-                    for(Department area:list){
-                        node=new HashMap<String, Object>();
-                        String id=area.getId();
+                for(Department area:list){
+                    node=new HashMap<String, Object>();
+                    String id=area.getId();
 
-                        node.put("id", area.getId());
-                        node.put("text", area.getName()+"|"+area.getId());
-                        //attributes=new HashMap<String, Object>();
-                        //node.put("attributes", attributes);
-                        int count=departmentMapper.findByParentidCount(id,orgid);
-                        if(count>0){
-                            node.put("state", "closed");
-                        }
-                        nodelist.add(node);
+                    node.put("id", area.getId());
+                    node.put("text", area.getName()+"|"+area.getId());
+                    //attributes=new HashMap<String, Object>();
+                    //node.put("attributes", attributes);
+                    int count=departmentMapper.findByParentidCount(id,orgid);
+                    if(count>0){
+                        node.put("state", "closed");
                     }
-                    rootNode.put("children", nodelist);
+                    nodelist.add(node);
                 }
-                JsonConfig jsonConfig = new JsonConfig();
-                jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);//自动为我排除circle。
-                JSONArray jsonArray = JSONArray.fromObject(rootNode, jsonConfig);
-                return jsonArray.toString();
+                rootNode.put("children", nodelist);
+            }
+            JsonConfig jsonConfig = new JsonConfig();
+            jsonConfig.setCycleDetectionStrategy(CycleDetectionStrategy.LENIENT);//自动为我排除circle。
+            JSONArray jsonArray = JSONArray.fromObject(rootNode, jsonConfig);
+            return jsonArray.toString();
 
 
 

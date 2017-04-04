@@ -12,25 +12,30 @@ import com.markbro.dzd.base.filter.Token;
 import com.markbro.dzd.base.login.bean.LoginBean;
 import com.markbro.dzd.base.login.dao.LoginMapper;
 import com.markbro.dzd.base.orgOrganization.dao.OrganizationMapper;
+import com.markbro.dzd.base.orgUser.dao.OrgUserMapper;
 import com.markbro.dzd.common.util.ConstantUtil;
 import com.markbro.dzd.common.util.Des;
 import com.markbro.dzd.common.util.Guid;
 import com.markbro.dzd.sys.permission.dao.PermissionMapper;
-import com.markbro.dzd.base.orgUser.dao.UserMapper;
+import com.markbro.dzd.sys.permission.service.PermissionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 
 /**
- * Area Service
+ * Area service
  * Created by wujiyue on 2016-03-13 03:24:07.
  */
 
@@ -40,10 +45,21 @@ public class LoginService {
     @Autowired
     private LoginMapper loginMapper;
     @Autowired
-    private UserMapper userMapper;
+    private OrgUserMapper userMapper;
     @Autowired
     private OrganizationMapper organizationMapper;
+    @Autowired
+    private PermissionService permissionService;
 
+    /*private static   String pageRememberMeKey = "RememberMe";
+    private  static String cookieNameKey = "sdtjqf_ict_username";//cookie中用户名key
+    private static String cookiePassKey = "sdtjqf_ict_password";
+    private static String cookieTokenKey = "sdtjqf_ict_token";*/
+
+    private static   String pageRememberMeKey = "RememberMe";
+    private  static String cookieNameKey = "markbro_username";//cookie中用户名key
+    private static String cookiePassKey = "markbro_password";
+    private static String cookieTokenKey = "markbro_token";
     @Autowired
     private PermissionMapper qxMapper;
     private final String pageInputDd = "account";//登录页面帐户名
@@ -90,7 +106,7 @@ public class LoginService {
      */
 
     @Transactional
-    public String validate(HttpServletRequest request, HttpServletResponse response) {
+    public String validate(HttpServletRequest request, HttpServletResponse response,Model model) {
         String errpage = "";
 
 //		String key = PatternUtil.isNull(String.valueOf(request.getSession().getAttribute(sessionCapKey)));
@@ -99,7 +115,7 @@ public class LoginService {
         String dlmc = StringUtil.isNull(request.getParameter(pageInputDd));
         String dlmm = StringUtil.isNull(request.getParameter(pageInputMm));
         String code = StringUtil.isNull(request.getParameter(pageInputCode));//验证码
-        String token = "";
+        String tokenType = "";
         String mainpage = "";
         String validateStr = "";
         try {
@@ -113,7 +129,7 @@ public class LoginService {
                 }
             }
 
-            token = SysPara.getValue("sys_token");//0：默认，采用原有cookie方式，1：采用无cookie方式
+            tokenType = SysPara.getValue("sys_token");//0：默认，采用原有cookie方式，1：采用无cookie方式
             mainpage = SysPara.getValue("sys_mainpage");//登录后的主页面地址
 
             if (!mainpage.startsWith(ConstantUtil.SYMB_XIEXIAN)){//如果目标开始的第一个字符不是/则添加一个/
@@ -122,7 +138,7 @@ public class LoginService {
             errpage=StringUtil.subEndStr(errpage,".jsp");
             mainpage=StringUtil.subEndStr(mainpage,".jsp");
 
-            validateStr = this.validateUser(request, response, token);
+            validateStr = this.validateUser(request, response, tokenType,model);
         } catch (Exception e) {
             errpage = "/login";
             e.printStackTrace();
@@ -146,10 +162,6 @@ public class LoginService {
         return code.equalsIgnoreCase(sessionCode);
     }
 
-    private final String pageInputMem = "mem_pass";
-    private final String cookieNameKey = "sdtjqf_ict_username";//cookie中用户名key
-    private final String cookiePassKey = "sdtjqf_ict_password";
-    private final String cookieTokenKey = "sdtjqf_ict_token";
 
     /**
      * 验证用户
@@ -158,7 +170,7 @@ public class LoginService {
      * @throws Exception
      */
 
-    private String validateUser(HttpServletRequest request, HttpServletResponse response, String token) throws Exception{
+    private String validateUser(HttpServletRequest request, HttpServletResponse response, String tokenType,Model model) throws Exception{
         String dlmc = StringUtil.isNull(request.getParameter(pageInputDd));
         String dlmm = StringUtil.isNull(request.getParameter(pageInputMm));
         int cookieOrPage = 0;//0=page;1=cookie
@@ -172,22 +184,24 @@ public class LoginService {
         if(dlmc.equals("")){
             return "错误：请重新登录";
         }
-        Map<String, String> yhxx = loginMapper.queryYhidByDlmc(dlmc);
+        Map<String, Object> yhxx = loginMapper.queryYhidByDlmc(dlmc);
         if(yhxx==null){
             return "用户名或密码错误！！";
         }
         String yhid = "";
         String yhxm = "";
-        if(yhxx.get("yhid").length() > 0){
-            yhid = yhxx.get("yhid");
-            yhxm = yhxx.get("xm");
+        if(String.valueOf(yhxx.get("yhid")).length() > 0){
+            yhid = String.valueOf(yhxx.get("yhid"));
+            yhxm = String.valueOf(yhxx.get("xm"));
         }else{
             return "用户名不存在！！";
         }
-
-
         if (!validate(dlmc, dlmm)) {
             return "用户名或密码错误！！";
+        }
+        if(String.valueOf(yhxx.get("available")).equals("0"))
+        {
+            return "帐号状态异常！";
         }
         String ipAddr = ConstantUtil.getRequestIp(request);
         //如果不允许重复登录
@@ -196,7 +210,7 @@ public class LoginService {
             return ConstantUtil.NUM_ZERO;
         }
         request.setAttribute(ConstantUtil.YHID_KEY, yhid);
-        if (token.equals(ConstantUtil.NUM_ZERO)) {
+        if (tokenType.equals(ConstantUtil.NUM_ZERO)) {
             Cookie ckie = new Cookie("sdtjqf_ict_session_cookie", Guid.get());
             ckie.setMaxAge(-1);
             ckie.setPath("/");
@@ -205,10 +219,13 @@ public class LoginService {
                 Cookie ckieu = new Cookie(cookieNameKey, dlmc);
                 ckieu.setMaxAge(31536000);
                 response.addCookie(ckieu);
-                if ("1".equals(request.getParameter(pageInputMem))) {//记住密码
-                    Cookie ckiep = new Cookie(cookiePassKey, new Des().getEncString(dlmm));
+                if ("1".equals(request.getParameter(pageRememberMeKey))||"on".equals(request.getParameter(pageRememberMeKey))) {//记住密码
+                    Cookie ckiep = new Cookie(cookiePassKey,dlmm);
                     ckiep.setMaxAge(31536000);
                     response.addCookie(ckiep);
+                    Cookie ckiepre = new Cookie(pageRememberMeKey,"1");
+                    ckiep.setMaxAge(31536000);
+                    response.addCookie(ckiepre);
                 }
                 //this.setLoginInfo(request, response, yhid, dlmc);
                 String gentoken = "";
@@ -217,8 +234,10 @@ public class LoginService {
                 } catch (Exception localException) {
                     gentoken = Md5.getMd5(Guid.get() + "eqioz;d238*l");
                 }
+                log.info("gentoken ======"+gentoken);
                 String addrIP = request.getRemoteAddr();//客户端真实IP
                 String[] arrayOfString = this.insertSessionInfo(yhid, addrIP, gentoken);
+                log.info("arrayOfString[0]===="+arrayOfString[0]+"\n arrayOfString[1]====="+arrayOfString[1]);
                 if (!"".equals(arrayOfString[0])){
                     if (addrIP.equals(arrayOfString[1])) {
                         if (SysPara.compareValue("session_storage", ConstantUtil.NUM_ONE, ConstantUtil.NUM_ONE)){
@@ -246,11 +265,11 @@ public class LoginService {
                 response.addCookie(localCookie);
                 request.setAttribute(cookieTokenKey, gentoken);
                 //ydxsLoginMapper.updateDlcs(yhid);
-
-
             }else{//来自cookie
                 this.resetLoginInfo(request, response, dlmc, yhid);
             }
+            List<Map<String,Object>> qxlist=permissionService.getUserMenus(yhid);
+            model.addAttribute("qxlist",qxlist);
         }
         log.info("{}授权进入系统", yhxm);
         return "";
@@ -290,11 +309,16 @@ public class LoginService {
         EhCacheUtils.putUserInfo(ConstantUtil.GWID_KEY,yhid,  lbean.getGwid());
         EhCacheUtils.putUserInfo(ConstantUtil.XM_KEY,yhid,  lbean.getXm());
         EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_USERBEAN,yhid,lbean);
-        EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_JS,yhid,  lbean.getJsList());
-        if(!"admin".equals(yhid)&&!"1".equals(yhid)){
-            EhCacheUtils.putUserInfo("orgMap",yhid,  lbean.getOrgMap());
+        EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_JS_LIST,yhid,  lbean.getJsList());
+        EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_BM_LIST,yhid,  lbean.getBmList());
+        EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_GW_LIST,yhid,  lbean.getGwList());
+        EhCacheUtils.putUserInfo("orgMap",yhid,  lbean.getOrgMap());
+        if(!lbean.isAdmin()){
             EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_ORG,yhid,  this.getOrgInfo(yhid));
             EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_URL,yhid,  this.getUrlByYhid(yhid));
+        }else
+        {
+            EhCacheUtils.putUserInfo(ConstantUtil.CON_ADMIN,yhid,  true);
         }
         //EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_GW_SEL,yhid,  ydxsLoginMapper.queryYhGwId(yhid));
         //EhCacheUtils.putUserInfo(ConstantUtil.CACHE_YH_METHOD,yhid,  this.getMethodByYhid(yhid));
@@ -317,7 +341,7 @@ public class LoginService {
         LoginBean lBean = new LoginBean();
         Map<String, Object> userMap = userMapper.queryUserMapByYhid(yhid);
         lBean.setUserMap(userMap);
-        if (ConstantUtil.CON_ADMIN.equals(yhid)||"1".equals(yhid)) {
+        if (ConstantUtil.CON_ADMIN.equals(yhid)||"1".equals(yhid)) {//特殊的超级管理员，而不是以admin角色定义的超级管理员
             lBean.setBmid(ConstantUtil.NUM_ZERO);
             lBean.setGwid(ConstantUtil.NUM_ZERO);
             lBean.setYhid(yhid);
@@ -327,6 +351,7 @@ public class LoginService {
             lBean.setJsList(new ArrayList<Map<String, String>>());
             Map<String, Object> orgMap = loginMapper.queryOrgMapByYhid("1");;
             lBean.setOrgMap(orgMap);
+            lBean.setAdmin(true);
             return lBean;
         }
         String zzid = "";
@@ -335,26 +360,44 @@ public class LoginService {
         Map<String, Object> orgMap = loginMapper.queryOrgMapByYhid(yhid);
         if(orgMap!=null){
             zzid = orgMap.get("id").toString();
+        }else{
+            log.warn("没有查询到用户{}所属的组织信息!",yhid);
         }
-
-        List<Map<String, String>> bmList = loginMapper.queryLoginBmList(zzid,yhid);
-        List<Map<String, String>> gwList = loginMapper.queryLoginGwList(zzid,yhid);
         List<Map<String, String>> jsList = loginMapper.queryLoginJsList(zzid,yhid);
+       //遍历角色是否有admin角色
+        for(Map t:jsList){
+            //String jsid= (String) t.get("dm");
+            String jsmc= (String) t.get("mc");
+            if("admin".equals(jsmc)){
+                lBean.setAdmin(true);
+                break;
+            }
+        }
 
         if(userMap!=null){
             String xm=String.valueOf(userMap.get("nickname"));
             lBean.setXm(xm);
             String available=String.valueOf(userMap.get("available"));
             lBean.setState(available);
+        }else{
+            log.warn("没有查询到用户:{}的用户信息!",yhid);
         }
-        lBean.setBmList(bmList);
-        if (bmList.size() > 0){
-            lBean.setBmid(String.valueOf(bmList.get(0).get(ConstantUtil.DM_KEY)));
+        if(lBean.isAdmin()){
+            lBean.setBmid("0");
+            lBean.setGwid("0");
+        }else{
+            List<Map<String, String>> bmList = loginMapper.queryLoginBmList(zzid,yhid);
+            List<Map<String, String>> gwList = loginMapper.queryLoginGwList(zzid,yhid);
+            lBean.setBmList(bmList);
+            if (bmList.size() > 0){
+                lBean.setBmid(String.valueOf(bmList.get(0).get(ConstantUtil.DM_KEY)));
+            }
+            lBean.setGwList(gwList);
+            if (gwList.size() > 0){
+                lBean.setGwid(String.valueOf(gwList.get(0).get(ConstantUtil.DM_KEY)));
+            }
         }
-        lBean.setGwList(gwList);
-        if (gwList.size() > 0){
-            lBean.setGwid(String.valueOf(gwList.get(0).get(ConstantUtil.DM_KEY)));
-        }
+
         lBean.setJsList(jsList);
         lBean.setYhid(yhid);
         lBean.setZzid(zzid);
@@ -362,24 +405,14 @@ public class LoginService {
 
         return lBean;
     }
-    /**
-     * 用户的权限列表
-     * @param yhid
-     * @return
-     */
-    @SuppressWarnings("unchecked")
-    private List<Map<String, Object>> getQxByYhid(String yhid) {
-        List<Map<String,Object>> qxList=qxMapper.queryQxByYhid(yhid);
 
-        return qxList;
-    }
     /**
      * 用户的url权限列表,除去url为空的
      * @param yhid
      * @return
      */
     private List<String> getUrlByYhid(String yhid) {
-        List<Map<String,Object>> qxList=this.getQxByYhid(yhid);
+        List<Map<String,Object>> qxList=permissionService.getQxByYhid(yhid);
         List<String> urls=new ArrayList<String>();
         if(qxList!=null&&qxList.size()>0){
             String url=null;
@@ -491,9 +524,9 @@ public class LoginService {
      */
 
     private boolean validate(String dlmc, String dlmm) {
-        Map<String, String> localList = loginMapper.queryYhidByDlmc(dlmc);
-        String yhid = localList.get(ConstantUtil.YHID_KEY);
-        String sjkdlmm = localList.get("dlmm");
+        Map<String, Object> localList = loginMapper.queryYhidByDlmc(dlmc);
+        String yhid =String.valueOf(localList.get(ConstantUtil.YHID_KEY));
+        String sjkdlmm = String.valueOf(localList.get("dlmm"));
 
 
         //加密模式
@@ -524,6 +557,8 @@ public class LoginService {
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         String token = ConstantUtil.getCookieValue(request, cookieTokenKey);
         String yhid = this.getYhidByToken(token);
+        log.info("===========logout=========");
+        log.info("yhid====="+yhid+"\n token="+token);
         String str2 = "";
         try {
             str2 = SysPara.getValue("login_redirect");
@@ -531,7 +566,7 @@ public class LoginService {
         } catch (Exception localException) {
             str2 = "/login";
         }
-        Cookie[] arrayOfCookie = request.getCookies();
+       /* Cookie[] arrayOfCookie = request.getCookies();
         if (arrayOfCookie != null){
             for (int i = 0; i < arrayOfCookie.length; i++) {
                 if (arrayOfCookie[i].getName().equals(cookieNameKey)){
@@ -541,9 +576,11 @@ public class LoginService {
                 arrayOfCookie[i].setMaxAge(0);
                 response.addCookie(arrayOfCookie[i]);
             }
-        }
+        }*/
         if (!"".equals(token)) {
+            log.info("===========deleteUserSessionToken=========");
             loginMapper.deleteUserSessionToken(yhid, token);
+            log.info("===========removeUserCacheYhid=========");
             this.removeUserCacheYhid(yhid);
         }
         //request.getSession().removeAttribute(sessionFLKey);

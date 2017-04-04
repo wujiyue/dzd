@@ -1,4 +1,5 @@
 package com.markbro.dzd.base.orgDepartment.dao;
+
 import com.github.miemiedev.mybatis.paginator.domain.PageBounds;
 import com.markbro.dzd.base.orgDepartment.bean.Department;
 import org.apache.ibatis.annotations.Param;
@@ -8,13 +9,14 @@ import java.util.List;
 import java.util.Map;
 /**
  * 部门 dao
- * Created by wujiyue on 2016-07-09 23:04:45.
+ * Created by wujiyue on 2016-07-17 11:52:55.
  */
 @Repository
 public interface DepartmentMapper{
     public Department get(java.lang.String id);
     public Map<String,Object> getMap(java.lang.String id);
     public void add(Department department);
+    public void addByMap(Map<String,Object> map);
     public void addBatch(List<Department> departments);
     public void update(Department department);
     public void updateByMap(Map<String,Object> map);
@@ -38,5 +40,4 @@ public interface DepartmentMapper{
     public int updateSort(@Param("id")String id, @Param("sort")String sort);
 
     public Integer getMaxSortByParentid(@Param("parentid")String parentid);
-
 }

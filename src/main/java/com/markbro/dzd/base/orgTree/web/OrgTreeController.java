@@ -27,7 +27,7 @@ public class OrgTreeController extends com.markbro.asoiaf.core.web.BaseControlle
     protected OrgTreeService treeService;
     @RequestMapping(value={"","/"})
     public String index(){
-        return "/base/org/manager";
+        return "/base/orgTree/list";
     }
     /**
      * 跳转到新增页面

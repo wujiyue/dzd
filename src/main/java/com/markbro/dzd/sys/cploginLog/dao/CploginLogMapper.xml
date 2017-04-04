@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.sys.cploginLog.dao.CploginLogMapper">
+	<!--<sql id="addColumns">id,userid,yhmc,fjh,sf,cpdm,cpmc,version,logintime,ip</sql> -->
+	<!--<sql id="updateColumns">userid,yhmc,fjh,sf,cpdm,cpmc,version,logintime,ip</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,userid,yhmc,fjh,sf,cpdm,cpmc,version,logintime,ip</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="cploginLogResult" type="com.markbro.dzd.sys.cploginLog.bean.CploginLog">
+		<result property="id" column="id" />
+		<result property="userid" column="userid" />
+		<result property="yhmc" column="yhmc" />
+		<result property="fjh" column="fjh" />
+		<result property="sf" column="sf" />
+		<result property="cpdm" column="cpdm" />
+		<result property="cpmc" column="cpmc" />
+		<result property="version" column="version" />
+		<result property="logintime" column="logintime" />
+		<result property="ip" column="ip" />
+	</resultMap>
+    <sql id="CploginLog_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="userid != null and userid != ''">
+				AND userid = #{userid}
+		</if>
+			<if test="yhmc != null and yhmc != ''">
+				AND yhmc like CONCAT('%',#{yhmc},'%')
+		</if>
+			<if test="fjh != null and fjh != ''">
+				AND fjh = #{fjh}
+		</if>
+			<if test="sf != null and sf != ''">
+				AND sf = #{sf}
+		</if>
+			<if test="cpdm != null and cpdm != ''">
+				AND cpdm = #{cpdm}
+		</if>
+			<if test="cpmc != null and cpmc != ''">
+				AND cpmc like concat(concat('%',#{cpmc}),'%')
+		</if>
+			<if test="version != null and version != ''">
+				AND version = #{version}
+		</if>
+			<if test="logintime != null and logintime != ''">
+				AND logintime = #{logintime}
+		</if>
+			<if test="ip != null and ip != ''">
+				AND ip = #{ip}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="cploginLogResult">
+        select <include refid="allColumns"/>
+        from sys_cplogin_log
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select <include refid="allColumns"/>
+            from sys_cplogin_log
+            where
+            id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.sys.cploginLog.bean.CploginLog" flushCache="true">
+    	insert into sys_cplogin_log(id,userid,yhmc,fjh,sf,cpdm,cpmc,version,logintime,ip)
+    	values (null,#{userid},#{yhmc},#{fjh},#{sf},#{cpdm},#{cpmc},#{version},#{logintime},#{ip})
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into sys_cplogin_log(id,userid,yhmc,fjh,sf,cpdm,cpmc,version,logintime,ip)
+    	values (null,#{userid},#{yhmc},#{fjh},#{sf},#{cpdm},#{cpmc},#{version},#{logintime},#{ip})
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into sys_cplogin_log (id,userid,yhmc,fjh,sf,cpdm,cpmc,version,logintime,ip)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(null,#{item.userid},#{item.yhmc},#{item.fjh},#{item.sf},#{item.cpdm},#{item.cpmc},#{item.version},#{item.logintime},#{item.ip})
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.sys.cploginLog.bean.CploginLog" flushCache="true">
+    	update sys_cplogin_log 
+    	<set>
+    		<if test="userid != null">userid=#{userid},</if>
+			<if test="yhmc != null">yhmc=#{yhmc},</if>
+			<if test="fjh != null">fjh=#{fjh},</if>
+			<if test="sf != null">sf=#{sf},</if>
+			<if test="cpdm != null">cpdm=#{cpdm},</if>
+			<if test="cpmc != null">cpmc=#{cpmc},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="logintime != null">logintime=#{logintime},</if>
+			<if test="ip != null">ip=#{ip},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update sys_cplogin_log
+        <set>
+            <if test="userid != null">userid=#{userid},</if>
+			<if test="yhmc != null">yhmc=#{yhmc},</if>
+			<if test="fjh != null">fjh=#{fjh},</if>
+			<if test="sf != null">sf=#{sf},</if>
+			<if test="cpdm != null">cpdm=#{cpdm},</if>
+			<if test="cpmc != null">cpmc=#{cpmc},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="logintime != null">logintime=#{logintime},</if>
+			<if test="ip != null">ip=#{ip},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update sys_cplogin_log
+         <set>
+         <if test="userid != null">userid=#{userid},</if>
+			<if test="yhmc != null">yhmc=#{yhmc},</if>
+			<if test="fjh != null">fjh=#{fjh},</if>
+			<if test="sf != null">sf=#{sf},</if>
+			<if test="cpdm != null">cpdm=#{cpdm},</if>
+			<if test="cpmc != null">cpmc=#{cpmc},</if>
+			<if test="version != null">version=#{version},</if>
+			<if test="logintime != null">logintime=#{logintime},</if>
+			<if test="ip != null">ip=#{ip},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from sys_cplogin_log where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from sys_cplogin_log where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="cploginLogResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM sys_cplogin_log
+        <where>
+            
+            
+            <include refid="CploginLog_Where_Clause"/>
+        </where>
+    </select>
+    <select id="findByMap" resultMap="cploginLogResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM sys_cplogin_log
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="userid != null and userid != ''">
+				AND userid = #{userid}
+			</if>
+			<if test="yhmc != null and yhmc != ''">
+				AND yhmc = #{yhmc}
+			</if>
+			<if test="fjh != null and fjh != ''">
+				AND fjh = #{fjh}
+			</if>
+			<if test="sf != null and sf != ''">
+				AND sf = #{sf}
+			</if>
+			<if test="cpdm != null and cpdm != ''">
+				AND cpdm = #{cpdm}
+			</if>
+			<if test="cpmc != null and cpmc != ''">
+				AND cpmc like concat(concat('%',#{cpmc}),'%')
+			 </if>
+			<if test="version != null and version != ''">
+				AND version = #{version}
+			</if>
+			<if test="logintime != null and logintime != ''">
+				AND logintime = #{logintime}
+			</if>
+			<if test="ip != null and ip != ''">
+				AND ip = #{ip}
+			</if>
+			
+   		</where>
+   	</select>
+
+
+
+</mapper>

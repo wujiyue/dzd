@@ -63,6 +63,17 @@ public class AclVerify {
 					throw new UnAuthorizedException();//未授权访问-401
 			}
 		}*/
+		if(uri.indexOf("/json/")>0&&!(uri.indexOf("/remove")>0)&&!(uri.indexOf("/delete")>0)){
+			uri = uri.substring(0,uri.indexOf("/json/"));
+		}
+		if(uri.indexOf("/json/")>0&&((uri.indexOf("/remove")>0)||(uri.indexOf("/delete")>0))){
+			if(uri.indexOf("/remove")>0){
+				uri = uri.substring(0,uri.indexOf("/remove")+7);
+			}
+			if(uri.indexOf("/remove")>0){
+				uri = uri.substring(0,uri.indexOf("/delete")+7);
+			}
+		}
 		List<String> list = (List<String>) EhCacheUtils.getUserInfo(ConstantUtil.CACHE_YH_URL,yhid);
 		for (String s : list) {
 			if (s.indexOf(uri) >= 0) {
