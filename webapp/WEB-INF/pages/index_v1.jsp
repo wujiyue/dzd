@@ -13,21 +13,67 @@
     <link type="text/css" rel="stylesheet" href="/resources/lib/fontawesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="/resources/css/animate.min.css">
     <link href="/resources/css/index/index.css" rel="stylesheet">
-    
+    <script type="text/javascript" src="/front/demo/banner/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/resources/lib/jquery.SuperSlide.2.1.1.js"></script>
+    <style>
+        /*幻灯片*/
+        .slider{position:relative;text-align:center; margin:0 auto;z-index:1}
+        .slider .bd,.slider .bd li,.slider .bd img{width:960px; height:272px}/*请给每个幻灯片套个div并设置id，通过id重置这个地方的宽度，达到自定义效果*/
+        .slider .bd{z-index:2;overflow:hidden}
+        .slider .bd li{float:left;width: 100%;overflow:hidden; background-position:center; background-repeat:no-repeat}
+        .slider .bd li a{ display:block; width: 100%; height: 100%}
+        .slider .bd li img{display:block}
+        .slider .hd{ position: absolute; z-index: 3; left: 0; right: 0; bottom:10px; padding: 0 10px; text-align: center}
+        .slider .hd li{display:inline-block;text-align:center;margin-right:10px;cursor:pointer;background-color:#C2C2C2}
+        .slider .hd li.active{background-color:#f8ac59}
+        /*圆点*/
+        .dots li{width:10px; height:10px;font-size:0px;line-height:0px;border-radius:50%}
+        /*数字*/
+        .numbox li{width:20px; height:20px; line-height:20px; font-size:13px;font-family:Arial;font-weight:bold; text-indent:inherit}
+        .numbox li.active{color:#fff}
+        /*长方条*/
+        .rectangle li{width:40px; height:10px;font-size:0px;line-height:0px}
 
+        #banner{ width: 960px; height: 273px; overflow: hidden}/*这个是demo页面定义尺寸的样式，请根据自己幻灯片的尺寸重新定义。切莫生搬硬套。*/
+
+    </style>
+    <script type="text/javascript">
+        $(function(){
+            jQuery("#banner .slider").slide({mainCell:".bd ul",titCell:".hd li",trigger:"click",effect:"leftLoop",autoPlay:true,delayTime:700,interTime:7000,pnLoop:false,titOnClassName:"active"})
+            /* jQuery("#${id}").css("width",${width}).css("height",${height});*/
+        });
+    </script>
 </head>
 
 <body class="gray-bg">
     <div class="row  border-bottom white-bg dashboard-header">
         <div class="col-sm-12">
-            <blockquote class="text-warning" style="font-size:14px">您是否需要自己做一款后台、会员中心等等的，但是又缺乏html等前端知识…
+            <%--<blockquote class="text-warning" style="font-size:14px">您是否需要自己做一款后台、会员中心等等的，但是又缺乏html等前端知识…
                 <br>您是否一直在苦苦寻找一款适合自己的后台主题…
                 <br>您是否想做一款自己的web应用程序…
                 <br>…………
                 <h4 class="text-danger">那么，现在H+来了</h4>
             </blockquote>
+            <hr>--%>
 
-            <hr>
+                <div id="banner">
+                    <div class="slider">
+                        <div class="bd">
+                            <ul>
+                                <li><a href="#" target="_blank"><img src="/front/demo/banner/images/banner-1.jpg" ></a></li>
+                                <li><a href="#" target="_blank"><img src="/front/demo/banner/images/banner-1.jpg" ></a></li>
+                                <li><a href="#" target="_blank"><img src="/front/demo/banner/images/banner-1.jpg" ></a></li>
+                                <li><a href="#" target="_blank"><img src="/front/demo/banner/images/banner-1.jpg" ></a></li>
+                            </ul>
+                        </div>
+                        <ol class="hd cl numbox">
+                            <li>1</li>
+                            <li>2</li>
+                            <li>3</li>
+                            <li>4</li>
+                        </ol>
+                    </div>
+                </div>
         </div>
         <div class="col-sm-3">
             <h2>Hello,Guest</h2>
@@ -452,7 +498,7 @@
                                                 <a data-toggle="collapse" data-parent="#version" href="#v11">v1.1.0</a><code class="pull-right">2014.11.18</code>
                                             </h4>
                                     </div>
-                                    <div id="v11" class="panel-collapse collapse">
+                                    <div id="v1122" class="panel-collapse collapse">
                                         <div class="panel-body">
                                             <ol>
                                                 <li>修复了几处问题。</li>
@@ -606,7 +652,7 @@
             </div>
         </div>
     </script>
-    <script type="text/javascript" src="/resources/lib/jquery/1.9.1/jquery.min.js"></script>
+   <%-- <script type="text/javascript" src="/resources/lib/jquery/1.9.1/jquery.min.js"></script>--%>
     <script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap.min.js?v=3.3.6"></script>
 
     <script src="/resources/lib/layer/layer.js"></script>

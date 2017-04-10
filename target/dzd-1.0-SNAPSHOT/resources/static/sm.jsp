@@ -29,6 +29,9 @@
 	<script  type="text/javascript" src="${ctx}/resources/js/common/main.js"></script>
 	<script type="text/javascript" src="${ctx}/resources/js/H-ui.admin.js"></script>
 	<script src="/resources/lib/layui-v1.0.7/layui/layui.js"></script>
+<%--	<script type="text/javascript" src="/resources/lib/jquery/1.9.1/jquery.min.js"></script>--%>
+	<script type="text/javascript" src="/front/demo/banner/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/resources/lib/jquery.SuperSlide.2.1.1.js"></script>
 	<!--[if IE 6]>
 	<script type="text/javascript" src="http://lib.h-ui.net/DD_belatedPNG_0.0.8a-min.js" ></script>
 	<script>DD_belatedPNG.fix('*');</script>
@@ -84,7 +87,7 @@ $(function(){
 			<input type="checkbox" checked="" name="open" lay-skin="switch" lay-filter="switchTest" title="开关">
 		</div>
 	</div>
-
+<bro:banner id="banner11" type="numbox"></bro:banner>
 </form>
 	<script>
 		layui.use(['form', 'layedit', 'laydate'], function(){
@@ -95,5 +98,10 @@ $(function(){
 		});
 	</script>
 </div>
+
+
+
+
+
 </body>
 </html>

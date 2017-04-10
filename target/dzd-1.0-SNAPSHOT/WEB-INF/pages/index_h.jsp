@@ -21,7 +21,8 @@
     <link type="text/css" rel="stylesheet" href="/resources/lib/fontawesome/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="/resources/css/animate.min.css">
     <link href="/resources/css/index/index.css" rel="stylesheet">
-
+    <link href="/resources/css/index/index_h.css" rel="stylesheet">
+    <script type="text/javascript" src="/front/demo/banner/js/jquery.min.js"></script>
 
 </head>
 
@@ -234,19 +235,22 @@
                                             <a href="#"><i class="${qx2.icon}"></i> <span class="nav-label">${qx2.name}</span><span class="fa arrow"></span></a>
                                             <ul class="nav nav-second-level">
                                             <c:forEach items="${children3}" var="qx3">
-                                                <c:choose>
-                                                    <c:when test="${qx3.target==''||qx3.target=='undefined'||qx3.target==null}">
-                                                    <a class="J_menuItem" href="${qx3.url}" ><i class="${qx3.icon}"></i> <span class="nav-label">${qx3.name}</span></a>
-                                                    </c:when>
-                                                    <c:otherwise>
-                                                    <a href="${qx3.url}" target="${qx3.target}"><i class="${qx3.icon}"></i> <span class="nav-label">${qx3.name}</span></a>
-                                                    </c:otherwise>
-                                                </c:choose>
+                                                <li>
+                                                    <c:choose>
+                                                        <c:when test="${qx3.target==''||qx3.target=='undefined'||qx3.target==null}">
+                                                            <a class="J_menuItem" href="${qx3.url}" ><i class="${qx3.icon}"></i> <span class="nav-label">${qx3.name}</span></a>
+                                                        </c:when>
+                                                        <c:otherwise>
+                                                            <a href="${qx3.url}" target="${qx3.target}"><i class="${qx3.icon}"></i> <span class="nav-label">${qx3.name}</span></a>
+                                                        </c:otherwise>
+                                                    </c:choose>
+                                                 </li>
                                             </c:forEach>
-                                             </li>
                                             </ul>
+                                         </li>
                                         </c:when>
                                         <c:otherwise>
+                                            <li>
                                             <c:choose>
                                                 <c:when test="${qx2.target==''||qx2.target=='undefined'||qx2.target==null}">
                                                     <a class="J_menuItem" href="${qx2.url}" ><i class="${qx2.icon}"></i> <span class="nav-label">${qx2.name}</span></a>
@@ -255,6 +259,7 @@
                                                     <a href="${qx2.url}" target="${qx2.target}"><i class="${qx2.icon}"></i> <span class="nav-label">${qx2.name}</span></a>
                                                 </c:otherwise>
                                             </c:choose>
+                                            </li>
                                         </c:otherwise>
                                     </c:choose>
                                 </c:forEach>
@@ -265,7 +270,7 @@
                         <c:choose>
                             <c:when test="${qx.target==''||qx.target=='undefined'||qx.target==null}">
                                 <a class="J_menuItem" href="${qx.url}" ><i class="${qx.icon}"></i> <span class="nav-label">${qx.name}</span></a>
-                            </c:when>
+                        </c:when>
                             <c:otherwise>
                                 <a href="${qx.url}" target="${qx.target}"><i class="${qx.icon}"></i> <span class="nav-label">${qx.name}</span></a>
                             </c:otherwise>
@@ -915,7 +920,8 @@
     <script type="text/javascript" src="/resources/lib/contabs.min.js"></script>
     <script src="/resources/lib/pace/pace.min.js"></script>
     <script src="/resources/js/index_h.js"></script>--%>
-    <script type="text/javascript" src="/resources/lib/jquery/1.9.1/jquery.min.js"></script>
+<%--    <script type="text/javascript" src="/resources/lib/jquery/1.9.1/jquery.min.js"></script>--%>
+
     <script type="text/javascript" src="/resources/lib/bootstrap/js/bootstrap.min.js?v=3.3.6"></script>
     <script src="/resources/lib/metisMenu/jquery.metisMenu.js"></script>
     <script src="/resources/lib/slimscroll/jquery.slimscroll.min.js"></script>

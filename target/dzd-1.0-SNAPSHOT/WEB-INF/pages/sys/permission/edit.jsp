@@ -18,6 +18,7 @@
   <link href="/resources/css/animate.min.css" rel="stylesheet">
   <link href="/resources/css/index/index.css" rel="stylesheet">
   <link href="/resources/css/bro.css" rel="stylesheet">
+  <script type="text/javascript" src="/resources/lib/jquery/1.9.1/jquery.min.js"></script>
   <style>
     .mui-switch {
       width: 52px;
@@ -114,11 +115,40 @@
           <div class="Validform_checktip"></div>
         </div>
       </div>
-
       <div class="form-group">
-        <label class="control-label col-sm-2"><span class="text-danger">*</span>权限代码:</label>
+        <label class="control-label col-sm-2"><span class="text-danger">*</span>权限类型:</label>
+        <input type="hidden" id="qxlx" name="qxlx" value="${permission.qxlx}">
         <div class="col-sm-6 formControls">
-          <input type="text" class="form-control"  id="code"  name="code" value="${permission.code}"   datatype="*" nullmsg="请输入权限代码"    />
+
+          <label><input type="radio" id="radio_page"  name="option1" >页面</label>
+
+          <label><input type="radio" id="radio_btn" name="option1">按钮</label>
+          <script>
+         var qxlx=  $("#qxlx").val();
+         if(qxlx==2||qxlx=='2'){
+
+           $("#radio_btn").prop("checked","checked");
+         }else{
+           $("#radio_page").prop("checked","checked");
+         }
+            $("input[type='radio']").click(function(){
+              if($("#radio_btn").is(":checked")){
+                $("#qxlx").val("2");
+              }else{
+                $("#qxlx").val("1");
+              }
+            });
+          </script>
+        </div>
+
+        <div class="col-sm-4">
+          <div class="Validform_checktip"></div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="control-label col-sm-2">权限代码:</label>
+        <div class="col-sm-6 formControls">
+          <input type="text" class="form-control"  id="code"  name="code" value="${permission.code}" />
         </div>
         <div class="col-sm-4">
           <div class="Validform_checktip"></div>
@@ -170,7 +200,7 @@
     </form></div>
 </div>
 
-<script type="text/javascript" src="/resources/lib/jquery/1.9.1/jquery.min.js"></script>
+
 <script type="text/javascript" src="${ctx}/resources/lib/layer/layer.js"></script>
 <script type="text/javascript" src="${ctx}/resources/js/common/broutil.js"></script>
 

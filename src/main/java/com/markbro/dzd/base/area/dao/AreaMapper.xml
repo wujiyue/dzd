@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC   
+    "-//mybatis.org//DTD Mapper 3.0//EN"  
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.markbro.dzd.base.area.dao.AreaMapper">
+	<!--<sql id="addColumns">id,parentid,parentids,code,name,sort,areatype,createBy,createTime,updateBy,updateTime,available,deleted</sql> -->
+	<!--<sql id="updateColumns">parentid,parentids,code,name,sort,areatype,createBy,updateBy,updateTime,available,deleted</sql> -->
+	<cache type="com.markbro.asoiaf.mybatis.cache.AsoiafCache" eviction="org.apache.ibatis.cache.decorators.LruCache" readOnly="true" size="1024" flushInterval="3600000"/>
+	<sql id="allColumns">id,parentid,parentids,code,name,sort,areatype,createBy,createTime,updateBy,updateTime,available,deleted</sql>
+	<!--如果实体类中属性名与数据库表中的字段名不一致就需要用resultMap映射-->
+	<resultMap id="areaResult" type="com.markbro.dzd.base.area.bean.Area">
+		<result property="id" column="id" />
+		<result property="parentid" column="parentid" />
+		<result property="parentids" column="parentids" />
+		<result property="code" column="code" />
+		<result property="name" column="name" />
+		<result property="sort" column="sort" />
+		<result property="areatype" column="areatype" />
+		<result property="createBy" column="createBy" />
+		<result property="createTime" column="createTime" />
+		<result property="updateBy" column="updateBy" />
+		<result property="updateTime" column="updateTime" />
+		<result property="available" column="available" />
+		<result property="deleted" column="deleted" />
+	</resultMap>
+    <sql id="Area_Where_Clause">
+        <if test="id != null and id != ''">
+				AND id = #{id}
+		</if>
+			<if test="parentid != null and parentid != ''">
+				AND parentid = #{parentid}
+		</if>
+			<if test="parentids != null and parentids != ''">
+				AND parentids = #{parentids}
+		</if>
+			<if test="code != null and code != ''">
+				AND code = #{code}
+		</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+		</if>
+			<if test="sort != null and sort != ''">
+				AND sort = #{sort}
+		</if>
+			<if test="areatype != null and areatype != ''">
+				AND areatype = #{areatype}
+		</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+		</if>
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+		</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
+		</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+		</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+		</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+		</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+		</if>
+			
+    </sql>
+    <select id="get"  resultMap="areaResult">
+        select <include refid="allColumns"/>
+        from base_area
+        where
+        id =#{id}
+    </select>
+    <select id="getMap"  resultType="java.util.Map">
+            select a.id,a.parentid,a.parentids,a.code,a.name,a.sort,a.areatype,a.createBy,a.createTime,a.updateBy,a.updateTime,a.available,a.deleted,b.name parentname
+            from base_area a left join base_area b
+			on a.parentid=b.id
+            where
+            a.id =#{id}
+    </select>
+    <insert id="add" useGeneratedKeys="true" keyProperty="id" parameterType="com.markbro.dzd.base.area.bean.Area" flushCache="true">
+    	insert into base_area(id,parentid,parentids,code,name,sort,areatype,createBy,createTime,updateBy,updateTime,available,deleted)
+    	values (#{id},#{parentid},#{parentids},#{code},#{name},#{sort},#{areatype},#{createBy},now(),#{updateBy},now(),1,0)
+    </insert>
+    <insert id="addByMap" useGeneratedKeys="true" keyProperty="id" parameterType="java.util.Map" flushCache="true">
+    	insert into base_area(id,parentid,parentids,code,name,sort,areatype,createBy,createTime,updateBy,updateTime,available,deleted)
+    	values (#{id},#{parentid},#{parentids},#{code},#{name},#{sort},#{areatype},#{createBy},now(),#{updateBy},now(),1,0)
+    </insert>
+    <insert id="addBatch" flushCache="true">
+        insert into base_area (id,parentid,parentids,code,name,sort,areatype,createBy,createTime,updateBy,updateTime,available,deleted)
+        values
+        <foreach collection="list" item="item" separator="," >
+        	(#{item.id},#{item.parentid},#{item.parentids},#{item.code},#{item.name},#{item.sort},#{item.areatype},#{item.createBy},now(),#{item.updateBy},now(),1,0)
+        </foreach>
+    </insert>
+    <update id="update" parameterType="com.markbro.dzd.base.area.bean.Area" flushCache="true">
+    	update base_area 
+    	<set>
+    		<if test="parentid != null">parentid=#{parentid},</if>
+			<if test="parentids != null">parentids=#{parentids},</if>
+			<if test="code != null">code=#{code},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="sort != null">sort=#{sort},</if>
+			<if test="areatype != null">areatype=#{areatype},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+    	</set>
+    	 where
+    	id =#{id}
+    </update>
+	<update id="updateByMap" parameterType="map" flushCache="true">
+        update base_area
+        <set>
+            <if test="parentid != null">parentid=#{parentid},</if>
+			<if test="parentids != null">parentids=#{parentids},</if>
+			<if test="code != null">code=#{code},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="sort != null">sort=#{sort},</if>
+			<if test="areatype != null">areatype=#{areatype},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+        </set>
+        where
+        id =#{id}
+    </update>
+	<update id="updateByMapBatch" parameterType="map" flushCache="true">
+         update base_area
+         <set>
+         <if test="parentid != null">parentid=#{parentid},</if>
+			<if test="parentids != null">parentids=#{parentids},</if>
+			<if test="code != null">code=#{code},</if>
+			<if test="name != null">name=#{name},</if>
+			<if test="sort != null">sort=#{sort},</if>
+			<if test="areatype != null">areatype=#{areatype},</if>
+			<if test="createBy != null">createBy=#{createBy},</if>
+			<if test="updateBy != null">updateBy=#{updateBy},</if>
+			updateTime=now(),
+			<if test="available != null">available=#{available},</if>
+			<if test="deleted != null">deleted=#{deleted},</if>
+			
+         </set>
+         where
+         id in
+         <foreach collection="ids" item = "id" open="(" separator="," close=")">
+         #{id}
+         </foreach>
+    </update>
+  	<delete id="delete" flushCache="true">
+      	delete  from base_area where id =#{id}
+    </delete>
+  	<delete id="deleteBatch" flushCache="true">
+      	delete  from base_area where id in
+        <foreach collection="array" item = "ids" open="(" separator="," close=")">
+        #{ids}
+        </foreach>
+    </delete>
+    <select id="find" resultMap="areaResult" parameterType="java.util.Map">
+        SELECT <include refid="allColumns"/> FROM base_area
+        <where>
+            and available=1
+            and deleted=0
+            <include refid="Area_Where_Clause"/>
+        </where>
+		order by sort
+    </select>
+    <select id="findByMap" resultMap="areaResult"  parameterType="map" >
+   		SELECT <include refid="allColumns"/> FROM base_area
+   		<where>
+   		    <if test="id != null and id != ''">
+				AND id = #{id}
+			</if>
+			<if test="parentid != null and parentid != ''">
+				AND parentid = #{parentid}
+			</if>
+			<if test="parentids != null and parentids != ''">
+				AND parentids = #{parentids}
+			</if>
+			<if test="code != null and code != ''">
+				AND code = #{code}
+			</if>
+			<if test="name != null and name != ''">
+				AND name = #{name}
+			</if>
+			<if test="sort != null and sort != ''">
+				AND sort = #{sort}
+			</if>
+			<if test="areatype != null and areatype != ''">
+				AND areatype = #{areatype}
+			</if>
+			<if test="createBy != null and createBy != ''">
+				AND createBy = #{createBy}
+			</if>
+			<if test="createTime_start != null and createTime_start != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')>=  DATE_FORMAT(#{createTime_start}, '%Y-%m-%d')   ]]>
+			</if>
+			<if test="createTime_end != null and createTime_end != ''">
+				<![CDATA[   and DATE_FORMAT(createTime, '%Y-%m-%d')<  ADDDATE(DATE_FORMAT(#{createTime_end}, '%Y-%m-%d'),1)   ]]>
+			</if>
+			<if test="updateBy != null and updateBy != ''">
+				AND updateBy = #{updateBy}
+			</if>
+			<if test="updateTime != null and updateTime != ''">
+				AND updateTime = #{updateTime}
+			</if>
+			<if test="available != null and available != ''">
+				AND available = #{available}
+			</if>
+			<if test="deleted != null and deleted != ''">
+				AND deleted = #{deleted}
+			</if>
+			
+   		</where>
+		order by sort
+   	</select>
+
+	<select id="findByParentid" resultType="com.markbro.dzd.base.area.bean.Area">
+		select *
+			from base_area
+		<where>
+			parentid=#{parentid}
+			and deleted=0
+			and available=1
+		</where>
+		order by sort
+	</select>
+
+	<!--删除菜单时检测是否含有子菜单-->
+	<select id="checkForDelete" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select count(1) from base_area where deleted=0 and parentid in ('${ids}')
+	</select>
+	<select id="getParentidsById" resultType="java.lang.String" parameterType="java.lang.String">
+		select parentids from base_area where id=#{id}
+	</select>
+
+	<update id="updateSort" parameterType="java.lang.String">
+		update base_area set sort=#{sort} where id=#{id}
+	</update>
+
+	<select id="getMaxSortByParentid" resultType="java.lang.Integer" parameterType="java.lang.String">
+		select IFNULL(Max(sort),0) from base_area where deleted=0 and parentid=#{parentid}
+	</select>
+
+</mapper>
